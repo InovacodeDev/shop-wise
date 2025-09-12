@@ -15,6 +15,8 @@ import { ptBR } from "date-fns/locale";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle, faTrash, faSave, faCalendarAlt, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useLingui } from '@lingui/react/macro';
+import { track } from '@vercel/analytics';
+import { analyticsConfig } from '@/lib/analytics';
 
 const itemSchema = z.object({
     name: z.string().min(1, `Name is required`),
@@ -68,6 +70,13 @@ export function ManualPurchaseForm({ onSave }: ManualPurchaseFormProps) {
                 storeName: "",
                 date: new Date(),
                 items: [{ name: "", quantity: 1, unitPrice: 0, price: 0, barcode: "", volume: "" }],
+            });
+            // Track successful purchase save
+            analyticsConfig.trackPurchase('manual', {
+                store_name: data.storeName,
+                item_count: data.items.length,
+                total_amount: totalAmount,
+                date: data.date.toISOString().split('T')[0]
             });
         } finally {
             setIsSaving(false);
@@ -246,7 +255,13 @@ export function ManualPurchaseForm({ onSave }: ManualPurchaseFormProps) {
                                                 type="button"
                                                 variant="ghost"
                                                 size="icon"
-                                                onClick={() => remove(index)}
+                                                onClick={() => {
+                                                    remove(index);
+                                                    analyticsConfig.trackUserAction('item_removed', {
+                                                        item_index: index,
+                                                        item_name: form.getValues(`items.${index}.name`) || 'unnamed'
+                                                    });
+                                                }}
                                                 disabled={fields.length <= 1}
                                             >
                                                 <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
@@ -261,9 +276,12 @@ export function ManualPurchaseForm({ onSave }: ManualPurchaseFormProps) {
                             type="button"
                             variant="outlined"
                             className="mt-4"
-                            onClick={() =>
-                                append({ name: "", quantity: 1, unitPrice: 0, price: 0, barcode: "", volume: "" })
-                            }
+                            onClick={() => {
+                                append({ name: "", quantity: 1, unitPrice: 0, price: 0, barcode: "", volume: "" });
+                                analyticsConfig.trackUserAction('item_added', {
+                                    total_items: fields.length + 1
+                                });
+                            }}
                         >
                             <FontAwesomeIcon icon={faPlusCircle} className="mr-2" /> {t`Add Item`}
                         </Button>

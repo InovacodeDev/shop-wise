@@ -41,6 +41,8 @@ import { useToast } from '@/hooks/use-toast';
 import { getCurrencyFromLocale } from '@/lib/localeCurrency';
 import type { ExtractProductDataOutput, Product } from '@/types/ai-flows';
 import { useRouter } from '@tanstack/react-router';
+import { track } from '@vercel/analytics';
+import { analyticsConfig } from '@/lib/analytics';
 
 interface NfceScannerComponentProps {
     onSave: (purchaseData: ExtractProductDataOutput, products: Product[], entryMethod?: 'import' | 'nfce') => Promise<void>;
@@ -115,6 +117,7 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
 
     const resetScan = () => {
         setAnalysisState({ step: 'scan' });
+        analyticsConfig.trackUserAction('nfce_scan_reset');
     };
 
     const handleSaveData = async () => {
@@ -156,6 +159,14 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
 
         await onSave(purchaseData, products, 'nfce');
         resetScan();
+
+        // Track NFCe save event
+        analyticsConfig.trackPurchase('nfce', {
+            store_name: data.storeName,
+            product_count: data.products.length,
+            total_amount: data.products.reduce((sum, p) => sum + p.price, 0),
+            method: 'scanner'
+        });
     };
 
 

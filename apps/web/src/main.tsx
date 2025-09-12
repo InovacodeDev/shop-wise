@@ -4,6 +4,7 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "@tanstack/react-router";
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Analytics } from '@vercel/analytics/react';
 import { createRouter } from "./router";
 import Providers from "./providers";
 
@@ -23,6 +24,7 @@ if (!rootElement.innerHTML) {
         <Providers>
             <RouterProvider router={router} />
             <SpeedInsights />
+            <Analytics />
         </Providers>
     );
 

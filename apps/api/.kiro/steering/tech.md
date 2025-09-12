@@ -62,7 +62,7 @@ pnpm run format       # Format code with Prettier
 ## Environment Configuration
 
 - Uses `.env` files for configuration
-- MongoDB connection via `MONGO_DB_CONNECTION`
+- MongoDB connection via `MONGODB_URI`
 - Optional `MONGO_DB_NAME` override
 - Google OAuth via `GOOGLE_CLIENT_ID`
 - SMTP configuration for email services

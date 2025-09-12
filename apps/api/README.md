@@ -99,12 +99,12 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 ## MongoDB
 
-This project includes a small MongoDB integration. The connection string is read from `.env.template` (or your environment) via the `MONGO_DB_CONNECTION` variable.
+This project includes a small MongoDB integration. The connection string is read from `.env.template` (or your environment) via the `MONGODB_URI` variable.
 
 Environment variables (in `.env.template`):
 
-- `MONGO_DB_CONNECTION` - MongoDB connection URI (required).
-- `MONGO_DB_NAME` - Optional. If set, overrides the database name parsed from the connection string.
+- `MONGODB_URI` - MongoDB connection URI (required).
+- `MONGODB_NAME` - Optional. If set, overrides the database name parsed from the connection string.
 
 Usage in code:
 
@@ -119,7 +119,7 @@ constructor(private mongoService: MongoService) {
 }
 ```
 
-2. Example `.env.template` contains a placeholder for `MONGO_DB_CONNECTION`.
+2. Example `.env.template` contains a placeholder for `MONGODB_URI`.
 
 ### UUID-based Primary Keys
 

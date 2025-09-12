@@ -36,8 +36,8 @@ import { WebcrawlerModule } from './webcrawler/webcrawler.module';
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (config: ConfigService) => ({
-                uri: config.get<string>('MONGO_DB_CONNECTION') ?? '',
-                dbName: config.get<string>('MONGO_DB_NAME'),
+                uri: config.get<string>('MONGODB_URI') ?? '',
+                dbName: config.get<string>('MONGODB_NAME'),
             }),
         }),
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
