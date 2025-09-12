@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { BudgetsModule } from './budgets/budgets.module';
 import { CategoriesModule } from './categories/categories.module';
+import { EmailModule } from './common/email.module';
 import { CreditCardsModule } from './credit-cards/credit-cards.module';
 import { CreditTransactionsModule } from './credit-transactions/credit-transactions.module';
 import { ExpensesModule } from './expenses/expenses.module';
@@ -42,6 +43,7 @@ import { WebcrawlerModule } from './webcrawler/webcrawler.module';
         }),
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
         MongoModule,
+        EmailModule,
         AuthModule,
         AccountsModule,
         BudgetsModule,

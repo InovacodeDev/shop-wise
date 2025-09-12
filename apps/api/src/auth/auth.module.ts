@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 
 // RateLimitMiddleware removed - Fastify-level rate limiting is used instead
+import { EmailModule } from '../common/email.module';
 import { MongoService } from '../mongo/mongo.service';
 import { UsersService } from '../users/users.service';
 import { TokenMetricsService } from './';
@@ -29,6 +30,7 @@ if (process.env.GOOGLE_CLIENT_ID) {
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
         MongooseModule.forFeature([{ name: 'Family', schema: FamilySchema }]),
         PassportModule.register({ defaultStrategy: 'jwt' }),
+        EmailModule,
     ],
     providers: [
         AuthService,

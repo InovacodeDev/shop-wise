@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
+import { EmailModule } from '../common/email.module';
 import { FamiliesModule } from '../families/families.module';
+import { UsersModule } from '../users/users.module';
 import { PaymentsLifecycleService } from './payments-lifecycle.service';
 import { PaymentsController } from './payments.controller';
 import { PaymentPollingStatus, PaymentPollingStatusSchema } from './schemas/payment-polling-status.schema';
@@ -14,7 +16,9 @@ import { StripeClientService } from './services/stripe-client.service';
 @Module({
     imports: [
         ConfigModule,
+        EmailModule,
         FamiliesModule,
+        UsersModule,
         MongooseModule.forFeature([
             { name: StripeTransaction.name, schema: StripeTransactionSchema },
             { name: PaymentPollingStatus.name, schema: PaymentPollingStatusSchema },
