@@ -9,9 +9,8 @@
                 "^build"
             ],
             "outputs": [
-                ".next/**",
-                "!.next/cache/**",
-                "dist/**"
+                "dist/**",
+                "build/**"
             ]
         },
         "dev": {

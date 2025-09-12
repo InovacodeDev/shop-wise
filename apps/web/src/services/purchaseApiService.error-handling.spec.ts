@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getPurchasesByMonth } from './purchaseApiService';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { apiService } from './api';
+import { getPurchasesByMonth } from './purchaseApiService';
 
 // Mock the API service
 vi.mock('./api', () => ({
@@ -21,11 +22,11 @@ describe('purchaseApiService - Error Handling', () => {
 
         it('should handle network errors with appropriate message', async () => {
             const networkError = new Error('Network Error');
-            networkError.code = 'NETWORK_ERROR';
+            (networkError as any).code = 'NETWORK_ERROR';
             mockApiService.getPurchasesByMonth.mockRejectedValue(networkError);
 
             await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Network connection failed. Please check your internet connection'
+                'Network connection failed. Please check your internet connection',
             );
         });
 
@@ -33,9 +34,7 @@ describe('purchaseApiService - Error Handling', () => {
             const timeoutError = new Error('Request timeout');
             mockApiService.getPurchasesByMonth.mockRejectedValue(timeoutError);
 
-            await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Request timed out. Please try again'
-            );
+            await expect(getPurchasesByMonth(familyId)).rejects.toThrow('Request timed out. Please try again');
         });
 
         it('should handle 400 Bad Request errors', async () => {
@@ -43,9 +42,7 @@ describe('purchaseApiService - Error Handling', () => {
             (badRequestError as any).status = 400;
             mockApiService.getPurchasesByMonth.mockRejectedValue(badRequestError);
 
-            await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Invalid family ID provided'
-            );
+            await expect(getPurchasesByMonth(familyId)).rejects.toThrow('Invalid family ID provided');
         });
 
         it('should handle 401 Unauthorized errors', async () => {
@@ -54,7 +51,7 @@ describe('purchaseApiService - Error Handling', () => {
             mockApiService.getPurchasesByMonth.mockRejectedValue(unauthorizedError);
 
             await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Authentication required to access purchase data'
+                'Authentication required to access purchase data',
             );
         });
 
@@ -64,7 +61,7 @@ describe('purchaseApiService - Error Handling', () => {
             mockApiService.getPurchasesByMonth.mockRejectedValue(forbiddenError);
 
             await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Authentication required to access purchase data'
+                'Authentication required to access purchase data',
             );
         });
 
@@ -73,9 +70,7 @@ describe('purchaseApiService - Error Handling', () => {
             (notFoundError as any).status = 404;
             mockApiService.getPurchasesByMonth.mockRejectedValue(notFoundError);
 
-            await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Family not found'
-            );
+            await expect(getPurchasesByMonth(familyId)).rejects.toThrow('Family not found');
         });
 
         it('should handle 500 Internal Server Error', async () => {
@@ -84,13 +79,13 @@ describe('purchaseApiService - Error Handling', () => {
             mockApiService.getPurchasesByMonth.mockRejectedValue(serverError);
 
             await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Server error occurred while fetching purchases'
+                'Server error occurred while fetching purchases',
             );
         });
 
         it('should mark retryable errors correctly', async () => {
             const retryableStatuses = [408, 429, 500, 502, 503, 504];
-            
+
             for (const status of retryableStatuses) {
                 const error = new Error(`HTTP ${status}`);
                 (error as any).status = status;
@@ -128,7 +123,7 @@ describe('purchaseApiService - Error Handling', () => {
 
         it('should not mark client errors as retryable', async () => {
             const clientErrors = [400, 401, 403, 404];
-            
+
             for (const status of clientErrors) {
                 const error = new Error(`HTTP ${status}`);
                 (error as any).status = status;
@@ -161,7 +156,7 @@ describe('purchaseApiService - Error Handling', () => {
             mockApiService.getPurchasesByMonth.mockRejectedValue(genericError);
 
             await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Failed to fetch monthly purchases: Something went wrong'
+                'Failed to fetch monthly purchases: Something went wrong',
             );
         });
 
@@ -169,26 +164,20 @@ describe('purchaseApiService - Error Handling', () => {
             const errorWithoutMessage = new Error();
             mockApiService.getPurchasesByMonth.mockRejectedValue(errorWithoutMessage);
 
-            await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Failed to fetch monthly purchases'
-            );
+            await expect(getPurchasesByMonth(familyId)).rejects.toThrow('Failed to fetch monthly purchases');
         });
 
         it('should handle non-Error objects thrown', async () => {
             const stringError = 'String error';
             mockApiService.getPurchasesByMonth.mockRejectedValue(stringError);
 
-            await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Failed to fetch monthly purchases'
-            );
+            await expect(getPurchasesByMonth(familyId)).rejects.toThrow('Failed to fetch monthly purchases');
         });
 
         it('should handle null/undefined errors', async () => {
             mockApiService.getPurchasesByMonth.mockRejectedValue(null);
 
-            await expect(getPurchasesByMonth(familyId)).rejects.toThrow(
-                'Failed to fetch monthly purchases'
-            );
+            await expect(getPurchasesByMonth(familyId)).rejects.toThrow('Failed to fetch monthly purchases');
         });
 
         it('should log errors for debugging', async () => {

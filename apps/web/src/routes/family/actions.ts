@@ -74,6 +74,8 @@ export async function updatePurchaseItems(familyId: string, purchaseId: string, 
                     quantity: item.quantity,
                     price: item.price,
                     unitPrice: item.unitPrice || item.price / item.quantity,
+                    // total is required by CreatePurchaseItemRequest
+                    total: (item.unitPrice || item.price / item.quantity) * item.quantity,
                     category: item.category,
                 };
 

@@ -9,7 +9,8 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
             className="relative w-full overflow-auto"
             style={{
                 borderRadius: materialShapes.components.card,
-                boxShadow: materialElevation.level1,
+                // materialElevation.level1 is an object; use its shadow string for boxShadow
+                boxShadow: (materialElevation.level1 as any).shadow ?? undefined,
             }}
         >
             <table

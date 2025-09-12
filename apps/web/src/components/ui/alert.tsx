@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { materialColors, materialTypography, materialShapes, materialSpacing, materialElevation } from "@/lib/material-design";
+import { materialTypography, materialShapes, materialSpacing, materialElevation } from "@/lib/material-design";
 
 const alertVariants = cva(
     "relative w-full border [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
@@ -29,10 +29,11 @@ const Alert = React.forwardRef<
         ref={ref}
         role="alert"
         className={cn(alertVariants({ variant }), className)}
-        style={{
+            style={{
             borderRadius: materialShapes.components.card,
             padding: materialSpacing.lg,
-            boxShadow: materialElevation.level1,
+            // materialElevation.level1 is an object; use its shadow string for boxShadow
+            boxShadow: (materialElevation.level1 as any).shadow ?? undefined,
             ...style,
         }}
         {...props}

@@ -172,9 +172,11 @@ describe('Monthly Purchases E2E Integration', () => {
             },
         } as any);
 
-        // Setup axios defaults
-        mockedAxios.create = vi.fn(() => mockedAxios);
-        mockedAxios.defaults = { baseURL: mockApiUrl };
+    // Setup axios defaults
+    // Cast to any to satisfy TypeScript typings for the mock
+    (mockedAxios as any).create = vi.fn(() => mockedAxios as any);
+    // Provide headers object as required by AxiosDefaults typing
+    mockedAxios.defaults = { baseURL: mockApiUrl, headers: {} } as any;
     });
 
     afterEach(() => {
