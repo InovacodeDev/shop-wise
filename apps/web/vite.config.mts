@@ -34,4 +34,8 @@ export default defineConfig({
         }),
         lingui(),
     ],
+    // Increase the chunk size warning limit from the default 500KB to 1000KB
+    build: {
+        chunkSizeWarningLimit: 1000,
+    },
 });
