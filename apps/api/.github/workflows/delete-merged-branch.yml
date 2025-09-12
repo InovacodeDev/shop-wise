@@ -1,0 +1,17 @@
+name: Delete Merged Branch
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  delete-branch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete branch
+        uses: jessicalostinspace/branch-cleanup-action@v1
+        with:
+          # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

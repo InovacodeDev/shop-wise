@@ -1,0 +1,298 @@
+/* @import "tailwindcss"; */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @import "@fontsource-variable/dm-sans";
+@import "@fontsource-variable/dm-mono";
+
+@theme inline {
+    --font-sans: "DM Sans Variable", sans-serif;
+    --font-mono: "DM Mono Variable", monospace;
+} */
+
+@layer base {
+    :root {
+        /* Legacy shadcn/ui variables for compatibility */
+        --background: 0 0% 100%; /* #FFFFFF */
+        --foreground: 240 10% 3.9%; /* #0F0F0F */
+        --card: 0 0% 100%; /* #FFFFFF */
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 142 76% 36%; /* #16A249 - Green from M3 palette */
+        --primary-foreground: 355 25% 95%;
+        --secondary: 210 40% 98%;
+        --secondary-foreground: 222 84% 4.9%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215 16% 47%;
+        --accent: 210 40% 96%;
+        --accent-foreground: 222 84% 4.9%;
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214 32% 91%;
+        --input: 214 32% 91%;
+        --ring: 142 76% 36%;
+        --radius: 0.75rem;
+
+        /* M3 Core Color Tokens - Light Theme */
+        /* Primary colors */
+        --primary-container: 142 76% 88%; /* Light green container */
+        --on-primary: 0 0% 100%; /* White text on primary */
+        --on-primary-container: 142 100% 13%; /* Dark green text on primary container */
+
+        /* Secondary colors */
+        --secondary-container: 210 40% 95%; /* Light blue-gray container */
+        --on-secondary: 0 0% 0%; /* Black text on secondary */
+        --on-secondary-container: 213 31% 23%; /* Dark blue-gray on secondary container */
+
+        /* Tertiary colors */
+        --tertiary: 45 100% 51%; /* Amber/Gold */
+        --tertiary-container: 48 100% 88%; /* Light amber container */
+        --on-tertiary: 0 0% 0%; /* Black text on tertiary */
+        --on-tertiary-container: 40 100% 20%; /* Dark amber on tertiary container */
+
+        /* Error colors */
+        --error: 0 65% 51%; /* Red error */
+        --error-container: 0 100% 95%; /* Light red container */
+        --on-error: 0 0% 100%; /* White text on error */
+        --on-error-container: 0 100% 20%; /* Dark red on error container */
+
+        /* Surface colors - M3 Surface System */
+        --surface: 0 0% 100%; /* White base surface */
+        --surface-dim: 0 0% 87%; /* Dimmed surface */
+        --surface-bright: 0 0% 100%; /* Bright surface (same as base in light) */
+        --surface-container-lowest: 0 0% 100%; /* Lowest elevation */
+        --surface-container-low: 0 0% 98%; /* Low elevation */
+        --surface-container: 0 0% 96%; /* Default container elevation */
+        --surface-container-high: 0 0% 92%; /* High elevation */
+        --surface-container-highest: 0 0% 90%; /* Highest elevation */
+        --surface-variant: 220 13% 93%; /* Variant surface */
+        --on-surface: 240 6% 10%; /* Dark text on surfaces */
+        --on-surface-variant: 220 9% 46%; /* Medium text on variant surfaces */
+
+        /* Outline colors */
+        --outline: 220 9% 65%; /* Standard outline */
+        --outline-variant: 220 13% 84%; /* Subtle outline variant */
+
+        /* Other M3 roles */
+        --inverse-surface: 240 6% 13%; /* Dark inverse surface */
+        --inverse-on-surface: 240 6% 90%; /* Light text on inverse surface */
+        --inverse-primary: 142 76% 68%; /* Light green on inverse surface */
+        --scrim: 0 0% 0%; /* Black scrim overlay */
+        --shadow: 0 0% 0%; /* Black shadows */
+
+        /* Sidebar variables (mapped to M3 tokens) */
+        --sidebar: var(--surface-container-low);
+        --sidebar-foreground: var(--on-surface);
+        --sidebar-border: var(--outline-variant);
+        --sidebar-accent: var(--primary-container);
+        --sidebar-accent-foreground: var(--on-primary-container);
+        --sidebar-ring: var(--primary);
+
+        /* Category colors remain the same for business logic */
+        --color-category-produce-and-eggs: 122 33% 84%;
+        --color-category-produce-and-eggs-foreground: 120 25% 25%;
+        --color-category-meat-and-seafood: 0 71% 80%;
+        --color-category-meat-and-seafood-foreground: 0 50% 30%;
+        --color-category-bakery-and-deli: 45 100% 75%;
+        --color-category-bakery-and-deli-foreground: 35 50% 30%;
+        --color-category-dairy-and-chilled: 211 89% 78%;
+        --color-category-dairy-and-chilled-foreground: 210 50% 30%;
+        --color-category-pantry-and-dry-goods: 30 100% 75%;
+        --color-category-pantry-and-dry-goods-foreground: 25 50% 30%;
+        --color-category-breakfast-and-snacks: 341 81% 77%;
+        --color-category-breakfast-and-snacks-foreground: 340 50% 30%;
+        --color-category-frozen-foods: 185 60% 88%;
+        --color-category-frozen-foods-foreground: 185 30% 35%;
+        --color-category-beverages: 265 56% 79%;
+        --color-category-beverages-foreground: 265 30% 30%;
+        --color-category-cleaning-and-household: 174 44% 71%;
+        --color-category-cleaning-and-household-foreground: 175 30% 30%;
+        --color-category-personal-care: 291 59% 81%;
+        --color-category-personal-care-foreground: 290 30% 30%;
+        --color-category-baby-and-child-care: 57 100% 80%;
+        --color-category-baby-and-child-care-foreground: 55 50% 30%;
+        --color-category-pet-supplies: 20 25% 76%;
+        --color-category-pet-supplies-foreground: 20 20% 30%;
+        --color-category-home-and-general: 200 25% 80%;
+        --color-category-home-and-general-foreground: 200 20% 30%;
+        --color-category-pharmacy: 174 44% 78%;
+        --color-category-pharmacy-foreground: 175 30% 30%;
+    }
+
+    .dark {
+        /* Legacy shadcn/ui variables for compatibility */
+        --background: 240 10% 3.9%; /* Dark background */
+        --foreground: 0 0% 98%; /* Light text */
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 142 76% 68%; /* Lighter green for dark mode */
+        --primary-foreground: 142 100% 13%;
+        --secondary: 217 33% 17%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217 33% 17%;
+        --muted-foreground: 215 20% 65%;
+        --accent: 217 33% 17%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 63% 31%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217 33% 17%;
+        --input: 217 33% 17%;
+        --ring: 142 76% 68%;
+
+        /* M3 Core Color Tokens - Dark Theme */
+        /* Primary colors */
+        --primary-container: 142 100% 20%; /* Dark green container */
+        --on-primary: 142 100% 13%; /* Dark green text on primary */
+        --on-primary-container: 142 76% 88%; /* Light green text on primary container */
+
+        /* Secondary colors */
+        --secondary-container: 213 31% 23%; /* Dark blue-gray container */
+        --on-secondary: 210 40% 95%; /* Light text on secondary */
+        --on-secondary-container: 210 40% 95%; /* Light blue-gray on secondary container */
+
+        /* Tertiary colors */
+        --tertiary: 48 100% 70%; /* Light amber for dark mode */
+        --tertiary-container: 40 100% 20%; /* Dark amber container */
+        --on-tertiary: 40 100% 20%; /* Dark amber text on tertiary */
+        --on-tertiary-container: 48 100% 88%; /* Light amber on tertiary container */
+
+        /* Error colors */
+        --error: 0 86% 65%; /* Light red for dark mode */
+        --error-container: 0 100% 20%; /* Dark red container */
+        --on-error: 0 100% 20%; /* Dark red text on error */
+        --on-error-container: 0 100% 95%; /* Light red on error container */
+
+        /* Surface colors - M3 Surface System for Dark */
+        --surface: 240 6% 6%; /* Dark base surface */
+        --surface-dim: 240 6% 6%; /* Dimmed surface (same as base in dark) */
+        --surface-bright: 240 6% 24%; /* Bright surface */
+        --surface-container-lowest: 240 6% 4%; /* Lowest elevation */
+        --surface-container-low: 240 6% 10%; /* Low elevation */
+        --surface-container: 240 6% 13%; /* Default container elevation */
+        --surface-container-high: 240 6% 17%; /* High elevation */
+        --surface-container-highest: 240 6% 22%; /* Highest elevation */
+        --surface-variant: 220 9% 20%; /* Variant surface */
+        --on-surface: 240 6% 90%; /* Light text on surfaces */
+        --on-surface-variant: 220 9% 69%; /* Medium text on variant surfaces */
+
+        /* Outline colors */
+        --outline: 220 9% 39%; /* Standard outline for dark */
+        --outline-variant: 220 9% 28%; /* Subtle outline variant for dark */
+
+        /* Other M3 roles */
+        --inverse-surface: 240 6% 90%; /* Light inverse surface */
+        --inverse-on-surface: 240 6% 13%; /* Dark text on inverse surface */
+        --inverse-primary: 142 76% 36%; /* Dark green on inverse surface */
+        --scrim: 0 0% 0%; /* Black scrim overlay */
+        --shadow: 0 0% 0%; /* Black shadows */
+
+        /* Sidebar variables (mapped to M3 tokens) */
+        --sidebar: var(--surface-container-low);
+        --sidebar-foreground: var(--on-surface);
+        --sidebar-border: var(--outline-variant);
+        --sidebar-accent: var(--primary-container);
+        --sidebar-accent-foreground: var(--on-primary-container);
+        --sidebar-ring: var(--primary);
+
+        /* Category colors for dark mode */
+        --color-category-produce-and-eggs: 122 39% 30%;
+        --color-category-produce-and-eggs-foreground: 120 25% 75%;
+        --color-category-meat-and-seafood: 0 65% 33%;
+        --color-category-meat-and-seafood-foreground: 0 50% 82%;
+        --color-category-bakery-and-deli: 45 100% 30%;
+        --color-category-bakery-and-deli-foreground: 35 50% 85%;
+        --color-category-dairy-and-chilled: 211 85% 32%;
+        --color-category-dairy-and-chilled-foreground: 210 50% 82%;
+        --color-category-pantry-and-dry-goods: 30 100% 30%;
+        --color-category-pantry-and-dry-goods-foreground: 25 50% 85%;
+        --color-category-breakfast-and-snacks: 341 81% 34%;
+        --color-category-breakfast-and-snacks-foreground: 340 50% 82%;
+        --color-category-frozen-foods: 185 78% 71%;
+        --color-category-frozen-foods-foreground: 185 40% 25%;
+        --color-category-beverages: 265 58% 36%;
+        --color-category-beverages-foreground: 265 30% 82%;
+        --color-category-cleaning-and-household: 174 45% 23%;
+        --color-category-cleaning-and-household-foreground: 175 30% 85%;
+        --color-category-personal-care: 291 49% 35%;
+        --color-category-personal-care-foreground: 290 30% 82%;
+        --color-category-baby-and-child-care: 56 94% 37%;
+        --color-category-baby-and-child-care-foreground: 55 50% 82%;
+        --color-category-pet-supplies: 20 20% 28%;
+        --color-category-pet-supplies-foreground: 20 20% 85%;
+        --color-category-home-and-general: 200 17% 30%;
+        --color-category-home-and-general-foreground: 200 20% 85%;
+        --color-category-pharmacy: 174 45% 23%;
+        --color-category-pharmacy-foreground: 175 30% 85%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-surface text-on-surface;
+    }
+}
+
+@layer components {
+    /* M3 Surface Elevation Classes */
+    .surface-level-0 {
+        @apply bg-surface;
+    }
+    .surface-level-1 {
+        @apply bg-surface-container-low;
+    }
+    .surface-level-2 {
+        @apply bg-surface-container;
+    }
+    .surface-level-3 {
+        @apply bg-surface-container-high;
+    }
+    .surface-level-4 {
+        @apply bg-surface-container-highest;
+    }
+
+    /* M3 State Layer Utilities */
+    .hover-primary {
+        @apply hover:bg-primary-8;
+    }
+    .focus-primary {
+        @apply focus:bg-primary-12;
+    }
+    .pressed-primary {
+        @apply active:bg-primary-12;
+    }
+
+    .hover-surface {
+        @apply hover:bg-on-surface-8;
+    }
+    .focus-surface {
+        @apply focus:bg-on-surface-12;
+    }
+    .pressed-surface {
+        @apply active:bg-on-surface-12;
+    }
+
+    /* M3 Interactive States */
+    .interactive-surface {
+        @apply hover-surface focus-surface pressed-surface transition-colors duration-200;
+    }
+    .interactive-primary {
+        @apply hover-primary focus-primary pressed-primary transition-colors duration-200;
+    }
+
+    /* Hide scrollbar */
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+}

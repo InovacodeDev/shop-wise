@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - '@firebase/util'
+  - '@nestjs/core'
+  - bcrypt
+  - mongodb-memory-server
+  - protobufjs
+  - unrs-resolver

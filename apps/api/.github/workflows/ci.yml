@@ -1,0 +1,79 @@
+name: CI - Test and Lint
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    test-and-lint:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '24.x'
+                  cache: 'pnpm'
+
+            - name: Set up pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 10.14.0
+
+            - name: Ensure pnpm is available (Corepack)
+              run: |
+                  corepack enable
+                  corepack prepare pnpm@10.14.0 --activate
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run dependency security audit
+              run: pnpm audit --audit-level high
+
+            - name: Run secrets scanner
+              run: node ./scripts/check-secrets.js
+
+            - name: Run truffleHog secret scan (git history)
+              run: |
+                  python3 -m pip install --user truffleHog
+                  ~/.local/bin/trufflehog git --rule entropy --max_depth 50 --since-commit HEAD~50 .
+
+            - name: Run linter
+              run: pnpm run lint
+
+            - name: Run unit tests
+              run: pnpm test
+
+            - name: Run e2e tests
+              run: pnpm run test:e2e
+
+    integration-tests:
+        runs-on: ubuntu-latest
+        needs: test-and-lint
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '24.x'
+                  cache: 'pnpm'
+
+            - name: Set up pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 10.14.0
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run integration tests
+              # Run only integration tests; pass the integration folder to Jest
+              run: pnpm test -- test/integration

@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Auto Commit Message Generator",
+  "description": "Reads all diff from staged files and generates a commit message following patterns in kiro/sterrings/commit.md, then asks user to commit & push changes with the generated commit message",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": [
+      ".git/index"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read all diff from staged files and:\n\n1. generate a commit message with detailed description following patterns in kiro/sterrings/commit.md;\n2. ask user to commit & push changes with the generated commit message"
+  }
+}

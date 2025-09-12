@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "Start debug",
+            "command": "pnpm start:debug",
+            "request": "launch",
+            "type": "node-terminal"
+        }
+    ]
+}

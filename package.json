@@ -1,0 +1,27 @@
+{
+  "name": "shop-wise",
+  "private": "true",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=@shop-wise/web",
+    "dev:api": "turbo run dev --filter=@shop-wise/api",
+    "start": "turbo run start",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean",
+    "install:all": "pnpm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.1",
+  "devDependencies": {
+    "turbo": "^2.5.6",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}

@@ -1,0 +1,228 @@
+{
+    // -------------------------------------------------------------------------
+    // I. EDITOR BEHAVIOR - MIMICKING JETBRAINS
+    // -------------------------------------------------------------------------
+    // Use JetBrains IDE keymap (Install the 'JetBrains IDE Keymap' extension)
+    // This is the most crucial step. After installing the extension,
+    // VS Code will prompt you to set it as the default.
+    // Editor: Minimap - Often disabled in JetBrains for more screen real estate
+    "editor.minimap.enabled": false,
+    "editor.rulers": [
+        120
+    ],
+    // Editor: Code Lens - Similar to JetBrains' inline hints (references, implementations)
+    "editor.codeLens": true, // Enable for languages that support it
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit" // Or true for older VS Code versions
+    },
+    // Editor: Parameter Hints - Show parameter info
+    "editor.parameterHints.enabled": true,
+    // Editor: Quick Suggestions - Show suggestions as you type
+    "editor.suggestOnTriggerCharacters": true,
+    // Editor: Hover - Enable hover for documentation and type information
+    "editor.hover.enabled": true,
+    "editor.hover.delay": 300, // Adjust delay as preferred
+    // Editor: Formatting - Auto format on save and paste
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    // Editor: Bracket Pair Colorization and Guides
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.guides.highlightActiveIndentation": true,
+    "editor.guides.indentation": true,
+    // Editor: Auto Closing Brackets and Quotes
+    "editor.autoClosingBrackets": "languageDefined",
+    "editor.autoClosingQuotes": "languageDefined",
+    "editor.autoSurround": "languageDefined",
+    // Editor: Smooth Scrolling - For a smoother caret movement
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.smoothScrolling": true,
+    // Editor: Whitespace - Render whitespace characters (optional, but common)
+    "editor.renderWhitespace": "boundary", // "all", "none", "boundary", "selection", "trailing"
+    // Editor: Rename on Type (for files in explorer, like JetBrains)
+    "explorer.autoReveal": true, // Keep explorer focused on the active file
+    "explorer.confirmDragAndDrop": false, // Less intrusive drag/drop
+    // -------------------------------------------------------------------------
+    // II. APPEARANCE & THEME - JETBRAINS LOOK & FEEL
+    // -------------------------------------------------------------------------
+    // Window: Title Bar Style (for a more integrated look on macOS/Windows)
+    "window.titleBarStyle": "custom",
+    // Workbench: Theme (Install a JetBrains-like theme)
+    // Examples: "One Dark Pro", "Material Theme" (with specific JetBrains variants),
+    // or search for "IntelliJ theme", "Darcula theme" in extensions.
+    // "workbench.colorTheme": "JetBrains Darcula Theme", // Requires "JetBrains Darcula Theme" extension
+    // Workbench: Icon Theme (Material Icon Theme is popular and comprehensive)
+    // Workbench: Activity Bar - Position to the top (experimental, might not be perfect)
+    // Or hide it if you prefer using commands/shortcuts only.
+    // "workbench.activityBar.location": "top", // This is not a standard setting.
+    // Some themes might offer this or extensions. Default is 'side'.
+    // Workbench: Breadcrumbs - Similar to JetBrains navigation bar
+    "breadcrumbs.enabled": true,
+    "breadcrumbs.filePath": "on",
+    "breadcrumbs.symbolPath": "on",
+    // Workbench: Status Bar - Visibility
+    "workbench.statusBar.visible": true,
+    // -------------------------------------------------------------------------
+    // III. TERMINAL - INTEGRATED TERMINAL SETTINGS
+    // -------------------------------------------------------------------------
+    "terminal.integrated.fontFamily": "",
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.persistentSessionReviveProcess": "onExit", // Try to revive terminal sessions
+    // -------------------------------------------------------------------------
+    // IV. VERSION CONTROL (GIT) - ENHANCEMENTS
+    // -------------------------------------------------------------------------
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true, // Stage all changes when no specific files are staged
+    "gitlens.currentLine.enabled": false, // GitLens: disable current line blame to reduce noise, JetBrains shows this on hover/gutter
+    "gitlens.codeLens.enabled": false, // GitLens: disable codelens to reduce noise, JetBrains shows this on hover/gutter
+    "gitlens.hovers.currentLine.over": "line", // GitLens: Show blame on line hover
+    // -------------------------------------------------------------------------
+    // V. FILE AND FOLDER SETTINGS
+    // -------------------------------------------------------------------------
+    // Files: Auto Save - 'afterDelay' is a common preference
+    "files.autoSave": "onFocusChange",
+    "files.autoSaveDelay": 1000,
+    // Files: Exclude - Common files/folders to hide from the explorer
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true,
+        "**/node_modules": false,
+        "**/bower_components": true,
+        "**/*.pyc": {
+            "when": "$(basename).py"
+        },
+        "**/__pycache__": true
+    },
+    "files.associations": {
+        // Add custom file associations if needed
+        // "*.module": "php"
+    },
+    // Search: Exclude - Mirror files.exclude for search
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/.git": true,
+        "**/routeTree.gen.ts": true
+    },
+    "files.readonlyInclude": {
+        "**/routeTree.gen.ts": true
+    },
+    "files.watcherExclude": {
+        "**/routeTree.gen.ts": true
+    },
+    // -------------------------------------------------------------------------
+    // VI. DEBUGGING - SIMILAR TO JETBRAINS DEBUG EXPERIENCE
+    // -------------------------------------------------------------------------
+    "debug.inlineValues": "on", // Show variable values inline during debugging
+    "debug.toolBarLocation": "floating", // Or 'docked'
+    "debug.showBreakpointsInOverviewRuler": true,
+    "debug.openDebug": "openOnFirstSessionStart", // When to open the debug view
+    // -------------------------------------------------------------------------
+    // VII. LANGUAGE SPECIFIC (EXAMPLES - CUSTOMIZE AS NEEDED)
+    // -------------------------------------------------------------------------
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4, // Updated to 4, inferring from JSON indent in XML and common JetBrains style.
+        "editor.insertSpaces": true
+        // Note: Forcing braces (IF_BRACE_FORCE, FOR_BRACE_FORCE from XML) is typically handled by a linter like ESLint (e.g., 'curly' rule).
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4, // Updated to 4, inferring from JSON indent in XML and common JetBrains style.
+        "editor.insertSpaces": true
+        // Note: Settings like CALL_PARAMETERS_LPAREN_ON_NEXT_LINE, ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE (from XML)
+        // are handled by Prettier based on printWidth.
+        // Forcing braces (IF_BRACE_FORCE, FOR_BRACE_FORCE from XML) is typically handled by a linter like ESLint (e.g., 'curly' rule).
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.tabSize": 4, // From XML: indentOptions.INDENT_SIZE: 4
+        "editor.insertSpaces": true
+        // Note on SPACE_BEFORE_COLON: true (from XML): Prettier's default for JSON is no space before colon and this is not configurable in Prettier.
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        // Notes on matching JetBrains XML HTML style with Prettier:
+        // - Attribute Wrapping (HTML_ATTRIBUTE_WRAP, HTML_NEWLINE_BEFORE_FIRST_ATTRIBUTE, etc. from XML):
+        //   Prettier will wrap attributes based on the global "prettier.printWidth" setting.
+        // - Quote Style (HTML_QUOTE_STYLE: Single from XML):
+        //   Prettier generally uses double quotes for HTML attributes. This specific XML setting (single quotes)
+        //   is not directly achievable with Prettier for HTML attributes.
+    },
+    // Para definir o Tailwind CSS IntelliSense como o formatador padrão para arquivos CSS (ou para ativar o plugin), adicione as configurações abaixo.
+    // O Tailwind não é um formatador, mas você pode garantir que o plugin esteja ativado e que o emmet funcione bem com ele.
+    "tailwindCSS.experimental.classRegex": [
+        "class(?:Name)?=\"([^\"]*)",
+        "class:\\s*'([^']*)"
+    ],
+    "editor.quickSuggestions": {
+        "strings": true // Sugestão de classes Tailwind em strings
+    },
+    "css.validate": false, // Para evitar conflitos de validação com Tailwind
+    "editor.defaultFormatter": "esbenp.prettier-vscode", // Prettier continua como formatador padrão
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "tailwindCSS.includeLanguages": {
+        "typescript": "javascript",
+        "typescriptreact": "javascript",
+        "html": "html"
+    },
+    // -------------------------------------------------------------------------
+    // VIII. OTHER USEFUL SETTINGS
+    // -------------------------------------------------------------------------
+    "workbench.editor.enablePreview": true, // Open files in preview mode (single click)
+    "workbench.editor.highlightModifiedTabs": true, // Visually distinguish unsaved tabs
+    "window.zoomLevel": 0, // Adjust overall zoom level of VS Code UI
+    "workbench.startupEditor": "newUntitledFile", // What to show on startup
+    // -------------------------------------------------------------------------
+    // IX. PRETTIER CONFIGURATION (Inspired by JetBrains XML)
+    // -------------------------------------------------------------------------
+    "prettier.singleQuote": true, // From JS/TS XML: USE_DOUBLE_QUOTES: false
+    "prettier.semi": true, // From TS XML: FORCE_SEMICOLON_STYLE: true (applied to JS as well for consistency)
+    "prettier.trailingComma": "es5", // From JS/TS XML: ENFORCE_TRAILING_COMMA: WhenMultiline ("es5" is a common equivalent)
+    "prettier.bracketSpacing": true, // From TS XML: SPACES_WITHIN_OBJECT_LITERAL_BRACES: true
+    // "prettier.printWidth": 80,       // Default is 80. Adjust if your JetBrains settings use a different line length for wrapping.
+    // Prettier handles most other wrapping (VAR_DECLARATION_WRAP, METHOD_CALL_CHAIN_WRAP, etc. from XML)
+    // based on this printWidth.
+    // Note on SPACES_WITHIN_IMPORTS (from JS/TS XML): Prettier formats ES6 import statements according to its standard style,
+    // which typically includes spaces within braces, e.g., import { foo } from 'bar';
+    // For "Find Usages" like behavior (more reliant on language servers and extensions)
+    // Ensure your language extensions are well-configured.
+    // Keybinding for "Go to Implementation" (Ctrl+Alt+B in IntelliJ)
+    // Often mapped by the JetBrains IDE Keymap extension. If not, you can add:
+    // { "key": "ctrl+alt+b", "command": "editor.action.goToImplementation",
+    //   "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" }
+    // Check keybindings.json (Preferences: Open Keyboard Shortcuts (JSON))
+    // -------------------------------------------------------------------------
+    // X. ESLINT CONFIGURATION
+    // -------------------------------------------------------------------------
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
+}
