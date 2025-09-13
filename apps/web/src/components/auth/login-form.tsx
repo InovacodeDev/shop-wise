@@ -1,29 +1,46 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLingui } from '@lingui/react/macro';
+import { Link, useRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState, useEffect } from "react";
-import { Link, useRouter } from "@tanstack/react-router";
-import { useLingui } from '@lingui/react/macro';
 
 import { Button } from "@/components/md3/button";
 import {
     Form,
+    FormCard,
     FormInput,
     FormPasswordInput,
-    FormSubmitButton,
-    FormCard
+    FormSubmitButton
 } from "@/components/ui/md3-form";
-import { Separator } from "../ui/separator";
-import { useToast } from "@/hooks/use-toast";
+import { useAsyncOperation } from "@/hooks/use-async-operation";
 import { useAuth } from "@/hooks/use-auth";
-import { apiService } from "@/services/api";
+import { useToast } from "@/hooks/use-toast";
 import { trackEvent } from "@/services/analytics-service";
+import { apiService } from "@/services/api";
+import { Separator } from "../ui/separator";
 
 export function LoginForm() {
     const router = useRouter();
     const { toast } = useToast();
     const { t } = useLingui();
     const { user, loading, reloadUser } = useAuth();
+    
+    // Add async operation for login
+    const loginOperation = useAsyncOperation();
+
+    // Check if user came from successful password reset
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('resetSuccess') === 'true') {
+            toast({
+                title: t`Password reset successful!`,
+                description: t`Your password has been changed. You can now log in with your new password.`,
+            });
+            // Clean up the URL
+            window.history.replaceState({}, '', window.location.pathname);
+        }
+    }, [toast, t]);
 
     const formSchema = z.object({
         email: z.string().email({ message: t`Please enter a valid email.` }),
@@ -40,17 +57,11 @@ export function LoginForm() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        try {
+        await loginOperation.execute(async () => {
             await apiService.login(values.email, values.password);
             trackEvent("login", { method: "email" });
             router.navigate({ to: "/home" });
-        } catch (error: any) {
-            toast({
-                variant: "destructive",
-                title: t`Login Error`,
-                description: error.message,
-            });
-        }
+        });
     }
 
     useEffect(() => {
@@ -94,8 +105,8 @@ export function LoginForm() {
                     </div>
 
                     <FormSubmitButton
-                        disabled={!isValid}
-                        loading={isSubmitting}
+                        disabled={!isValid || loginOperation.isLoading}
+                        loading={loginOperation.isLoading}
                         loadingText={t`Signing in...`}
                         className="mt-6"
                     >

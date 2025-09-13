@@ -3,8 +3,7 @@ import { FamiliesService } from '@/families/families.service';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import argon2 from 'argon2';
-import { randomUUID } from 'crypto';
-import { createHmac } from 'crypto';
+import { createHmac, randomUUID } from 'crypto';
 import { Model } from 'mongoose';
 
 import { UserDocument } from '../users/schemas/user.schema';
@@ -230,6 +229,45 @@ export class AuthService {
             )
             .exec();
         return true;
+    }
+
+    async validateResetToken(token: string): Promise<{ valid: boolean; email?: string }> {
+        // Compute hmac prefix to narrow candidates
+        const hmacSecret = process.env.TOKEN_HMAC_SECRET || process.env.JWT_SECRET || 'dev-secret';
+        const tokenHmac = createHmac('sha256', hmacSecret).update(token).digest('hex');
+        const prefix = tokenHmac.slice(0, 8);
+
+        // Find user candidates by prefix
+        const all = (await this.userModel
+            .find({ passwordResetTokenHmacPrefix: prefix })
+            .lean<LeanUser>()
+            .exec()) as unknown as LeanUser[];
+        let userToUse: LeanUser | null = null;
+        for (const u of all) {
+            if (!u.passwordResetTokenHash) continue;
+            try {
+                const start = Date.now();
+                /* eslint-disable @typescript-eslint/no-unsafe-call */
+                const ok = Boolean(await (argon2 as any).verify(this.safeToString(u.passwordResetTokenHash), token));
+                const duration = Date.now() - start;
+                try {
+                    this.metrics?.recordLookup(Number(duration), Boolean(ok));
+                } catch {
+                    /* ignore metrics errors */
+                }
+                if (ok) {
+                    userToUse = u;
+                    break;
+                }
+            } catch {
+                // ignore verification errors for this entry
+            }
+        }
+        if (!userToUse) return { valid: false };
+        if (userToUse.passwordResetExpiresAt && new Date(userToUse.passwordResetExpiresAt) < new Date())
+            return { valid: false };
+
+        return { valid: true, email: this.safeToString(userToUse.email) || undefined };
     }
 
     async verifyEmail(token: string) {

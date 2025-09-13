@@ -32,7 +32,7 @@ export class EmailService {
         scheduledAt?: string;
     }) {
         try {
-            const from = options.from || this.configService.get<string>('EMAIL_FROM', 'noreply@shopwise.com');
+            const from = options.from || this.configService.get<string>('EMAIL_FROM', '');
 
             const emailData = {
                 from,
@@ -53,7 +53,8 @@ export class EmailService {
             const result = await this.resend.emails.send(emailData);
 
             if (result.error) {
-                throw new Error(`Resend API error: ${result.error.message}`);
+                const errorMessage = result.error?.message || JSON.stringify(result.error) || 'Unknown error';
+                throw new Error(`Resend API error: ${errorMessage}`);
             }
 
             return result.data;

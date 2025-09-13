@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteRouteImport } from './routes/signup/route'
 import { Route as SettingsRouteRouteImport } from './routes/settings/route'
+import { Route as ResetPasswordRouteRouteImport } from './routes/reset-password/route'
 import { Route as PurchasesRouteRouteImport } from './routes/purchases/route'
 import { Route as ProjectionsRouteRouteImport } from './routes/projections/route'
 import { Route as LoginRouteRouteImport } from './routes/login/route'
@@ -44,6 +45,11 @@ const SignupRouteRoute = SignupRouteRouteImport.update({
 const SettingsRouteRoute = SettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRouteRoute = ResetPasswordRouteRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PurchasesRouteRoute = PurchasesRouteRouteImport.update({
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRouteRoute
   '/projections': typeof ProjectionsRouteRoute
   '/purchases': typeof PurchasesRouteRoute
+  '/reset-password': typeof ResetPasswordRouteRoute
   '/settings': typeof SettingsRouteRoute
   '/signup': typeof SignupRouteRoute
   '/admin/audit': typeof AdminAuditRouteRoute
@@ -213,6 +220,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRouteRoute
   '/projections': typeof ProjectionsRouteRoute
   '/purchases': typeof PurchasesRouteRoute
+  '/reset-password': typeof ResetPasswordRouteRoute
   '/settings': typeof SettingsRouteRoute
   '/signup': typeof SignupRouteRoute
   '/admin/audit': typeof AdminAuditRouteRoute
@@ -242,6 +250,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRouteRoute
   '/projections': typeof ProjectionsRouteRoute
   '/purchases': typeof PurchasesRouteRoute
+  '/reset-password': typeof ResetPasswordRouteRoute
   '/settings': typeof SettingsRouteRoute
   '/signup': typeof SignupRouteRoute
   '/admin/audit': typeof AdminAuditRouteRoute
@@ -272,6 +281,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/projections'
     | '/purchases'
+    | '/reset-password'
     | '/settings'
     | '/signup'
     | '/admin/audit'
@@ -300,6 +310,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/projections'
     | '/purchases'
+    | '/reset-password'
     | '/settings'
     | '/signup'
     | '/admin/audit'
@@ -328,6 +339,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/projections'
     | '/purchases'
+    | '/reset-password'
     | '/settings'
     | '/signup'
     | '/admin/audit'
@@ -357,6 +369,7 @@ export interface RootRouteChildren {
   LoginRouteRoute: typeof LoginRouteRoute
   ProjectionsRouteRoute: typeof ProjectionsRouteRoute
   PurchasesRouteRoute: typeof PurchasesRouteRoute
+  ResetPasswordRouteRoute: typeof ResetPasswordRouteRoute
   SettingsRouteRoute: typeof SettingsRouteRoute
   SignupRouteRoute: typeof SignupRouteRoute
 }
@@ -375,6 +388,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/purchases': {
@@ -591,6 +611,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRouteRoute: LoginRouteRoute,
   ProjectionsRouteRoute: ProjectionsRouteRoute,
   PurchasesRouteRoute: PurchasesRouteRoute,
+  ResetPasswordRouteRoute: ResetPasswordRouteRoute,
   SettingsRouteRoute: SettingsRouteRoute,
   SignupRouteRoute: SignupRouteRoute,
 }

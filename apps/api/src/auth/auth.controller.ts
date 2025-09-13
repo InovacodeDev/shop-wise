@@ -8,6 +8,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SetExperimentalPasswordDto } from './dto/set-experimental-password.dto';
 import { SignInDto } from './dto/signin.dto';
 import { SignUpDto } from './dto/signup.dto';
+import { ValidateResetTokenDto } from './dto/validate-reset-token.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { signJwt } from './jwt.util';
 import { OauthService } from './oauth.service';
@@ -103,6 +104,11 @@ export class AuthController {
     @Post('request-password')
     async requestPassword(@Body() dto: RequestPasswordDto) {
         return this.auth.requestPasswordReset(dto.email);
+    }
+
+    @Post('validate-reset-token')
+    async validateResetToken(@Body() dto: ValidateResetTokenDto) {
+        return this.auth.validateResetToken(dto.token);
     }
 
     @Post('reset-password')

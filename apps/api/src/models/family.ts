@@ -6,7 +6,7 @@ export interface Family extends BaseModel {
     ownerId: ID; // user._id
     plan?: 'free' | 'premium' | 'pro';
     planExpiresAt?: Date | null;
-    familyComposition: FamilyComposition;
+    familyComposition?: FamilyComposition;
 }
 
 export interface FamilyComposition {

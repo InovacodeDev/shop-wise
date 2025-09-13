@@ -1,27 +1,31 @@
-import { SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, useSidebar } from "@/components/ui/sidebar";
+import { SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import { useAsyncOperation } from "@/hooks/use-async-operation";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
-import { useLingui } from '@lingui/react/macro';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { apiService } from "@/services/api";
+import { faFileLines, faMessage } from "@fortawesome/free-regular-svg-icons";
 import {
     faChartColumn,
+    faChevronDown,
     faCog,
     faList,
     faMicroscope,
+    faPlus,
     faPlusCircle,
     faShield,
     faShieldHalved,
     faShoppingBasket,
-    faUsers,
     faSignOutAlt,
     faUser,
     faUserGroup,
-    faPlus,
-    faChevronDown,
+    faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import { faFileLines, faMessage } from "@fortawesome/free-regular-svg-icons";
-import { apiService } from "@/services/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLingui } from '@lingui/react/macro';
 
+import { Button, LoadingButton } from "@/components/md3/button";
+import { trackEvent } from "@/services/analytics-service";
+import { Link, useRouter } from "@tanstack/react-router";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -39,9 +43,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Button } from "@/components/md3/button";
-import { trackEvent } from "@/services/analytics-service";
-import { Link, useRouter } from "@tanstack/react-router";
 
 export function MainNav() {
     const router = useRouter();
@@ -49,6 +50,9 @@ export function MainNav() {
     const { t } = useLingui();
     const isAdmin = profile?.isAdmin || false;
     const { state } = useSidebar();
+
+    // Add async operation for logout
+    const logoutOperation = useAsyncOperation();
 
     // Sections:
     // Routes that require premium access (these screens use PremiumFeatureGuard)
@@ -105,25 +109,27 @@ export function MainNav() {
     ];
 
     const handleSignOut = async () => {
-        try {
-            await apiService.revoke();
-        } catch (e) {
-            // ignore
-        }
-        try {
-            apiService.clearAuthState();
-        } catch (e) {
-            console.warn('Error clearing tokens on logout:', e);
-        }
+        await logoutOperation.execute(async () => {
+            try {
+                await apiService.revoke();
+            } catch (e) {
+                // ignore
+            }
+            try {
+                apiService.clearAuthState();
+            } catch (e) {
+                console.warn('Error clearing tokens on logout:', e);
+            }
 
-        try {
-            await reloadUser();
-        } catch {
-            // ignore
-        }
+            try {
+                await reloadUser();
+            } catch {
+                // ignore
+            }
 
-        trackEvent("user_logged_out");
-        router.navigate({ to: "/" });
+            trackEvent("user_logged_out");
+            router.navigate({ to: "/" });
+        });
     };
 
     const isActive = (href: string) => {
@@ -396,7 +402,13 @@ export function MainNav() {
                         <AlertDialogFooter>
                             <AlertDialogCancel>{t`Cancel`}</AlertDialogCancel>
                             <AlertDialogAction asChild>
-                                <Button onClick={handleSignOut}>{t`Yes, sign out`}</Button>
+                                <LoadingButton 
+                                    onClick={handleSignOut} 
+                                    loading={logoutOperation.isLoading}
+                                    disabled={logoutOperation.isLoading}
+                                >
+                                    {t`Yes, sign out`}
+                                </LoadingButton>
                             </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>

@@ -72,11 +72,23 @@ describe('UsersService Integration Tests', () => {
         });
 
         it('should find a user with valid UUID', async () => {
+            // When no requesting user ID is provided, email should not be included
             const found = await usersService.findOne(testUserId);
 
             expect(found).toBeDefined();
             expect(found._id).toBe(testUserId);
-            expect(found.email).toBe('test@example.com');
+            expect(found.email).toBeUndefined(); // Email should be sanitized
+            expect(found.displayName).toBe('Test User');
+        });
+
+        it('should find a user with email when user requests their own data', async () => {
+            // When requesting user's own data, email should be included
+            const found = await usersService.findOne(testUserId, testUserId);
+
+            expect(found).toBeDefined();
+            expect(found._id).toBe(testUserId);
+            expect(found.email).toBe('test@example.com'); // Email should be included for own data
+            expect(found.displayName).toBe('Test User');
         });
 
         it('should throw BadRequestException for invalid UUID format', async () => {
@@ -190,13 +202,34 @@ describe('UsersService Integration Tests', () => {
         });
 
         it('should remove a user with valid UUID', async () => {
+            // When no requesting user ID is provided, email should not be included
             const removed = await usersService.remove(testUserId);
 
             expect(removed).toBeDefined();
             expect(removed._id).toBe(testUserId);
-            expect(removed.email).toBe('test@example.com');
+            expect(removed.email).toBeUndefined(); // Email should be sanitized
 
             const doc = await UserModel.findById(testUserId).exec();
+            expect(doc).toBeNull();
+        });
+
+        it('should remove a user and include email when user removes their own data', async () => {
+            // Create another user to test removal with own data access
+            const anotherUserId = randomUUID();
+            const createDto: CreateUserDto = {
+                email: 'another@example.com',
+                displayName: 'Another User',
+            };
+            await usersService.create(createDto, anotherUserId);
+
+            // When requesting user removes their own data, email should be included
+            const removed = await usersService.remove(anotherUserId, anotherUserId);
+
+            expect(removed).toBeDefined();
+            expect(removed._id).toBe(anotherUserId);
+            expect(removed.email).toBe('another@example.com'); // Email should be included for own data
+
+            const doc = await UserModel.findById(anotherUserId).exec();
             expect(doc).toBeNull();
         });
 

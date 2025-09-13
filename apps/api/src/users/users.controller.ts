@@ -19,26 +19,30 @@ export class UsersController {
     }
 
     @Get()
-    findAll() {
-        return this.usersService.findAll();
+    findAll(@Req() req: AuthenticatedRequest) {
+        const requestingUserId = req.user?.uid;
+        return this.usersService.findAll(requestingUserId);
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.usersService.findOne(id);
+    findOne(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
+        const requestingUserId = req.user?.uid;
+        return this.usersService.findOne(id, requestingUserId);
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Req() req: AuthenticatedRequest) {
         // A user should only be able to update their own data.
         // A more robust implementation would check if req.user.uid === id
-        return this.usersService.update(id, updateUserDto);
+        const requestingUserId = req.user?.uid;
+        return this.usersService.update(id, updateUserDto, requestingUserId);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
+    remove(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
         // A user should only be able to delete their own account.
         // A more robust implementation would check if req.user.uid === id
-        return this.usersService.remove(id);
+        const requestingUserId = req.user?.uid;
+        return this.usersService.remove(id, requestingUserId);
     }
 }

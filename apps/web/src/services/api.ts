@@ -22,7 +22,6 @@ import type {
     // Category types
     Category,
     CheckoutResponse,
-    CreateCategoryRequest,
     CreateCheckoutRequest,
     CreateFamilyRequest,
     CreateNotificationRequest,
@@ -117,8 +116,8 @@ export class ApiService {
     // In-memory token store (safer than always using localStorage)
     private inMemoryBackendToken: string | null = null;
     private inMemoryBackendRefreshToken: string | null = null;
-    // Toggle to persist tokens in localStorage for compatibility; default false for safer behavior
-    private persistTokens: boolean = (import.meta.env.VITE_PERSIST_TOKENS as string) === 'true' || false;
+    // Toggle to persist tokens in localStorage for compatibility; default true for better UX
+    private persistTokens: boolean = (import.meta.env.VITE_PERSIST_TOKENS as string) !== 'false';
 
     constructor() {
         this.axiosInstance = axios.create({
@@ -129,6 +128,9 @@ export class ApiService {
             // Send credentials (cookies) in case the backend uses cookie-based sessions
             withCredentials: true,
         });
+
+        // Initialize tokens from localStorage if available
+        this.initializeTokensFromStorage();
 
         // Request interceptor to add auth token
         this.axiosInstance.interceptors.request.use(
@@ -262,6 +264,20 @@ export class ApiService {
             console.warn('Unable to refresh auth token:', e);
         }
         return null;
+    }
+
+    private initializeTokensFromStorage() {
+        if (this.persistTokens) {
+            const storedToken = localStorage.getItem('backendAuthToken');
+            const storedRefreshToken = localStorage.getItem('backendRefreshToken');
+
+            if (storedToken) {
+                this.inMemoryBackendToken = storedToken;
+            }
+            if (storedRefreshToken) {
+                this.inMemoryBackendRefreshToken = storedRefreshToken;
+            }
+        }
     }
 
     private async getAuthToken(): Promise<string | null> {
@@ -532,6 +548,27 @@ export class ApiService {
         });
         await this.handleAuthResponse(resp);
         return resp;
+    }
+
+    async requestPasswordReset(email: string): Promise<{ ok: boolean }> {
+        return this.makeRequest<{ ok: boolean }>('/auth/request-password', {
+            method: 'POST',
+            data: JSON.stringify({ email }),
+        });
+    }
+
+    async validateResetToken(token: string): Promise<{ valid: boolean; email?: string }> {
+        return this.makeRequest<{ valid: boolean; email?: string }>('/auth/validate-reset-token', {
+            method: 'POST',
+            data: JSON.stringify({ token }),
+        });
+    }
+
+    async resetPassword(token: string, newPassword: string): Promise<boolean> {
+        return this.makeRequest<boolean>('/auth/reset-password', {
+            method: 'POST',
+            data: JSON.stringify({ token, newPassword }),
+        });
     }
 
     /**
