@@ -4,14 +4,17 @@
     "framework": null,
     "installCommand": "pnpm install",
     "functions": {
-        "apps/api/dist/main.js": {
+        "apps/api/api/index.js": {
             "runtime": "nodejs18.x"
         }
+    },
+    "env": {
+        "SERVERLESS": "true"
     },
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/api/index.js"
+            "destination": "/api"
         }
     ]
 }

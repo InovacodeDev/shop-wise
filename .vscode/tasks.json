@@ -1,0 +1,227 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-api",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "build"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/apps/api"
+            },
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "label": "build-web",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "build"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/apps/web"
+            },
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "label": "build-all",
+            "type": "shell",
+            "command": "turbo",
+            "args": ["run", "build"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "label": "dev-api",
+            "type": "shell",
+            "command": "turbo",
+            "args": ["run", "dev", "--filter=@shop-wise/api"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "typescript",
+                "source": "ts",
+                "applyTo": "closedDocuments",
+                "fileLocation": "relative",
+                "pattern": "$tsc",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Starting compilation in watch mode...",
+                    "endsPattern": "Found \\d+ errors?\\. Watching for file changes\\."
+                }
+            }
+        },
+        {
+            "label": "dev-web",
+            "type": "shell",
+            "command": "turbo",
+            "args": ["run", "dev", "--filter=@shop-wise/web"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "vite",
+                "source": "vite",
+                "applyTo": "closedDocuments",
+                "fileLocation": "relative",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "\\s*Local:",
+                    "endsPattern": "ready in \\d+ms"
+                }
+            }
+        },
+        {
+            "label": "dev-all",
+            "type": "shell",
+            "command": "turbo",
+            "args": ["run", "dev"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "isBackground": true,
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "label": "test-api",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "test"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/apps/api"
+            }
+        },
+        {
+            "label": "test-web",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "test"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/apps/web"
+            }
+        },
+        {
+            "label": "lint-all",
+            "type": "shell",
+            "command": "turbo",
+            "args": ["run", "lint"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$eslint-stylish"]
+        },
+        {
+            "label": "clean-all",
+            "type": "shell",
+            "command": "turbo",
+            "args": ["run", "clean"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        }
+    ]
+}

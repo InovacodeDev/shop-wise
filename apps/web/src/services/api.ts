@@ -37,7 +37,6 @@ import type {
     CreateUserRequest,
     CreditCard,
     CreditCardInvoice,
-    CreditTransaction,
     // Generic types
     DeleteResponse,
     EducationalContent,
@@ -66,7 +65,6 @@ import type {
     PantryItem,
     // Payment types
     PaymentListParams,
-    PaymentMethod,
     PaymentStatusResponse,
     Plan,
     PollStatusResponse,
@@ -76,7 +74,6 @@ import type {
     Purchase,
     // Purchase Item types
     PurchaseItem,
-    RecurringTransaction,
     RefreshTokenResponse,
     RevokeTokenResponse,
     // Shopping List types
@@ -111,7 +108,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 export class ApiService {
     // Normalize VITE_API_URL to always include '/api' prefix expected by backend
     private baseURL = (() => {
-        const configured = (import.meta.env.VITE_API_URL as string) || '';
+        const configured = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3001';
         if (!configured) return '/api';
         const trimmed = configured.replace(/\/+$/, '');
         return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;

@@ -1,0 +1,135 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "🚀 Launch API (NestJS)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/apps/api/dist/main.js",
+            "preLaunchTask": "build-api",
+            "cwd": "${workspaceFolder}/apps/api",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "restart": true,
+            "sourceMaps": true,
+            "outFiles": ["${workspaceFolder}/apps/api/dist/**/*.js"],
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
+            "name": "🔧 Debug API (NestJS) - Watch Mode",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/nest",
+            "args": ["start", "--debug", "--watch"],
+            "cwd": "${workspaceFolder}/apps/api",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "restart": true,
+            "sourceMaps": true,
+            "outFiles": ["${workspaceFolder}/apps/api/dist/**/*.js"],
+            "skipFiles": ["<node_internals>/**"],
+            "runtimeArgs": ["--preserve-symlinks"]
+        },
+        {
+            "name": "🌐 Launch Web (Vite + React)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/vite",
+            "args": ["dev", "--host", "0.0.0.0", "--port", "3000"],
+            "cwd": "${workspaceFolder}/apps/web",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
+            "name": "🏃 Launch Full Stack (API + Web)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/turbo",
+            "args": ["run", "dev"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
+            "name": "🧪 Test API (Jest)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "args": ["--runInBand", "--detectOpenHandles", "--forceExit"],
+            "cwd": "${workspaceFolder}/apps/api",
+            "env": {
+                "NODE_ENV": "test"
+            },
+            "envFile": "${workspaceFolder}/.env.test",
+            "console": "integratedTerminal",
+            "sourceMaps": true,
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
+            "name": "🧪 Test API E2E",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "args": ["--config", "./test/jest-e2e.json", "--runInBand", "--detectOpenHandles", "--forceExit"],
+            "cwd": "${workspaceFolder}/apps/api",
+            "env": {
+                "NODE_ENV": "test"
+            },
+            "envFile": "${workspaceFolder}/.env.test",
+            "console": "integratedTerminal",
+            "sourceMaps": true,
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
+            "name": "🧪 Test Web (Vitest)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/vitest",
+            "args": ["run"],
+            "cwd": "${workspaceFolder}/apps/web",
+            "env": {
+                "NODE_ENV": "test"
+            },
+            "console": "integratedTerminal",
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
+            "name": "🔨 Build All",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/turbo",
+            "args": ["run", "build"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "NODE_ENV": "production"
+            },
+            "console": "integratedTerminal",
+            "skipFiles": ["<node_internals>/**"]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "🚀 Debug Full Stack",
+            "configurations": ["🔧 Debug API (NestJS) - Watch Mode", "🌐 Launch Web (Vite + React)"],
+            "presentation": {
+                "hidden": false,
+                "group": "fullstack",
+                "order": 1
+            }
+        }
+    ]
+}

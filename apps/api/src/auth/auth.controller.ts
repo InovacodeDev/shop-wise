@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Body, Controller, Delete, Get, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import type { Request, Response } from 'express';
 
@@ -13,7 +12,6 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 import { signJwt } from './jwt.util';
 import { OauthService } from './oauth.service';
 import { PassportJwtAuthGuard } from './passport-auth.guard';
-import { RefreshDto } from './refresh.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -48,7 +46,13 @@ export class AuthController {
         // Create a refresh token and return it as HttpOnly cookie
         try {
             const refresh = await this.auth.createRefreshTokenForUid(u._id);
-            // Set secure HttpOnly cookie for refresh token and return token+uid only
+
+            // For serverless environments, return tokens instead of setting cookies
+            if (process.env.NODE_ENV === 'production' || process.env.SERVERLESS === 'true') {
+                return { token, uid: u._id, refreshToken: refresh };
+            }
+
+            // For development, set secure HttpOnly cookie for refresh token and return token+uid only
             res.cookie('refreshToken', refresh, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
@@ -72,6 +76,17 @@ export class AuthController {
         const result = await this.auth.signIn(dto.email, dto.password, dto.totp);
         // result: { token, uid, refresh }
         const refreshVal = (result as { refresh?: string }).refresh;
+
+        // For serverless environments, return tokens instead of setting cookies
+        if (process.env.NODE_ENV === 'production' || process.env.SERVERLESS === 'true') {
+            return {
+                token: result.token,
+                uid: result.uid,
+                refreshToken: refreshVal,
+            };
+        }
+
+        // For development, still use cookies
         if (refreshVal) {
             // Set secure HttpOnly cookie for refresh token
             res.cookie('refreshToken', refreshVal, {
@@ -101,11 +116,12 @@ export class AuthController {
     }
 
     @Post('refresh')
-    async refresh(@Body() body: RefreshDto, @Req() req: Request) {
-        // Prefer body.token, fallback to cookie
-        type RequestWithCookies = Request & { cookies?: Record<string, string> };
-        const cookieToken = (req as unknown as RequestWithCookies).cookies?.refreshToken;
-        const token = typeof body.token === 'string' ? body.token : cookieToken;
+    async refresh(@Req() req: Request) {
+        // Try to get refresh token from header first (for serverless), then from cookie
+        const headerToken = req.headers['authorization']?.replace('Bearer ', '');
+        const cookieToken = (req as any).cookies?.refreshToken;
+        const token = headerToken || cookieToken;
+
         if (!token) throw new Error('No refresh token provided');
         return this.auth.refreshToken(String(token));
     }
