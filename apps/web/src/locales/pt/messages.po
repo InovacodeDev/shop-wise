@@ -2320,3 +2320,71 @@ msgstr "Seu comportamento de gastos ao longo do tempo, com foco atual em {curren
 #: src/routes/home/route.tsx:881
 msgid "Your spending behavior through {currentMonthName}. Current month is highlighted."
 msgstr "Seu comportamento de gastos até {currentMonthName}. O mês atual está destacado."
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Active"
+msgstr "Ativas"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Created"
+msgstr "Criadas"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Completed"
+msgstr "Concluídas"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Archived"
+msgstr "Arquivadas"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "No active lists yet"
+msgstr "Nenhuma lista ativa ainda"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "No created lists yet"
+msgstr "Nenhuma lista criada ainda"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "No completed lists yet"
+msgstr "Nenhuma lista concluída ainda"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "No archived lists yet"
+msgstr "Nenhuma lista arquivada ainda"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Brand (optional)"
+msgstr "Marca (opcional)"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "No brand"
+msgstr "Sem marca"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Category"
+msgstr "Categoria"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Category (required for new products)"
+msgstr "Categoria (obrigatório para novos produtos)"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Price (optional)"
+msgstr "Preço (opcional)"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Description (optional)"
+msgstr "Descrição (opcional)"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Item updated"
+msgstr "Item atualizado"
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Shopping list item has been updated."
+msgstr "O item da lista de compras foi atualizado."
+
+#: src/components/list/shopping-list-component-new.tsx
+msgid "Could not update item"
+msgstr "Não foi possível atualizar o item"

@@ -5,7 +5,6 @@ import { getCurrencyFromLocale } from '@/lib/localeCurrency';
 import {
     ChartContainer,
     ChartTooltip,
-    ChartTooltipContent,
     ChartLegend,
     ChartLegendContent,
 } from "@/components/ui/chart";
@@ -16,8 +15,6 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/md3/badge";
 import { Chip } from "@/components/md3/chip";
 import { cn } from "@/lib/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,7 +23,6 @@ import {
     faDollarSign,
     faShoppingBag,
     faArrowTrendUp,
-    faChartColumn,
     faTag,
     faScaleBalanced,
     faHashtag,
@@ -231,7 +227,6 @@ function DashboardPage() {
             try {
                 allFamilyPurchaseItems = await apiService.getAllFamilyPurchaseItems(profile.familyId);
                 monthlyGroups = await apiService.getPurchasesByMonth(profile.familyId);
-                console.log({ allFamilyPurchaseItems, monthlyGroups });
             } catch (error) {
                 console.error("Failed to fetch family purchase data:", error);
                 setLoading(false);
@@ -417,7 +412,6 @@ function DashboardPage() {
                 }
             });
 
-            console.log(Object.values(monthlyData)); // Debug log to verify data structure
             setBarChartData(Object.values(monthlyData));
 
             // -- Process Pie Chart data (this month) --

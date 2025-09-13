@@ -2,7 +2,6 @@
  * TypeScript types for API service responses
  * These types define the expected return types for all API endpoints
  */
-import { AnalyzeConsumptionDataOutput, ExtractProductDataOutput, SuggestMissingItemsOutput } from './ai-flows';
 
 // ===============================
 // Base Types
@@ -439,6 +438,7 @@ export interface UpdateShoppingListRequest {
     name?: string;
     description?: string;
     isActive?: boolean;
+    status?: string;
 }
 
 // ===============================
@@ -584,7 +584,7 @@ export interface SuggestMissingItemsRequest {
 }
 
 // Re-export AI flow output types
-export type { ExtractProductDataOutput, AnalyzeConsumptionDataOutput, SuggestMissingItemsOutput } from './ai-flows';
+export type { AnalyzeConsumptionDataOutput, ExtractProductDataOutput, SuggestMissingItemsOutput } from './ai-flows';
 
 // ===============================
 // Generic API Response Types

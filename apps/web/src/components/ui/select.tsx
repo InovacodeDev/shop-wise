@@ -1,10 +1,10 @@
-import * as React from "react";
-import * as SelectPrimitive from "@radix-ui/react-select";
 import { faCheck, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import * as SelectPrimitive from "@radix-ui/react-select";
+import * as React from "react";
 
+import { materialComponents, materialShapes, materialTypography } from "@/lib/material-design";
 import { cn } from "@/lib/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { materialColors, materialTypography, materialShapes, materialComponents } from "@/lib/material-design";
 
 const Select = SelectPrimitive.Root;
 
@@ -12,10 +12,15 @@ const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
 
+interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+    height?: string | number;
+    borderRadius?: string | number;
+}
+
 const SelectTrigger = React.forwardRef<
     React.ElementRef<typeof SelectPrimitive.Trigger>,
-    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+    SelectTriggerProps
+>(({ className, children, height, borderRadius, ...props }, ref) => (
     <SelectPrimitive.Trigger
         ref={ref}
         className={cn(
@@ -23,8 +28,8 @@ const SelectTrigger = React.forwardRef<
             className
         )}
         style={{
-            height: materialComponents.textField.height.outlined,
-            borderRadius: materialShapes.corner.extraSmall,
+            height: height ?? materialComponents.textField.height.outlined,
+            borderRadius: borderRadius ?? materialShapes.corner.extraSmall,
             ...materialTypography.bodyLarge,
             paddingLeft: '12px',
             paddingRight: '12px',
@@ -148,14 +153,6 @@ const SelectSeparator = React.forwardRef<
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 export {
-    Select,
-    SelectGroup,
-    SelectValue,
-    SelectTrigger,
-    SelectContent,
-    SelectLabel,
-    SelectItem,
-    SelectSeparator,
-    SelectScrollUpButton,
-    SelectScrollDownButton,
+    Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue
 };
+

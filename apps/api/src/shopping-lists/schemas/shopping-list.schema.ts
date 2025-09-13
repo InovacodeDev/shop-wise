@@ -17,6 +17,9 @@ export class ShoppingListDocument extends Document<string> {
 
     @Prop({ type: [Object], default: [] })
     items?: any[];
+
+    @Prop({ type: String, enum: ['active', 'created', 'completed', 'archived'], default: 'active' })
+    status?: string;
 }
 
 export const ShoppingListSchema = SchemaFactory.createForClass(ShoppingListDocument);
