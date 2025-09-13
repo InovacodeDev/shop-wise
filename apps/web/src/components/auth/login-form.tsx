@@ -59,6 +59,12 @@ export function LoginForm() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         await loginOperation.execute(async () => {
             await apiService.login(values.email, values.password);
+            // Ensure auth context/profile is loaded before redirecting
+            try {
+                await reloadUser();
+            } catch (e) {
+                console.warn('reloadUser after login failed:', e);
+            }
             trackEvent("login", { method: "email" });
             router.navigate({ to: "/home" });
         });

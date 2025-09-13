@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useAsyncOperation } from "@/hooks/use-async-operation";
+import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { trackEvent } from "@/services/analytics-service";
 import { apiService } from "@/services/api";
@@ -24,6 +25,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     const { t } = useLingui();
     const { toast } = useToast();
     const router = useRouter();
+    const { reloadUser } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -76,11 +78,18 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             });
 
             // Attempt auto-login if we have the user's email
-            if (userEmail) {
+                if (userEmail) {
                 try {
                     await apiService.login(userEmail, values.password);
                     trackEvent("login", { method: "password_reset" });
-                    
+
+                    // Ensure auth context/profile is loaded before redirecting
+                    try {
+                        await reloadUser();
+                    } catch (e) {
+                        console.warn('reloadUser after password reset failed:', e);
+                    }
+
                     // Redirect to home after successful login
                     router.navigate({ to: "/home" });
                 } catch (loginError) {
