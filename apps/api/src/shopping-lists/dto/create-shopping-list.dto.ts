@@ -2,7 +2,9 @@ import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export enum ShoppingListStatus {
     ACTIVE = 'active',
+    CREATED = 'created',
     COMPLETED = 'completed',
+    ARCHIVED = 'archived',
 }
 
 export class CreateShoppingListDto {

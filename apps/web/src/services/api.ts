@@ -654,7 +654,8 @@ export class ApiService {
 
     // Shopping Lists endpoints
     async getShoppingLists(familyId: string): Promise<ShoppingList[]> {
-        return this.makeRequest<ShoppingList[]>(`/families/${familyId}/shopping-lists`);
+        const result = await this.makeRequest<ShoppingList[]>(`/families/${familyId}/shopping-lists`);
+        return result;
     }
 
     async createShoppingList(familyId: string, data: CreateShoppingListRequest): Promise<ShoppingList> {

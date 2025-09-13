@@ -43,10 +43,18 @@ export class ShoppingListsService {
 
     async findAll(familyId: string): Promise<ShoppingList[]> {
         UuidUtil.validateUuid(familyId);
-        return (await this.shoppingListModel
+        const result = (await this.shoppingListModel
             .find({ familyId })
             .lean<LeanShoppingList>()
             .exec()) as unknown as ShoppingList[];
+
+        // Ensure all lists have a status field for backward compatibility
+        const resultWithStatus = result.map((list) => ({
+            ...list,
+            status: list.status || 'active',
+        }));
+
+        return resultWithStatus;
     }
 
     async findOne(familyId: string, id: string): Promise<ShoppingList> {

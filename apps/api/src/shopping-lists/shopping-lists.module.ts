@@ -6,6 +6,8 @@ import { PassportJwtAuthGuard } from '../auth/passport-auth.guard';
 import { PurchaseSchema } from '../purchases/schemas/purchase.schema';
 import { StoresModule } from '../stores/stores.module';
 import { ShoppingListSchema } from './schemas/shopping-list.schema';
+import { ShoppingListItemsController } from './shopping-list-items.controller';
+import { ShoppingListItemsService } from './shopping-list-items.service';
 import { ShoppingListsController } from './shopping-lists.controller';
 import { ShoppingListsService } from './shopping-lists.service';
 
@@ -18,7 +20,7 @@ import { ShoppingListsService } from './shopping-lists.service';
         AiModule,
         forwardRef(() => StoresModule),
     ],
-    controllers: [ShoppingListsController],
-    providers: [ShoppingListsService, PassportJwtAuthGuard],
+    controllers: [ShoppingListsController, ShoppingListItemsController],
+    providers: [ShoppingListsService, ShoppingListItemsService, PassportJwtAuthGuard],
 })
 export class ShoppingListsModule {}
