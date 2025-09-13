@@ -1,26 +1,30 @@
+import { Button, LoadingButton } from "@/components/md3/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/md3/card";
+import { Input } from "@/components/md3/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useAsyncOperation } from "@/hooks/use-async-operation";
+import { useToast } from "@/hooks/use-toast";
+import { apiService } from "@/services/api";
+import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/md3/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/md3/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/md3/card";
 import { Separator } from "../ui/separator";
-import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import { apiService } from "@/services/api";
 
 import { trackEvent } from "@/services/analytics-service";
-import { Link, useRouter } from "@tanstack/react-router";
 import { useLingui } from '@lingui/react/macro';
+import { Link, useRouter } from "@tanstack/react-router";
 
 export function SignupForm() {
     const router = useRouter();
     const { toast } = useToast();
     const { t } = useLingui();
     const [showPassword, setShowPassword] = useState(false);
+    
+    // Add async operation for signup
+    const signupOperation = useAsyncOperation();
 
     const formSchema = z.object({
         name: z.string().min(2, { message: t`Please enter at least two caracters.` }),
@@ -39,7 +43,7 @@ export function SignupForm() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        try {
+        await signupOperation.execute(async () => {
             const resp = await apiService.signUp({ email: values.email, password: values.password, displayName: values.name });
             if (resp?.token) {
                 apiService.setBackendAuthToken(resp.token);
@@ -47,13 +51,7 @@ export function SignupForm() {
             }
             trackEvent("sign_up", { method: "email" });
             router.navigate({ to: "/home" });
-        } catch (error: any) {
-            toast({
-                variant: "destructive",
-                title: t`Error Creating Account`,
-                description: error.message,
-            });
-        }
+        });
     }
 
     const { isValid, isSubmitting } = form.formState;
@@ -138,9 +136,15 @@ export function SignupForm() {
                                 )}
                             />
                         </div>
-                        <Button type="submit" className="w-full" disabled={!isValid || isSubmitting}>
+                        <LoadingButton 
+                            type="submit" 
+                            className="w-full" 
+                            disabled={!isValid || signupOperation.isLoading}
+                            loading={signupOperation.isLoading}
+                            loadingText={t`Creating Account...`}
+                        >
                             {t`Create Account`}
-                        </Button>
+                        </LoadingButton>
                         <div className="relative">
                             <Separator />
                             <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-sm text-muted-foreground">

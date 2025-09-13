@@ -1,5 +1,7 @@
 import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 
+import { type FamilyComposition } from '../../models/family';
+
 export enum FamilyPlan {
     FREE = 'free',
     PRO = 'pro',
@@ -18,4 +20,7 @@ export class UpdateFamilyDto {
     @IsDateString()
     @IsOptional()
     planExpiresAt?: Date;
+
+    @IsOptional()
+    familyComposition?: FamilyComposition;
 }

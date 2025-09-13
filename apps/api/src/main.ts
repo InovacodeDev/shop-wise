@@ -60,8 +60,24 @@ async function bootstrap() {
         origin: (origin: string | undefined, callback: any) => {
             // Allow non-browser requests (no origin) like curl / server-to-server
             if (!origin) return callback(null, true);
-            // In development, allow localhost if no explicit origins set
-            if (allowedOrigins.length === 0 && process.env.NODE_ENV === 'development') return callback(null, true);
+
+            // In development, be more permissive
+            if (process.env.NODE_ENV === 'development') {
+                // Allow localhost and any local development origins
+                if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+                    return callback(null, true);
+                }
+            }
+
+            // Check configured origins
+            if (allowedOrigins.length === 0) {
+                // If no origins configured and not development, deny
+                if (process.env.NODE_ENV !== 'development') {
+                    return callback(new Error('CORS not allowed'), false);
+                }
+                return callback(null, true);
+            }
+
             const isAllowed = allowedOrigins.some((o) => {
                 if (o === origin) return true;
                 if (o.includes('*')) {

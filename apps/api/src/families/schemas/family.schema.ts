@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+import type { FamilyComposition } from '../../models/family';
+
 @Schema({ collection: 'families', timestamps: false, _id: false })
 export class FamilyDocument extends Document<string> {
     @Prop({ type: String, required: true })
@@ -18,8 +20,8 @@ export class FamilyDocument extends Document<string> {
     @Prop({ required: false, default: null, type: Date })
     planExpiresAt?: Date;
 
-    @Prop({ type: [Object] })
-    familyComposition: Record<string, number>;
+    @Prop({ type: Object, required: true, default: {} })
+    familyComposition: FamilyComposition;
 
     @Prop()
     createdAt: Date;

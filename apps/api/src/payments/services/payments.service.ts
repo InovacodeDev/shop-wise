@@ -4,8 +4,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import Stripe from 'stripe';
 
+import { EmailService } from '../../common/email.service';
 import { FamilyPlan, UpdateFamilyDto } from '../../families/dto/update-family.dto';
 import { FamiliesService } from '../../families/families.service';
+import { UsersService } from '../../users/users.service';
 import { CreateCheckoutDto } from '../dto/create-checkout.dto';
 import { CreateEmbeddedProPlanCheckoutDto } from '../dto/create-embedded-pro-plan-checkout.dto';
 import { CreateProPlanCheckoutDto, ProPlanType } from '../dto/create-pro-plan-checkout.dto';
@@ -36,6 +38,8 @@ export class PaymentsService {
         private readonly stripeClientService: StripeClientService,
         private readonly familiesService: FamiliesService,
         private readonly configService: ConfigService,
+        private readonly emailService: EmailService,
+        private readonly usersService: UsersService,
     ) {}
 
     /**
@@ -642,6 +646,36 @@ export class PaymentsService {
             if (familyId && typeof familyId === 'string') {
                 await this.familiesService.update(familyId, updateFamilyDto);
                 this.logger.log(`Family plan updated to PRO for family ${familyId}`);
+
+                // Send plan purchase confirmation email
+                try {
+                    const user = await this.usersService.findOne(userId);
+                    const planName = planType === ProPlanType.MONTHLY ? 'Pro Monthly' : 'Pro Yearly';
+                    const amount = parseFloat(transaction.metadata?.amount as string) || 0;
+                    const currency = (transaction.metadata?.currency as string) || 'USD';
+                    const billingCycle = planType === ProPlanType.MONTHLY ? 'Mensal' : 'Anual';
+
+                    const planDetails = {
+                        planName,
+                        amount,
+                        currency: currency.toUpperCase(),
+                        features: [
+                            'Compras ilimitadas',
+                            'Listas de compras avançadas',
+                            'Análise de gastos',
+                            'Suporte prioritário',
+                        ],
+                        billingCycle,
+                    };
+
+                    await this.emailService.sendPlanPurchaseConfirmation(user.email || '', planDetails);
+
+                    this.logger.log(`Plan purchase confirmation email sent to ${user.email || 'unknown'}`);
+                } catch (emailError) {
+                    this.logger.error(
+                        `Failed to send plan purchase confirmation email: ${emailError instanceof Error ? emailError.message : 'Unknown error'}`,
+                    );
+                }
             } else {
                 this.logger.warn('No family ID found for pro plan upgrade');
             }

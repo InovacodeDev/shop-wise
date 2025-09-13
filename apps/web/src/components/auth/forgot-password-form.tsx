@@ -1,16 +1,23 @@
+import { Button, LoadingButton } from "@/components/md3/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/md3/card";
+import { Input } from "@/components/md3/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/md3/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/md3/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/md3/card";
 
-import { Link } from "@tanstack/react-router";
+import { useAsyncOperation } from "@/hooks/use-async-operation";
+import { useToast } from "@/hooks/use-toast";
+import { apiService } from "@/services/api";
 import { useLingui } from '@lingui/react/macro';
+import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 
 export function ForgotPasswordForm() {
     const { t } = useLingui();
+    const { toast } = useToast();
+    const [emailSent, setEmailSent] = useState(false);
+    const resetOperation = useAsyncOperation();
 
     const formSchema = z.object({
         email: z.string().email({ message: t`Please enter a valid email.` }),
@@ -24,12 +31,55 @@ export function ForgotPasswordForm() {
         mode: "onChange",
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        // Here you would handle the password reset logic
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        await resetOperation.execute(async () => {
+            await apiService.requestPasswordReset(values.email);
+            setEmailSent(true);
+            toast({
+                title: t`Reset link sent!`,
+                description: t`We've sent a password reset link to your email address.`,
+            });
+        });
     }
 
-    const { isDirty, isValid, isSubmitting } = form.formState;
+    const { isDirty, isValid } = form.formState;
+
+    if (emailSent) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-2xl font-headline">{t`Check Your Email`}</CardTitle>
+                    <CardDescription>{t`We've sent a password reset link to your email address. Please check your inbox and follow the instructions.`}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="text-center">
+                        <p className="text-sm text-muted-foreground">
+                            {t`Didn't receive the email? Check your spam folder or try again.`}
+                        </p>
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <div className="w-full space-y-2">
+                        <Button 
+                            variant="outlined" 
+                            className="w-full" 
+                            onClick={() => setEmailSent(false)}
+                        >
+                            {t`Try Different Email`}
+                        </Button>
+                        <p className="text-sm text-muted-foreground w-full text-center">
+                            {t`Remembered your password?`}{" "}
+                            <Link to="/login">
+                                <Button variant="link" className="px-0 h-auto">
+                                    {t`Login`}
+                                </Button>
+                            </Link>
+                        </p>
+                    </div>
+                </CardFooter>
+            </Card>
+        );
+    }
 
     return (
         <Card>
@@ -53,9 +103,14 @@ export function ForgotPasswordForm() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="w-full" disabled={!isDirty || !isValid || isSubmitting}>
+                        <LoadingButton 
+                            type="submit" 
+                            className="w-full" 
+                            disabled={!isDirty || !isValid}
+                            loading={resetOperation.isLoading}
+                        >
                             {t`Send Reset Link`}
-                        </Button>
+                        </LoadingButton>
                     </CardContent>
                     <CardFooter>
                         <p className="text-sm text-muted-foreground w-full text-center">

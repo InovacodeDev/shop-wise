@@ -1,0 +1,58 @@
+{
+    "recommendations": [
+        // Essential TypeScript/JavaScript
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+
+        // React Development
+        "dsznajder.es7-react-js-snippets",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+
+        // Node.js/NestJS
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-node-debug2",
+
+        // Database & API
+        "mongodb.mongodb-vscode",
+        "humao.rest-client",
+        "rangav.vscode-thunder-client",
+
+        // Git & Version Control
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+
+        // Development Tools
+        "gruntfuggly.todo-tree",
+        "aaron-bond.better-comments",
+        "wayou.vscode-todo-highlight",
+        "ms-vscode.vscode-npm-script",
+
+        // Productivity
+        "christian-kohler.npm-intellisense",
+        "ms-vscode.vscode-json5",
+        "dotenv.dotenv-vscode",
+
+        // Testing
+        "ms-vscode.test-adapter-converter",
+        "hbenl.vscode-test-explorer",
+        "orta.vscode-jest",
+
+        // Code Quality
+        "streetsidesoftware.code-spell-checker",
+        "shardulm94.trailing-spaces",
+        "editorconfig.editorconfig",
+
+        // Theme & UI
+        "pkief.material-icon-theme",
+        "github.github-vscode-theme",
+
+        // Turbo/Monorepo specific
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-json"
+    ],
+    "unwantedRecommendations": ["ms-vscode.vscode-typescript", "hookyqr.beautify"]
+}

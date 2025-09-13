@@ -12,7 +12,7 @@ export default defineConfig({
         proxy: {
             // Proxy API requests during development to backend to avoid CORS issues
             '/api': {
-                target: 'http://localhost:9091',
+                target: 'http://localhost:3001',
                 changeOrigin: true,
                 secure: false,
                 rewrite: (path) => path.replace(/^\/api/, ''),
@@ -37,5 +37,6 @@ export default defineConfig({
     // Increase the chunk size warning limit from the default 500KB to 1000KB
     build: {
         chunkSizeWarningLimit: 1000,
+        outDir: 'dist',
     },
 });

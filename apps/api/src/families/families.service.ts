@@ -33,10 +33,15 @@ export class FamiliesService {
     }
     async update(id: string, updateFamilyDto: UpdateFamilyDto): Promise<Family> {
         UuidUtil.validateUuid(id);
-        const existing = await this.familyModel.findById(id).exec();
+
+        // Check if family exists first
+        const existing = await this.familyModel.findById(id).lean<LeanFamily>().exec();
         if (!existing) throw new NotFoundException(`Family with ID "${String(id)}" not found`);
-        Object.assign(existing, mapUpdateFamilyDtoToPartial(updateFamilyDto));
-        await existing.save();
+
+        // Use updateOne to only send modified fields
+        const updateData = mapUpdateFamilyDtoToPartial(updateFamilyDto);
+        await this.familyModel.updateOne({ _id: id }, { $set: updateData }).exec();
+
         return (await this.familyModel.findById(id).lean<LeanFamily>().exec()) as unknown as Family;
     }
 

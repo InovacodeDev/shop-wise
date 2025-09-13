@@ -1,8 +1,9 @@
-import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { ButtonLoadingIndicator } from "./loading-indicator";
 
 // Material Design 3 Button variants following MD3 specifications
 const buttonVariants = cva(
@@ -75,6 +76,12 @@ export interface ButtonProps
     asChild?: boolean;
 }
 
+// Extended Button Props for LoadingButton
+export interface LoadingButtonProps extends ButtonProps {
+    loading?: boolean;
+    loadingText?: string;
+}
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant, size, shape, state, asChild = false, ...props }, ref) => {
         const Comp = asChild ? Slot : "button";
@@ -125,4 +132,51 @@ const ToggleButton = React.forwardRef<
 });
 ToggleButton.displayName = "ToggleButton";
 
-export { Button, ToggleButton, buttonVariants };
+// Loading Button - Button with integrated loading state
+const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
+    ({ loading = false, loadingText, children, disabled, size, onClick, className, ...props }, ref) => {
+        const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+            if (loading) return; // Prevent clicks when loading
+            onClick?.(event);
+        };
+
+        // Map button sizes to loading indicator sizes, excluding icon variants
+        const getLoadingSize = (buttonSize: typeof size): "xs" | "sm" | "default" | "lg" | "xl" => {
+            if (!buttonSize || buttonSize.includes("icon")) return "sm";
+            if (buttonSize === "xs") return "xs";
+            if (buttonSize === "sm") return "sm";  
+            if (buttonSize === "default") return "default";
+            if (buttonSize === "lg") return "lg";
+            if (buttonSize === "xl") return "xl";
+            return "default";
+        };
+
+        return (
+            <Button
+                ref={ref}
+                disabled={loading || disabled}
+                size={size}
+                onClick={handleClick}
+                className={cn(
+                    loading && "opacity-25", // Apply 25% opacity when loading
+                    className
+                )}
+                {...props}
+            >
+                {loading ? (
+                    <ButtonLoadingIndicator 
+                        size={getLoadingSize(size)} 
+                        variant="default"
+                        showLabel={false}
+                    />
+                ) : (
+                    children
+                )}
+            </Button>
+        );
+    }
+);
+LoadingButton.displayName = "LoadingButton";
+
+export { Button, buttonVariants, LoadingButton, ToggleButton };
+
