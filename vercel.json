@@ -1,8 +1,7 @@
 {
-    "buildCommand": "pnpm turbo run build --filter=@shop-wise/web",
-    "outputDirectory": "apps/web/dist",
+    "buildCommand": "turbo run build --filter=@shop-wise/web",
+    "outputDirectory": "dist",
     "framework": null,
-    "installCommand": "pnpm install",
     "functions": {
         "apps/api/api/index.js": {
             "runtime": "nodejs18.x"
