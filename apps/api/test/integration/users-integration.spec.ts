@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return */
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose, { Model } from 'mongoose';

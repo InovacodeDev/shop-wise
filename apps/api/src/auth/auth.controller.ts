@@ -124,8 +124,11 @@ export class AuthController {
     @Post('refresh')
     async refresh(@Req() req: Request) {
         // Try to get refresh token from header first (for serverless), then from cookie
-        const headerToken = req.headers['authorization']?.replace('Bearer ', '');
-        const cookieToken = (req as any).cookies?.refreshToken;
+        const authHeader = req.headers['authorization'];
+        const headerToken = typeof authHeader === 'string' ? authHeader.replace('Bearer ', '') : undefined;
+        const cookieToken = (req as Request & { cookies?: Record<string, unknown> }).cookies?.refreshToken as
+            | string
+            | undefined;
         const token = headerToken || cookieToken;
 
         if (!token) throw new Error('No refresh token provided');

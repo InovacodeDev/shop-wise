@@ -1,5 +1,5 @@
 import { CreateExpenseDto } from '@/expenses/dto/create-expense.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -30,7 +30,7 @@ export class PurchasesService {
         private readonly cacheService: MonthlyPurchasesCacheService,
         private readonly expensesService: ExpensesService,
         private readonly categoriesService: CategoriesService,
-        private readonly storePreferencesService: StorePreferencesService,
+        @Optional() private readonly storePreferencesService?: StorePreferencesService,
     ) {}
 
     async create(familyId: string, createPurchaseDto: CreatePurchaseDto, userId: string): Promise<Purchase> {
@@ -44,7 +44,7 @@ export class PurchasesService {
 
         // Update store preferences automatically (mark as favorite or update stats)
         try {
-            if (createPurchaseDto.storeId && createPurchaseDto.date) {
+            if (this.storePreferencesService && createPurchaseDto.storeId && createPurchaseDto.date) {
                 await this.storePreferencesService.updatePurchaseStats(
                     familyId,
                     createPurchaseDto.storeId,
