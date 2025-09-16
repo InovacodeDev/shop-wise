@@ -107,8 +107,12 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 export class ApiService {
     // Normalize VITE_API_URL to always include '/api' prefix expected by backend
     private baseURL = (() => {
-        const configured = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3001';
+        const configured = (import.meta.env.VITE_API_URL as string) || '';
+
+        // In production (when no VITE_API_URL is set), use relative paths
         if (!configured) return '/api';
+
+        // For development, ensure the URL ends with /api
         const trimmed = configured.replace(/\/+$/, '');
         return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
     })();
