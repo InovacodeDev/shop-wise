@@ -90,15 +90,8 @@ export class AuthService {
         await this.usersService.update(user._id, { familyId: family._id.toString() });
 
         if (this.mailService) {
-            const verificationUrl = `${process.env.APP_URL || 'http://localhost:9000'}/auth/verify-email?token=${emailVerificationToken}`;
-            this.mailService
-                .sendMail({
-                    to: dto.email,
-                    subject: 'Verify your email',
-                    text: `Please verify your email by visiting: ${verificationUrl}`,
-                    html: `<p>Please verify your email by visiting: <a href="${verificationUrl}">${verificationUrl}</a></p>`,
-                })
-                .catch(() => null);
+            // Send localized, templated verification email using FRONTEND_URL/verify-email
+            this.mailService.sendEmailVerification(dto.email, emailVerificationToken).catch(() => null);
         }
 
         return { uid, email: dto.email, emailVerificationToken };

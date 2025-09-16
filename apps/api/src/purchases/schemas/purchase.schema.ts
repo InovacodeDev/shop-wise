@@ -31,6 +31,13 @@ export class PurchaseDocument extends Document<string> {
     @Prop()
     discount?: number;
 
+    @Prop({
+        type: String,
+        enum: ['iFood', '99', 'store', 'marketplace', 'online_store'],
+        default: 'store',
+    })
+    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
+
     @Prop({ type: [PurchaseItemDocument], default: [] })
     items?: PurchaseItemDocument[];
 }

@@ -195,6 +195,7 @@ export interface Purchase extends BaseEntity {
     date: string;
     totalAmount: number;
     discount?: number;
+    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
     accessKey?: string | null;
     items?: PurchaseItem[];
 }
@@ -205,6 +206,7 @@ export interface CreatePurchaseRequest {
     date: string;
     totalAmount: number;
     discount?: number;
+    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
     accessKey?: string | null;
 }
 
@@ -214,6 +216,7 @@ export interface UpdatePurchaseRequest {
     date?: string;
     totalAmount?: number;
     discount?: number;
+    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
     accessKey?: string;
 }
 
@@ -575,6 +578,10 @@ export interface ExtractDataFromPageRequest {
 }
 
 export interface ExtractProductDataRequest {
+    receiptImage: string;
+}
+
+export interface ExtractFromReceiptPhotoRequest {
     receiptImage: string;
 }
 

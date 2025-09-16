@@ -1,7 +1,7 @@
 import * as React from "react";
 
+import { materialElevation, materialShapes, materialSpacing, materialTypography } from "@/lib/material-design";
 import { cn } from "@/lib/utils";
-import { materialColors, materialTypography, materialShapes, materialSpacing, materialElevation } from "@/lib/material-design";
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
     ({ className, style, ...props }, ref) => (
@@ -97,18 +97,33 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
-    ({ className, style, ...props }, ref) => (
-        <td
-            ref={ref}
-            className={cn("align-middle [&:has([role=checkbox])]:pr-0", className)}
-            style={{
-                padding: `${materialSpacing.lg} ${materialSpacing.lg}`,
-                ...materialTypography.bodyMedium,
-                ...style,
-            }}
-            {...props}
-        />
-    )
+    ({ className, style, children, ...props }, ref) => {
+        // Normalize how null-ish values appear in table cells.
+        // When value is the string "null" (any case) or null/undefined, show "--" instead.
+        const normalizedChildren = React.Children.map(children, (child) => {
+            if (child === null || child === undefined) return "--";
+            if (typeof child === "string") {
+                const trimmed = child.trim();
+                if (trimmed.toLowerCase() === "null") return "--";
+            }
+            return child;
+        });
+
+        return (
+            <td
+                ref={ref}
+                className={cn("align-middle [&:has([role=checkbox])]:pr-0", className)}
+                style={{
+                    padding: `${materialSpacing.lg} ${materialSpacing.lg}`,
+                    ...materialTypography.bodyMedium,
+                    ...style,
+                }}
+                {...props}
+            >
+                {normalizedChildren}
+            </td>
+        );
+    }
 );
 TableCell.displayName = "TableCell";
 
@@ -128,4 +143,5 @@ const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttribu
 );
 TableCaption.displayName = "TableCaption";
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };
+

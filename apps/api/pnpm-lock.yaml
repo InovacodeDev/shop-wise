@@ -26,6 +26,9 @@ importers:
       i18next:
         specifier: ^25.5.2
         version: 25.5.2
+      js-sha256:
+        specifier: ^0.11.1
+        version: 0.11.1
       mongoose:
         specifier: ^7.8.7
         version: 7.8.7
@@ -224,6 +227,9 @@ packages:
   iterare@1.2.1:
     resolution: {integrity: sha512-RKYVTCjAnRthyJes037NX/IiqeidgN1xc3j1RjFfECFp28A1GVwK9nA+i0rJPaHqSZwygLzRnFlzUuHFoWWy+Q==}
     engines: {node: '>=6'}
+
+  js-sha256@0.11.1:
+    resolution: {integrity: sha512-o6WSo/LUvY2uC4j7mO50a2ms7E/EAdbP0swigLV+nzHKTTaYnaLIWJ02VdXrsJX0vGedDESQnLsOekr94ryfjg==}
 
   js-yaml@4.1.0:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
@@ -546,6 +552,8 @@ snapshots:
   is-number@7.0.0: {}
 
   iterare@1.2.1: {}
+
+  js-sha256@0.11.1: {}
 
   js-yaml@4.1.0:
     dependencies:

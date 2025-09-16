@@ -45,9 +45,13 @@ export function SignupForm() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         await signupOperation.execute(async () => {
             const resp = await apiService.signUp({ email: values.email, password: values.password, displayName: values.name });
-            if (resp?.token) {
-                apiService.setBackendAuthToken(resp.token);
-                if ((resp as any).refresh) apiService.setBackendRefreshToken((resp as any).refresh);
+            // If backend did not return auth tokens on signup, perform sign-in to auto-login
+            if (!resp?.token) {
+                try {
+                    await apiService.signIn({ email: values.email, password: values.password });
+                } catch (e) {
+                    // ignore sign-in failure here; user can still login manually
+                }
             }
             trackEvent("sign_up", { method: "email" });
             router.navigate({ to: "/home" });

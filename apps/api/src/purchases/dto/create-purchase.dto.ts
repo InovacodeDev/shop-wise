@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePurchaseDto {
     @IsString()
@@ -24,4 +24,9 @@ export class CreatePurchaseDto {
     @IsString()
     @IsNotEmpty()
     accessKey: string;
+
+    @IsString()
+    @IsOptional()
+    @IsIn(['iFood', '99', 'store', 'marketplace', 'online_store'])
+    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
 }

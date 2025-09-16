@@ -112,6 +112,8 @@ export function mapCreatePurchaseDtoToPurchase(dto: CreatePurchaseDto, familyId:
         storeId: dto.storeId,
         storeName: dto.storeName,
         accessKey: dto.accessKey,
+        discount: dto.discount,
+        purchaseType: dto.purchaseType,
         items: [],
         createdAt: now,
         updatedAt: now,
@@ -125,6 +127,8 @@ export function mapUpdatePurchaseDtoToPartial(dto: UpdatePurchaseDto): Partial<P
     if (typed.storeName !== undefined) partial.storeName = typed.storeName;
     if (typed.date !== undefined) partial.date = typed.date ? new Date(typed.date) : undefined;
     if (typed.totalAmount !== undefined) partial.totalAmount = typed.totalAmount;
+    if (typed.discount !== undefined) partial.discount = typed.discount;
+    if (typed.purchaseType !== undefined) partial.purchaseType = typed.purchaseType;
     partial.updatedAt = new Date();
     return partial;
 }

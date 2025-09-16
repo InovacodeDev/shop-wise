@@ -81,6 +81,7 @@ export async function savePurchase(
         date: purchaseDate,
         totalAmount: parseFloat(totalAmount.toFixed(2)),
         discount: 'discount' in purchaseData ? purchaseData.discount || 0 : 0,
+        purchaseType: (purchaseData as any).purchaseType,
         accessKey:
             'accessKey' in purchaseData && purchaseData.accessKey ? purchaseData.accessKey.replace(/\s/g, '') : null,
     };

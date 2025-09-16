@@ -1,4 +1,4 @@
-import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdatePurchaseDto {
     @IsString()
@@ -16,4 +16,13 @@ export class UpdatePurchaseDto {
     @IsNumber()
     @IsOptional()
     totalAmount?: number;
+
+    @IsNumber()
+    @IsOptional()
+    discount?: number;
+
+    @IsString()
+    @IsOptional()
+    @IsIn(['iFood', '99', 'store', 'marketplace', 'online_store'])
+    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
 }

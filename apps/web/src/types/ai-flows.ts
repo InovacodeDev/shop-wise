@@ -8,31 +8,31 @@
 // ===============================
 
 export interface ExtractProductDataInput {
-  receiptImage: string; // Data URI with MIME type and Base64 encoding
+    receiptImage: string; // Data URI with MIME type and Base64 encoding
 }
 
 export interface Product {
-  barcode: string;
-  name: string;
-  quantity: number;
-  volume: string; // Unit of measurement (UN, KG, L, etc.)
-  unitPrice: number;
-  price: number; // Total price
-  brand?: string;
-  category: string;
-  subcategory?: string;
+    barcode: string;
+    name: string;
+    quantity: number;
+    volume: string; // Unit of measurement (UN, KG, L, etc.)
+    unitPrice: number;
+    price: number; // Total price
+    brand?: string;
+    category: string;
+    subcategory?: string;
 }
 
 export interface ExtractProductDataOutput {
-  products: Product[];
-  storeName: string;
-  date: string; // Format: dd/mm/yyyy
-  cnpj: string;
-  address: string;
-  accessKey: string;
-  latitude?: number;
-  longitude?: number;
-  discount?: number;
+    products: Product[];
+    storeName: string;
+    date: string; // Format: dd/mm/yyyy
+    cnpj: string;
+    address: string;
+    accessKey: string;
+    latitude?: number;
+    longitude?: number;
+    discount?: number;
 }
 
 // ===============================
@@ -40,19 +40,19 @@ export interface ExtractProductDataOutput {
 // ===============================
 
 export interface ExtractDataFromPdfInput {
-  pdfDataUri: string; // Data URI for PDF with Base64 encoding
+    pdfDataUri: string; // Data URI for PDF with Base64 encoding
 }
 
 export interface ExtractDataFromPdfOutput {
-  products: Product[];
-  storeName: string;
-  date: string; // Format: dd/mm/yyyy
-  cnpj: string;
-  address: string;
-  accessKey: string;
-  latitude?: number;
-  longitude?: number;
-  discount?: number;
+    products: Product[];
+    storeName: string;
+    date: string; // Format: dd/mm/yyyy
+    cnpj: string;
+    address: string;
+    accessKey: string;
+    latitude?: number;
+    longitude?: number;
+    discount?: number;
 }
 
 // ===============================
@@ -60,11 +60,11 @@ export interface ExtractDataFromPdfOutput {
 // ===============================
 
 export interface ExtractDataFromPageInput {
-  pageDataUri: string; // Data URI for single PDF page with Base64 encoding
+    pageDataUri: string; // Data URI for single PDF page with Base64 encoding
 }
 
 export interface ExtractDataFromPageOutput {
-  products: Product[];
+    products: Product[];
 }
 
 // ===============================
@@ -72,12 +72,12 @@ export interface ExtractDataFromPageOutput {
 // ===============================
 
 export interface AnalyzeConsumptionDataInput {
-  consumptionData: string; // JSON string of monthly consumption data
-  language?: string; // Language code (e.g., 'en', 'pt-BR')
+    consumptionData: string; // JSON string of monthly consumption data
+    language?: string; // Language code (e.g., 'en', 'pt-BR')
 }
 
 export interface AnalyzeConsumptionDataOutput {
-  analysis: string; // Detailed textual analysis in Markdown format
+    analysis: string; // Detailed textual analysis in Markdown format
 }
 
 // ===============================
@@ -85,44 +85,80 @@ export interface AnalyzeConsumptionDataOutput {
 // ===============================
 
 export interface SuggestMissingItemsInput {
-  purchaseHistory: string; // String containing purchase history
-  familySize: number; // Number of family members (adults + children)
+    purchaseHistory: string; // String containing purchase history
+    familySize: number; // Number of family members (adults + children)
 }
 
 export interface SuggestMissingItemsOutput {
-  suggestedItems: string[]; // Array of suggested item names
+    suggestedItems: string[]; // Array of suggested item names
 }
 
 // ===============================
 // Union Types for API Responses
 // ===============================
 
-export type AIFlowInput = 
-  | ExtractProductDataInput
-  | ExtractDataFromPdfInput
-  | ExtractDataFromPageInput
-  | AnalyzeConsumptionDataInput
-  | SuggestMissingItemsInput;
+export type AIFlowInput =
+    | ExtractProductDataInput
+    | ExtractDataFromPdfInput
+    | ExtractDataFromPageInput
+    | AnalyzeConsumptionDataInput
+    | SuggestMissingItemsInput;
 
-export type AIFlowOutput = 
-  | ExtractProductDataOutput
-  | ExtractDataFromPdfOutput
-  | ExtractDataFromPageOutput
-  | AnalyzeConsumptionDataOutput
-  | SuggestMissingItemsOutput;
+export type AIFlowOutput =
+    | ExtractProductDataOutput
+    | ExtractDataFromPdfOutput
+    | ExtractDataFromPageOutput
+    | AnalyzeConsumptionDataOutput
+    | SuggestMissingItemsOutput;
 
 // ===============================
 // Helper Types
 // ===============================
 
-export interface APIResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
+// ===============================
+// Extract From Receipt Photo Flow Types
+// ===============================
+
+export interface ExtractFromReceiptPhotoInput {
+    receiptImage: string; // Data URI with MIME type and Base64 encoding for photo
+}
+
+export interface ExtractFromReceiptPhotoOutput {
+    products: Product[];
+    storeName: string;
+    date: string; // Format: YYYY-MM-DD
+    cnpj: string;
+    address: string;
+    accessKey: string;
+    nfceNumber: string;
+    series: string;
+    emissionDateTime: string;
+    authorizationProtocol: string;
+    totalAmount: number;
+    paymentMethod?: string;
+    amountPaid?: number;
+    latitude?: number;
+    longitude?: number;
+    discount?: number;
+    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
+    type: string;
+    warnings?: string[]; // Validation warnings for photo quality/completeness
+}
+
+// ===============================
+// API Response Wrapper Types
+// ===============================
+// API Response Wrapper Types
+// ===============================
+
+interface APIResponse<T> {
+    data?: T;
+    error?: string;
+    message?: string;
 }
 
 export type ExtractProductAPIResponse = APIResponse<ExtractProductDataOutput>;
+export type ExtractFromReceiptPhotoAPIResponse = APIResponse<ExtractFromReceiptPhotoOutput>;
 export type ExtractPdfAPIResponse = APIResponse<ExtractDataFromPdfOutput>;
 export type ExtractPageAPIResponse = APIResponse<ExtractDataFromPageOutput>;
 export type AnalyzeConsumptionAPIResponse = APIResponse<AnalyzeConsumptionDataOutput>;

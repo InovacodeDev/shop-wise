@@ -9,6 +9,8 @@ export interface Purchase extends BaseModel {
     storeName?: string; // store.name
     date?: Date;
     totalAmount?: number;
+    discount?: number;
+    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
     items?: Array<PurchaseItem>;
 }
 

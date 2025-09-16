@@ -1,5 +1,5 @@
 import { logApiCall } from '@/lib/dev-utils';
-import { ExtractProductDataOutput } from '@/types/ai-flows';
+import { ExtractFromReceiptPhotoOutput, ExtractProductDataOutput } from '@/types/ai-flows';
 import type {
     // Finance types
     Account,
@@ -44,6 +44,7 @@ import type {
     ExpensesSummary,
     ExtractDataFromPageRequest,
     ExtractDataFromPdfRequest,
+    ExtractFromReceiptPhotoRequest,
     ExtractProductDataRequest,
     // Family types
     Family,
@@ -107,7 +108,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 export class ApiService {
     // Normalize VITE_API_URL to always include '/api' prefix expected by backend
     private baseURL = (() => {
-        const configured = (import.meta.env.VITE_API_URL as string) || '';
+        const configured = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3001';
 
         // In production (when no VITE_API_URL is set), use relative paths
         if (!configured) return '/api';
@@ -341,6 +342,13 @@ export class ApiService {
         });
     }
 
+    async extractFromReceiptPhoto(data: ExtractFromReceiptPhotoRequest): Promise<ExtractFromReceiptPhotoOutput> {
+        return this.makeRequest<ExtractFromReceiptPhotoOutput>('/ai/extract-from-receipt-photo', {
+            method: 'POST',
+            data: data,
+        });
+    }
+
     async suggestMissingItems(data: SuggestMissingItemsRequest): Promise<SuggestMissingItemsOutput> {
         return this.makeRequest<SuggestMissingItemsOutput>('/ai/suggest-missing-items', {
             method: 'POST',
@@ -387,6 +395,13 @@ export class ApiService {
 
     async getMe(): Promise<MeResponse> {
         return this.makeRequest<MeResponse>('/auth/me');
+    }
+
+    async verifyEmail(token: string): Promise<{ success: boolean }> {
+        return this.makeRequest<{ success: boolean }>(`/auth/verify-email`, {
+            method: 'POST',
+            data: { token },
+        });
     }
 
     async updateUser(id: string, data: UpdateUserRequest): Promise<User> {
