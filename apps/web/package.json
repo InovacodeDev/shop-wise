@@ -90,7 +90,6 @@
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
-        "@types/react-i18next": "^8.1.0",
         "@types/react-window": "^1.8.8",
         "@vitejs/plugin-react": "^5.0.0",
         "@vitest/ui": "^3.2.4",
