@@ -1,11 +1,10 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "globalDependencies": [".env", "locales/**/*.json"],
+    "globalDependencies": [".env"],
     "tasks": {
         "build": {
             "dependsOn": ["^build"],
-            "outputs": ["dist/**", "build/**"],
-            "inputs": ["src/**", "locales/**/*.json", "public/**"]
+            "outputs": ["dist/**", "build/**"]
         },
         "dev": {
             "cache": false,
@@ -20,15 +19,6 @@
         },
         "clean": {
             "cache": false
-        },
-        "i18n:validate": {
-            "cache": false,
-            "inputs": ["locales/**/*.json", "src/**/*.{ts,tsx}"]
-        },
-        "i18n:extract": {
-            "cache": false,
-            "outputs": ["locales/**/*.json"],
-            "inputs": ["src/**/*.{ts,tsx}"]
         }
     }
 }

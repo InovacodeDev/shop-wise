@@ -1,16 +1,14 @@
 {
-    "buildCommand": "pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist/* ./",
-    "outputDirectory": ".",
-    "installCommand": "pnpm install --frozen-lockfile",
+    "buildCommand": "turbo run build --filter=@shop-wise/web",
+    "outputDirectory": "dist",
     "framework": null,
     "functions": {
         "apps/api/api/index.js": {
-            "runtime": "nodejs20.x"
+            "runtime": "nodejs18.x"
         }
     },
     "env": {
-        "SERVERLESS": "true",
-        "NODE_ENV": "production"
+        "SERVERLESS": "true"
     },
     "rewrites": [
         {
