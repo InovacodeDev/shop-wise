@@ -147,7 +147,6 @@ export class ApiService {
                     const locale = localStorage.getItem('i18nextLng') || 'en';
                     config.headers = config.headers || {};
                     config.headers['Accept-Language'] = locale;
-                    config.params = { ...config.params, lang: locale };
                 } catch (e) {
                     console.warn('Error retrieving auth token for request:', e);
                 }
