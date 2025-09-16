@@ -1,10 +1,7 @@
 {
-    "version": 2,
-    "buildCommand": "pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist/* ./",
-    "outputDirectory": ".",
-    "installCommand": "pnpm install",
+    "buildCommand": "turbo run build --filter=@shop-wise/web",
+    "outputDirectory": "dist",
     "framework": null,
-    "regions": ["gru1"],
     "functions": {
         "apps/api/api/index.js": {
             "runtime": "nodejs20.x"
@@ -16,7 +13,7 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/apps/api/api/index.js"
+            "destination": "/api"
         }
     ]
 }
