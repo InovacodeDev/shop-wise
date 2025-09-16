@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { faCheck, faCrown, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCrown, faCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { Plan, FeatureCode } from '../../types/api';
+import React, { useState } from 'react';
+import { useI18n } from '../../hooks/useI18n';
 import { useSubscription } from '../../hooks/useSubscription';
+import { FeatureCode, Plan } from '../../types/api';
 
 interface PlanUpgradeCardProps {
     plan: Plan;
@@ -28,6 +29,7 @@ const PlanUpgradeCard: React.FC<PlanUpgradeCardProps> = ({
     onUpgrade,
     compact = false,
 }) => {
+    const { t } = useI18n();
     const { subscription, upgradePlan } = useSubscription();
     const [upgrading, setUpgrading] = useState(false);
 
