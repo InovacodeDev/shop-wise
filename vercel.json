@@ -1,14 +1,16 @@
 {
-    "buildCommand": "turbo run build --filter=@shop-wise/web",
-    "outputDirectory": "dist",
+    "buildCommand": "node build-for-vercel.js",
+    "outputDirectory": "apps/web/dist",
+    "installCommand": "pnpm install --frozen-lockfile",
     "framework": null,
     "functions": {
         "apps/api/api/index.js": {
-            "runtime": "nodejs18.x"
+            "runtime": "nodejs20.x"
         }
     },
     "env": {
-        "SERVERLESS": "true"
+        "SERVERLESS": "true",
+        "NODE_ENV": "production"
     },
     "rewrites": [
         {
