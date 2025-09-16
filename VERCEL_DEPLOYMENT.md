@@ -6,7 +6,7 @@ Este projeto é um monorepo que precisa de configuração específica no Vercel.
 
 ### 1. Build Settings
 
--   **Build Command**: `node build-for-vercel.js`
+-   **Build Command**: `pnpm turbo run build --filter=@shop-wise/web`
 -   **Output Directory**: `apps/web/dist`
 -   **Install Command**: `pnpm install --frozen-lockfile`
 -   **Root Directory**: Leave empty (use project root)
@@ -23,6 +23,23 @@ SERVERLESS=true
 ### 3. Node.js Version
 
 -   Runtime: Node.js 20.x (configurado no vercel.json)
+
+## ✅ Problema Resolvido - Setembro 2025
+
+**O erro `Cannot find module '/vercel/path0/apps/web/build-for-vercel.js'` foi corrigido!**
+
+### Solução implementada:
+
+1. **Comando simplificado**: Uso direto do `pnpm turbo` ao invés do script customizado
+2. **Output directory correto**: `apps/web/dist` (caminho correto no monorepo)
+3. **Configuração robusta**: Funciona independente do working directory
+
+### Teste Local:
+
+```bash
+pnpm turbo run build --filter=@shop-wise/web
+ls -la apps/web/dist/  # Deve mostrar: index.html, assets/, locales/
+```
 
 ## Troubleshooting Comum
 

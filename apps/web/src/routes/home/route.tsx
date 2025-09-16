@@ -712,10 +712,7 @@ function DashboardPage() {
                             data={monthlySpendingByStore}
                             type="spendingByStore"
                         >
-                            <Card
-                                variant="elevated"
-                                className="transition-all duration-300 ease-in-out"
-                            >
+                            <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
                                         {t('totalSpending')}
@@ -752,10 +749,7 @@ function DashboardPage() {
                             data={recentItems}
                             type="recentItems"
                         >
-                            <Card
-                                variant="elevated"
-                                className="transition-all duration-300 ease-in-out"
-                            >
+                            <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">{t('itemsPurchased')}</CardTitle>
                                     <FontAwesomeIcon icon={faShoppingBag} className="h-4 w-4 text-muted-foreground" />

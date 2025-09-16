@@ -1,5 +1,5 @@
 {
-    "buildCommand": "node build-for-vercel.js",
+    "buildCommand": "pnpm turbo run build --filter=@shop-wise/web",
     "outputDirectory": "apps/web/dist",
     "installCommand": "pnpm install --frozen-lockfile",
     "framework": null,

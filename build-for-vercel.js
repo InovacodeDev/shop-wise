@@ -7,6 +7,28 @@ console.log("Starting Vercel build process...");
 console.log("Node.js version:", process.version);
 console.log("Working directory:", process.cwd());
 
+// Find the project root (where package.json with shop-wise is located)
+let projectRoot = process.cwd();
+const rootPackageJsonPath = path.join(projectRoot, "package.json");
+
+if (fs.existsSync(rootPackageJsonPath)) {
+    const packageJson = JSON.parse(fs.readFileSync(rootPackageJsonPath, "utf8"));
+    if (packageJson.name !== "shop-wise") {
+        // Look for the shop-wise root
+        projectRoot = path.resolve(projectRoot, "..");
+        const parentPackageJsonPath = path.join(projectRoot, "package.json");
+        if (fs.existsSync(parentPackageJsonPath)) {
+            const parentPackageJson = JSON.parse(fs.readFileSync(parentPackageJsonPath, "utf8"));
+            if (parentPackageJson.name === "shop-wise") {
+                console.log("Found shop-wise root at:", projectRoot);
+                process.chdir(projectRoot);
+            }
+        }
+    }
+}
+
+console.log("Final working directory:", process.cwd());
+
 try {
     // 1. Verify pnpm is available
     console.log("Checking pnpm version...");
