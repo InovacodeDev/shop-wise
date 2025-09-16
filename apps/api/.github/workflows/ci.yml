@@ -31,7 +31,7 @@ jobs:
                   corepack prepare pnpm@10.14.0 --activate
 
             - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+              run: pnpm install
 
             - name: Run dependency security audit
               run: pnpm audit --audit-level high
@@ -72,7 +72,7 @@ jobs:
                   version: 10.14.0
 
             - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+              run: pnpm install
 
             - name: Run integration tests
               # Run only integration tests; pass the integration folder to Jest

@@ -58,7 +58,7 @@ const { toast } = useToast();
             }));
         } catch (error) {
             console.error('Error processing NFCe:', error);
-            const errorMessage = error instanceof Error ? error.message : t('Error processing NFCe') ;
+            const errorMessage = error instanceof Error ? error.message : t('errorProcessing') ;
 
             setAnalysisState(prev => ({
                 ...prev,
@@ -68,7 +68,7 @@ const { toast } = useToast();
 
             toast({
                 variant: 'destructive',
-                title: t('Error processing NFCe') ,
+                title: t('errorProcessing'),
                 description: errorMessage,
             });
         }
@@ -122,9 +122,9 @@ const { toast } = useToast();
     const renderScanStep = () => (
         <div className="space-y-6">
             <div className="text-center space-y-2">
-                <h3 className="text-lg font-semibold">{t('NFCe via URL') }</h3>
+                <h3 className="text-lg font-semibold">{t('nfceViaUrl')}</h3>
                 <p className="text-sm text-muted-foreground">
-                    {t('Paste the NFCe URL to automatically extract the data') }
+                    {t('pasteTheNfceUrlToExtractData')}
                 </p>
             </div>
             <ManualUrlInput onSubmit={handleManualUrl} />
@@ -133,8 +133,8 @@ const { toast } = useToast();
 
     const renderLoadingStep = () => (
         <Loading
-            text={t('Analyzing NFCe') }
-            description={t('We are extracting information from your fiscal receipt. This may take a few seconds') }
+            text={t('analyzingNfce')}
+            description={t('extractingInformationFromReceipt')}
             layout="vertical"
             size="lg"
         />
@@ -143,13 +143,13 @@ const { toast } = useToast();
     const renderErrorStep = () => (
         <div className="flex flex-col items-center justify-center space-y-4 py-12">
             <FontAwesomeIcon icon={faExclamationTriangle} className="w-12 h-12 text-red-500" />
-            <h3 className="text-xl font-semibold text-red-600">{t('Error processing NFCe') }</h3>
+            <h3 className="text-xl font-semibold text-red-600">{t('errorProcessing')}</h3>
             <p className="text-muted-foreground text-center max-w-md">
-                {analysisState.error || t('Could not process the NFCe. Please check if the URL is correct and try again') }
+                {analysisState.error || t('couldNotProcessNfce')}
             </p>
             <Button onClick={resetScan} variant="outlined">
                 <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4 mr-2" />
-                {t('Try again') }
+                {t('tryAgain')}
             </Button>
         </div>
     );
@@ -163,16 +163,16 @@ const { toast } = useToast();
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h3 className="text-lg font-semibold">{t('NFCe analysis result') }</h3>
-                        <p className="text-sm text-muted-foreground">{t('Data extracted from fiscal receipt') }</p>
+                        <h3 className="text-lg font-semibold">{t('nfceAnalysisResult')}</h3>
+                        <p className="text-sm text-muted-foreground">{t('dataExtractedFrom')}</p>
                     </div>
                     <div className="flex gap-2">
                         <Button onClick={resetScan} variant="outlined">
                             <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4 mr-2" />
-                            {t('New analysis') }
+                            {t('newAnalysis')}
                         </Button>
                         <Button onClick={handleSaveData}>
-                            {t('Save purchase') }
+                            {t('savePurchase')}
                         </Button>
                     </div>
                 </div>
@@ -181,7 +181,7 @@ const { toast } = useToast();
                     <Alert className="border-green-200 bg-green-50">
                         <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-green-600" />
                         <AlertDescription className="text-green-800">
-                            <span className="font-medium">{t('NFCe processed with AI') }</span> {t('Data was automatically enriched') }
+                            <span className="font-medium">{t('nfceProcessedWithAi')}</span> {t('dataAutomaticallyEnriched')}
                         </AlertDescription>
                     </Alert>
                 )}
@@ -192,7 +192,7 @@ const { toast } = useToast();
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-base">
                                 <FontAwesomeIcon icon={faStore} className="w-4 h-4 text-blue-600" />
-                                {t('Store') }
+                                {t('store')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
@@ -208,17 +208,17 @@ const { toast } = useToast();
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-base">
                                 <FontAwesomeIcon icon={faReceipt} className="w-4 h-4 text-green-600" />
-                                {t('Purchase') }
+                                {t('purchase')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div>
-                                    <p className="text-muted-foreground">{t('Date') }</p>
+                                    <p className="text-muted-foreground">{t('date')}</p>
                                     <p className="font-medium">{data.date}</p>
                                 </div>
                                 <div>
-                                    <p className="text-muted-foreground">{t('Total') }</p>
+                                    <p className="text-muted-foreground">{t('total')}</p>
                                     <p className="font-semibold text-green-600">
                                         {formatCurrency(data.totalAmount)}
                                     </p>
@@ -233,7 +233,7 @@ const { toast } = useToast();
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <FontAwesomeIcon icon={faShoppingCart} className="w-4 h-4 text-purple-600" />
-                            {t('Products') } ({data.products.length})
+                            {t('products')} ({data.products.length})
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -241,9 +241,9 @@ const { toast } = useToast();
                             <Table>
                                 <TableHeader>
                                     <TableRow className="bg-muted/50">
-                                        <TableHead>{t('Product') }</TableHead>
-                                        <TableHead className="text-center w-20">{t('Qty') }</TableHead>
-                                        <TableHead className="text-right w-24">{t('Total') }</TableHead>
+                                        <TableHead>{t('product')}</TableHead>
+                                        <TableHead className="text-center w-20">{t('qty')}</TableHead>
+                                        <TableHead className="text-right w-24">{t('total')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -276,7 +276,7 @@ const { toast } = useToast();
                         {/* Summary */}
                         <div className="mt-3 p-3 bg-muted/30 rounded-lg">
                             <div className="flex justify-between items-center">
-                                <span className="font-semibold">{t('Total') }</span>
+                                <span className="font-semibold">{t('total')}</span>
                                 <span className="text-lg font-bold text-green-600">
                                     {formatCurrency(data.totalAmount)}
                                 </span>

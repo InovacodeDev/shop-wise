@@ -52,16 +52,16 @@ export function NotificationPopover({ notifications, unreadCount, onMarkAllAsRea
                             {unreadCount}
                         </Badge>
                     )}
-                    <span className="sr-only">{t('Notifications') }</span>
+                    <span className="sr-only">{t('notifications')}</span>
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-0">
                 <div className="flex items-center justify-between p-3 border-b">
-                    <h4 className="font-medium text-sm">{t('Notifications') }</h4>
+                    <h4 className="font-medium text-sm">{t('notifications')}</h4>
                     {unreadCount > 0 && (
                         <Button variant="link" size="sm" className="h-auto p-0" onClick={onMarkAllAsRead}>
                             <FontAwesomeIcon icon={faCheckDouble} className="mr-1.5 h-3 w-3" />
-                            {t('Mark all as read') }
+                            {t('markAllAs')}
                         </Button>
                     )}
                 </div>
@@ -95,14 +95,14 @@ export function NotificationPopover({ notifications, unreadCount, onMarkAllAsRea
                     ) : (
                         <div className="text-center p-8 text-muted-foreground">
                             <FontAwesomeIcon icon={faEnvelopeOpen} className="h-10 w-10 mb-4" />
-                            <p className="text-sm font-medium">{t('All caught up') }</p>
-                            <p className="text-xs">{t('You have no new notifications') }</p>
+                            <p className="text-sm font-medium">{t('allCaughtUp')}</p>
+                            <p className="text-xs">{t('noNewNotifications')}</p>
                         </div>
                     )}
                 </ScrollArea>
                 <div className="p-2 text-center border-t">
                     <Button variant="link" size="sm" className="w-full text-xs">
-                        {t('View all notifications') }
+                        {t('viewAllNotifications')}
                     </Button>
                 </div>
             </PopoverContent>

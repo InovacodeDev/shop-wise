@@ -15,12 +15,12 @@ function AdminAuditPage() {
             <Card>
                 <CardHeader>
                                         <CardTitle className="text-lg font-bold">
-                        {t('Audit Testing') }
+                        {t('auditTesting')}
                     </CardTitle>
-                    <CardDescription>{t('Run audits and tests on the system.') }</CardDescription>
+                    <CardDescription>{t('runAuditsAnd')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>{t('Audit and testing tools will be available here.') }</p>
+                    <p>{t('auditAndTesting')}</p>
                 </CardContent>
             </Card>
         </div>

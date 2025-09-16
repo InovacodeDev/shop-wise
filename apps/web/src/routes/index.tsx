@@ -19,10 +19,10 @@ function Home() {
                 </div>
                 <nav className="flex items-center gap-2">
                     <Link to="/login">
-                        <Button variant="ghost">{t('Login')}</Button>
+                        <Button variant="ghost">{t('login')}</Button>
                     </Link>
                     <Link to="/signup">
-                        <Button>{t('Create account')}</Button>
+                        <Button>{t('createAccount')}</Button>
                     </Link>
                 </nav>
             </header>
@@ -35,16 +35,16 @@ function Home() {
                     />
                     <div className="max-w-3xl mx-auto">
                         <h2 className="text-4xl md:text-6xl font-bold font-headline text-foreground tracking-tight">
-                            {t('Smarter Purchases,')}
+                            {t('smarterPurchases')}
                             <br />
-                            <span className="text-primary">{t('A Fuller Life.')}</span>
+                            <span className="text-primary">{t('fullerLife')}</span>
                         </h2>
                         <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                            {t('ShopWise transforms your receipts into powerful insights, helping you save money, optimize your shopping list, and control your family\'s finances effortlessly.')}
+                            {t('shopWiseDescription')}
                         </p>
                         <div className="mt-8 flex justify-center gap-4">
                             <Link to="/signup">
-                                <Button size="lg">{t('Start Now for Free')}</Button>
+                                <Button size="lg">{t('startNowFor')}</Button>
                             </Link>
                         </div>
                     </div>
@@ -54,30 +54,30 @@ function Home() {
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-12">
                             <h3 className="text-3xl md:text-4xl font-bold font-headline text-foreground">
-                                {t('Powerful Features')}
+                                {t('powerfulFeatures')}
                             </h3>
-                            <p className="mt-4 text-lg text-muted-foreground">{t('Everything you need to take control of your finances')}</p>
+                            <p className="mt-4 text-lg text-muted-foreground">{t('everythingYouNeed')}</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                             <FeatureCard
                                 icon={<FontAwesomeIcon icon={faChartSimple} className="w-10 h-10 text-primary" />}
-                                title={t('Visual Insights')}
-                                description={t('Analyze your spending with intuitive charts and make smarter decisions.')}
+                                title={t('visualInsights')}
+                                description={t('analyzeYourSpending')}
                             />
                             <FeatureCard
                                 icon={<FontAwesomeIcon icon={faQrcode} className="w-10 h-10 text-primary" />}
-                                title={t('Scan Receipts')}
+                                title={t('scanReceipts')}
                                 description={t('Register your purchases quickly by scanning the receipt\'s QR code.')}
                             />
                             <FeatureCard
                                 icon={<FontAwesomeIcon icon={faShoppingCart} className="w-10 h-10 text-primary" />}
-                                title={t('Smart Lists')}
-                                description={t('Receive AI-powered suggestions and never forget an item again.')}
+                                title={t('smartLists')}
+                                description={t('receiveAiPowered')}
                             />
                             <FeatureCard
                                 icon={<FontAwesomeIcon icon={faSliders} className="w-10 h-10 text-primary" />}
-                                title={t('Full Control')}
-                                description={t('Manage your family, preferred stores and analyze your purchase history.')}
+                                title={t('fullControl')}
+                                description={t('manageYourFamily1')}
                             />
                         </div>
                     </div>

@@ -20,7 +20,7 @@ export function ForgotPasswordForm() {
     const resetOperation = useAsyncOperation();
 
     const formSchema = z.object({
-        email: z.string().email({ message: t('Please enter a valid email')  }),
+        email: z.string().email({ message: t('pleaseEnterValidEmail')}),
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -36,8 +36,8 @@ export function ForgotPasswordForm() {
             await apiService.requestPasswordReset(values.email);
             setEmailSent(true);
             toast({
-                title: t('Reset link sent') ,
-                description: t('We\'ve sent a password reset link to your email address') ,
+                title: t('resetLinkSent'),
+                description: t('passwordResetEmailSent'),
             });
         });
     }
@@ -48,13 +48,13 @@ export function ForgotPasswordForm() {
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-headline">{t('Check your email') }</CardTitle>
-                    <CardDescription>{t('We\'ve sent a password reset link to your email address please check your inbox and follow the instructions') }</CardDescription>
+                    <CardTitle className="text-2xl font-headline">{t('checkYourEmail')}</CardTitle>
+                    <CardDescription>{t('passwordResetEmailInstructions')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="text-center">
                         <p className="text-sm text-muted-foreground">
-                            {t('Didn\'t receive the email? Check your spam folder or try again') }
+                            {t('emailNotReceivedHelp')}
                         </p>
                     </div>
                 </CardContent>
@@ -65,13 +65,13 @@ export function ForgotPasswordForm() {
                             className="w-full" 
                             onClick={() => setEmailSent(false)}
                         >
-                            {t('Try different email') }
+                            {t('tryDifferentEmail')}
                         </Button>
                         <p className="text-sm text-muted-foreground w-full text-center">
-                            {t('Remembered your password') }{" "}
+                            {t('rememberedYourPassword')}{" "}
                             <Link to="/login">
                                 <Button variant="link" className="px-0 h-auto">
-                                    {t('Login') }
+                                    {t('login')}
                                 </Button>
                             </Link>
                         </p>
@@ -84,8 +84,8 @@ export function ForgotPasswordForm() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-2xl font-headline">{t('Forgot your password') }</CardTitle>
-                <CardDescription>{t('No problem enter your email and we\'ll send you a link to reset it') }</CardDescription>
+                <CardTitle className="text-2xl font-headline">{t('forgotYourPassword')}</CardTitle>
+                <CardDescription>{t('forgotPasswordDescription')}</CardDescription>
             </CardHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -95,9 +95,9 @@ export function ForgotPasswordForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t('Email') }</FormLabel>
+                                    <FormLabel>{t('email')}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder={t('seu@email.com') } {...field} />
+                                        <Input placeholder={t('seuEmailCom')} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -109,15 +109,15 @@ export function ForgotPasswordForm() {
                             disabled={!isDirty || !isValid}
                             loading={resetOperation.isLoading}
                         >
-                            {t('Send reset link') }
+                            {t('sendResetLink')}
                         </LoadingButton>
                     </CardContent>
                     <CardFooter>
                         <p className="text-sm text-muted-foreground w-full text-center">
-                            {t('Remembered your password') }{" "}
+                            {t('rememberedYourPassword')}{" "}
                             <Link to="/login">
                                 <Button variant="link" className="px-0 h-auto">
-                                    {t('Login') }
+                                    {t('login')}
                                 </Button>
                             </Link>
                         </p>

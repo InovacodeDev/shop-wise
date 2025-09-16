@@ -51,11 +51,11 @@ const PremiumFeatureGuard: React.FC<PremiumFeatureGuardProps> = ({
             </div>
 
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {t('Premium feature') }
+                {t('premiumFeature')}
             </h3>
 
             <p className="text-gray-600 text-center mb-6 max-w-md">
-                {t('This feature is available to premium users only') }
+                {t('premiumFeatureDescription')}
             </p>
 
             {showUpgrade && canUpgrade && (
@@ -69,13 +69,13 @@ const PremiumFeatureGuard: React.FC<PremiumFeatureGuardProps> = ({
                     </button>
 
                     <p className="text-sm text-gray-500 mt-2">
-                        {t('Plans starting at') } R$ {Math.min(...plans.map(p => p.price)).toFixed(2)}/{t('month') }
+                        {t('plansStartingAt')} R$ {Math.min(...plans.map(p => p.price)).toFixed(2)}/{t('month')}
                     </p>
                 </div>
             )}
 
             <p className="text-sm text-gray-400 text-center mt-4 max-w-sm">
-                {t('Upgrade to access this and many other advanced features') }
+                {t('upgradeToAccessFeatures')}
             </p>
         </div>
     );

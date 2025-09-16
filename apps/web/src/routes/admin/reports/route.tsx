@@ -15,12 +15,12 @@ function AdminReportsPage() {
             <Card variant="outlined">
                 <CardHeader>
                     <CardTitle className="text-lg font-bold">
-                        {t('Usage Reports') }
+                        {t('usageReports')}
                     </CardTitle>
-                    <CardDescription>{t('Generate and view system usage reports.') }</CardDescription>
+                    <CardDescription>{t('generateAndView')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>{t('Reporting tools will be available here.') }</p>
+                    <p>{t('reportingToolsWill')}</p>
                 </CardContent>
             </Card>
         </div>

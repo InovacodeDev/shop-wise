@@ -14,12 +14,12 @@ function AdminUsersPage() {
             <Card>
                 <CardHeader>
                                         <CardTitle className="text-lg font-bold">
-                        {t('Manage Users') }
+                        {t('manageUsers')}
                     </CardTitle>
-                    <CardDescription>{t('View and manage all registered users.') }</CardDescription>
+                    <CardDescription>{t('viewAndManage')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>{t('The user management interface will be here.') }</p>
+                    <p>{t('userManagementInterface')}</p>
                 </CardContent>
             </Card>
         </div>

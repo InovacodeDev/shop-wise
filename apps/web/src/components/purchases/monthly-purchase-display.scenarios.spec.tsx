@@ -139,7 +139,7 @@
 //     });
 
 //     const generateRealisticPurchases = (count: number, monthYear: string): Purchase[] => {
-//         const [year, month] = monthYear.split('-').map(Number);
+//         const [year, month] = monthYear.split('dash').map(Number);
 //         const stores = ['Grocery Store', 'Walmart', 'Target', 'Costco', 'Local Market'];
         
 //         return Array.from({ length: count }, (_, i) => ({
@@ -166,7 +166,7 @@
 //         return scenarios.map(({ monthYear, purchaseCount }) => {
 //             const purchases = generateRealisticPurchases(purchaseCount, monthYear);
 //             const totalAmount = purchases.reduce((sum, p) => sum + p.totalAmount, 0);
-//             const [year, month] = monthYear.split('-').map(Number);
+//             const [year, month] = monthYear.split('dash').map(Number);
 //             const monthNames = [
 //                 'January', 'February', 'March', 'April', 'May', 'June',
 //                 'July', 'August', 'September', 'October', 'November', 'December'

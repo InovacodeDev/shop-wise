@@ -14,12 +14,12 @@ function AdminNotificationsPage() {
             <Card>
                 <CardHeader>
                                         <CardTitle className="text-lg font-bold">
-                        {t('Manage Notifications')}
+                        {t('manageNotifications')}
                     </CardTitle>
-                    <CardDescription>{t('Manage system notifications and alerts.')}</CardDescription>
+                    <CardDescription>{t('manageSystemNotifications')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>{t('Notifications coming soon.')}</p>
+                    <p>{t('notificationsComingSoon')}</p>
                 </CardContent>
             </Card>
         </div>

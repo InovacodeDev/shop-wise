@@ -48,7 +48,7 @@ const MonthlyExpenseChart: React.FC<MonthlyExpenseChartProps> = ({
 
     const chartConfig = {
         amount: {
-            label: t('Amount') ,
+            label: t('amount'),
             color: "hsl(var(--chart-1))",
         },
     };
@@ -87,7 +87,7 @@ const MonthlyExpenseChart: React.FC<MonthlyExpenseChartProps> = ({
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div className="flex flex-col">
                                                     <span className="text-[0.70rem] uppercase text-muted-foreground">
-                                                        {t('Month') }
+                                                        {t('month1')}
                                                     </span>
                                                     <span className="font-bold text-muted-foreground">
                                                         {label}
@@ -95,7 +95,7 @@ const MonthlyExpenseChart: React.FC<MonthlyExpenseChartProps> = ({
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[0.70rem] uppercase text-muted-foreground">
-                                                        {t('Amount') }
+                                                        {t('amount')}
                                                     </span>
                                                     <span className="font-bold">
                                                         {formatCurrency(data.amount)}

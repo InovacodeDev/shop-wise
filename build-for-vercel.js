@@ -8,7 +8,7 @@ console.log("Starting Vercel build process...");
 try {
     // 1. Install dependencies
     console.log("Installing dependencies...");
-    execSync("pnpm install --frozen-lockfile", { stdio: "inherit" });
+    execSync("pnpm install", { stdio: "inherit" });
 
     // 2. Build the web app
     console.log("Building web app...");

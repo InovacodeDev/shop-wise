@@ -17,12 +17,12 @@ function AdminMarketInsightsPage() {
                 <CardHeader>
                     <CardTitle className="text-2xl font-headline flex items-center gap-2">
                         <FontAwesomeIcon icon={faShoppingBasket} className="w-6 h-6" />
-                        {t('Market Insights') }
+                        {t('marketInsights')}
                     </CardTitle>
-                    <CardDescription>{t('Analyze market trends based on aggregated user data.') }</CardDescription>
+                    <CardDescription>{t('analyzeMarketTrends')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>{t('Market analysis tools will be available here.') }</p>
+                    <p>{t('marketAnalysisTools')}</p>
                 </CardContent>
             </Card>
         </div>

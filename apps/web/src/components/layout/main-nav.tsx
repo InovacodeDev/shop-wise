@@ -67,45 +67,45 @@ export function MainNav() {
     ]);
     // Finance related
     const financeMenu = [
-        { href: "/investments", label: t('Investments') , icon: faChartColumn },
-        { href: "/budgets", label: t('Budgets') , icon: faFileLines },
-        { href: "/credit-cards", label: t('Credit cards') , icon: faFileLines },
-        { href: "/bank", label: t('Bank') , icon: faFileLines },
+        { href: "/investments", label: t('investments'), icon: faChartColumn },
+        { href: "/budgets", label: t('budgets'), icon: faFileLines },
+        { href: "/credit-cards", label: t('creditCards'), icon: faFileLines },
+        { href: "/bank", label: t('bank'), icon: faFileLines },
     ];
 
     // Top menu: put Insights first so it's the primary entry point
     const topMenu = [
-        { href: "/home", label: t('Insights') , icon: faChartColumn },
-        // { href: "/goals", label: t('Goals') , icon: faFileLines },
-        // { href: "/achievements", label: t('Achievements') , icon: faUsers },
-        // { href: "/projections", label: t('Projections') , icon: faChartColumn },
+        { href: "/home", label: t('insights'), icon: faChartColumn },
+        // { href: "/goals", label: t('Goals'), icon: faFileLines },
+        // { href: "/achievements", label: t('achievements'), icon: faUsers },
+        // { href: "/projections", label: t('projections'), icon: faChartColumn },
     ];
 
     // Shopping related
     const shoppingMenu = [
-        { href: "/list", label: t('Shopping list') , icon: faList },
-        { href: "/purchases", label: t('Add purchase') , icon: faShoppingBasket },
+        { href: "/list", label: t('shoppingList'), icon: faList },
+        { href: "/purchases", label: t('addPurchase'), icon: faShoppingBasket },
     ];
 
     const educationMenu = [
-        { href: "/education", label: t('Education') , icon: faFileLines },
+        { href: "/education", label: t('education'), icon: faFileLines },
     ];
 
     const settingsMenuItems = [
-        { href: "/family", label: t('Family') , icon: faUserGroup },
-        { href: "/settings", label: t('My account') , icon: faUser },
+        { href: "/family", label: t('family'), icon: faUserGroup },
+        { href: "/settings", label: t('myAccount'), icon: faUser },
     ];
 
     const adminMenuItems = [
-        { href: "/admin", label: t('Admin dashboard') , icon: faShieldHalved },
-        { href: "/admin/users", label: t('Manage users') , icon: faUsers },
-        { href: "/admin/reports", label: t('Usage reports') , icon: faChartColumn },
-        { href: "/admin/market-insights", label: t('Market insights') , icon: faShoppingBasket },
-        { href: "/admin/settings", label: t('Global settings') , icon: faCog },
-        { href: "/admin/notifications", label: t('Manage notifications') , icon: faMessage },
-        { href: "/admin/audit", label: t('Audit tests') , icon: faMicroscope },
-        { href: "/admin/security", label: t('Security') , icon: faShield },
-        { href: "/admin/logs", label: t('System logs') , icon: faFileLines },
+        { href: "/admin", label: t('adminDashboard'), icon: faShieldHalved },
+        { href: "/admin/users", label: t('manageUsers'), icon: faUsers },
+        { href: "/admin/reports", label: t('usageReports'), icon: faChartColumn },
+        { href: "/admin/market-insights", label: t('marketInsights'), icon: faShoppingBasket },
+        { href: "/admin/settings", label: t('globalSettings'), icon: faCog },
+        { href: "/admin/notifications", label: t('manageNotifications'), icon: faMessage },
+        { href: "/admin/audit", label: t('auditTests'), icon: faMicroscope },
+        { href: "/admin/security", label: t('security'), icon: faShield },
+        { href: "/admin/logs", label: t('systemLogs'), icon: faFileLines },
     ];
 
     const handleSignOut = async () => {
@@ -163,19 +163,19 @@ export function MainNav() {
                             <DropdownMenuItem asChild>
                                 <Link to="/purchases" className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faShoppingBasket} className="h-4 w-4" />
-                                    {t('Manual entry') }
+                                    {t('manualEntry')}
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <Link to="/purchases" className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faPlusCircle} className="h-4 w-4" />
-                                    {t('Scan receipt') }
+                                    {t('scanReceipt')}
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <Link to="/list" className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faList} className="h-4 w-4" />
-                                    {t('Shopping list') }
+                                    {t('shoppingList')}
                                 </Link>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -193,7 +193,7 @@ export function MainNav() {
                                 )}
                             >
                                 <FontAwesomeIcon icon={faPlus} className="h-4 w-4" />
-                                <span className="ml-2 font-medium">{t('Add purchase') }</span>
+                                <span className="ml-2 font-medium">{t('addPurchase')}</span>
                             </Button>
                         </Link>
                         <DropdownMenu>
@@ -214,19 +214,19 @@ export function MainNav() {
                                 <DropdownMenuItem asChild>
                                     <Link to="/purchases" className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faShoppingBasket} className="h-4 w-4" />
-                                        {t('Manual entry') }
+                                        {t('manualEntry')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
                                     <Link to="/purchases" className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faPlusCircle} className="h-4 w-4" />
-                                        {t('Scan receipt') }
+                                        {t('scanReceipt')}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
                                     <Link to="/list" className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faList} className="h-4 w-4" />
-                                        {t('Shopping list') }
+                                        {t('shoppingList')}
                                     </Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -265,7 +265,7 @@ export function MainNav() {
                         state === "collapsed" ? "opacity-0 h-auto" : "opacity-100 h-auto"
                     )}
                 >
-                    {t('Personal finance') }
+                    {t('personalFinance')}
                 </p>
                 {financeMenu.map((item) => (
                     <SidebarMenuItem key={item.href}>
@@ -290,7 +290,7 @@ export function MainNav() {
                         state === "collapsed" ? "opacity-0 h-auto" : "opacity-100 h-auto"
                     )}
                 >
-                    {t('Purchases') }
+                    {t('purchases')}
                 </p>
                 {shoppingMenu.map((item) => (
                     <SidebarMenuItem key={item.href}>
@@ -321,7 +321,7 @@ export function MainNav() {
                         state === "collapsed" ? "opacity-0 h-auto" : "opacity-100 h-auto"
                     )}
                 >
-                    {t('Educational') }
+                    {t('Educational')}
                 </p>
                 {educationMenu.map((item) => (
                     <SidebarMenuItem key={item.href}>
@@ -348,7 +348,7 @@ export function MainNav() {
                         state === "collapsed" ? "opacity-0 h-auto" : "opacity-100 h-auto"
                     )}
                 >
-                    {t('Settings') }
+                    {t('settings')}
                 </p>
                 {settingsMenuItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
@@ -377,7 +377,7 @@ export function MainNav() {
                     <AlertDialogTrigger asChild>
                         <SidebarMenuItem>
                             <SidebarMenuButton
-                                tooltip={t('Sign out') }
+                                tooltip={t('signOut')}
                                 asChild={false}
                             >
                                 <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
@@ -388,7 +388,7 @@ export function MainNav() {
                                             "opacity-100"
                                         )}
                                     >
-                                        {t('Sign out') }
+                                        {t('signOut')}
                                     </span>
                                 )}
                             </SidebarMenuButton>
@@ -396,18 +396,18 @@ export function MainNav() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>{t('Are you sure you want to sign out') }</AlertDialogTitle>
-                            <AlertDialogDescription>{t('You will be redirected to the home page') }</AlertDialogDescription>
+                            <AlertDialogTitle>{t('areYouSureYouWantToSignOut')}</AlertDialogTitle>
+                            <AlertDialogDescription>{t('youWillBeRedirectedToTheHomePage')}</AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>{t('Cancel') }</AlertDialogCancel>
+                            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
                             <AlertDialogAction asChild>
                                 <LoadingButton 
                                     onClick={handleSignOut} 
                                     loading={logoutOperation.isLoading}
                                     disabled={logoutOperation.isLoading}
                                 >
-                                    {t('Yes, sign out') }
+                                    {t('yesSignOut')}
                                 </LoadingButton>
                             </AlertDialogAction>
                         </AlertDialogFooter>
@@ -422,7 +422,7 @@ export function MainNav() {
                                 state === "collapsed" ? "opacity-0 h-0" : "opacity-100 h-auto"
                             )}
                         >
-                            {t('Administration') }
+                            {t('administration')}
                         </p>
                         {adminMenuItems.map((item) => (
                             <SidebarMenuItem key={item.href}>

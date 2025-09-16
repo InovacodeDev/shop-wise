@@ -552,8 +552,7 @@ const TimePickerDial = React.forwardRef<
         if (!timeStr) return { hours: 12, minutes: 0, period: 'AM' };
 
         const [time, period] = timeStr.includes('AM') || timeStr.includes('PM')
-            ? timeStr.split(' ')
-            : [timeStr, format24 ? '' : 'AM'];
+            ? timeStr.split(' '): [timeStr, format24 ? '' : 'AM'];
 
         const [hours, minutes] = time.split(':').map(Number);
         return { hours: hours || 12, minutes: minutes || 0, period: period || 'AM' };
@@ -750,8 +749,7 @@ const TimePickerInputMode = React.forwardRef<
         if (!timeStr) return { hours: 12, minutes: 0, period: 'AM' };
 
         const [time, period] = timeStr.includes('AM') || timeStr.includes('PM')
-            ? timeStr.split(' ')
-            : [timeStr, format24 ? '' : 'AM'];
+            ? timeStr.split(' '): [timeStr, format24 ? '' : 'AM'];
 
         const [hours, minutes] = time.split(':').map(Number);
         return { hours: hours || 12, minutes: minutes || 0, period: period || 'AM' };

@@ -31,7 +31,7 @@ export function QrScannerComponent({
                 const hasCamera = await QrScanner.hasCamera();
                 if (!hasCamera) {
                     setHasPermission(false);
-                    onError?.(new Error(t('No camera found on device') ));
+                    onError?.(new Error(t('noCameraFound')));
                     return;
                 }
 
@@ -126,17 +126,17 @@ export function QrScannerComponent({
             <div className={`flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg ${className}`}>
                 <FontAwesomeIcon icon={faCamera} className="w-12 h-12 text-gray-400 mb-4" />
                 <p className="text-gray-600 text-center mb-4">
-                    {t('Camera access is required to scan QR codes') }
+                    {t('cameraAccessIs')}
                 </p>
                 <Button onClick={() => window.location.reload()} variant="outlined">
-                    {t('Refresh to retry') }
+                    {t('refreshToRetry')}
                 </Button>
             </div>
         );
     }
 
     if (hasPermission === null) {
-        return <Loading text={t('Initializing camera') } className={className} />;
+        return <Loading text={t('initializingCamera')} className={className} />;
     }
 
     return (
@@ -158,7 +158,7 @@ export function QrScannerComponent({
                         icon={isScanning ? faStop : faCamera}
                         className="w-4 h-4 mr-2"
                     />
-                    {isScanning ? t('Stop scanning')  : t('Start scanning') }
+                    {isScanning ? t('stopScanning'): t('startScanning')}
                 </Button>
 
                 {cameras.length > 1 && (
@@ -174,7 +174,7 @@ export function QrScannerComponent({
 
             {isScanning && (
                 <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
-                    {t('Scanning for QR codes') }
+                    {t('scanningForQrCodes')}
                 </div>
             )}
         </div>

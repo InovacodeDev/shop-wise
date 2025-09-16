@@ -60,7 +60,7 @@ describe('Enhanced UI Components with MD3', () => {
                 />
             );
 
-            expect(screen.getByText('Add Item')).toBeInTheDocument();
+            expect(screen.getByText('addItem')).toBeInTheDocument();
         });
     });
 
@@ -80,14 +80,14 @@ describe('Enhanced UI Components with MD3', () => {
                 />
             );
 
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
+            expect(screen.getByText('loading1')).toBeInTheDocument();
             expect(screen.getByText('Please wait')).toBeInTheDocument();
         });
 
         it('renders minimal variant', () => {
             render(<Loading text="Loading..." variant="minimal" />);
 
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
+            expect(screen.getByText('loading1')).toBeInTheDocument();
         });
     });
 });

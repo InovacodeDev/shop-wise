@@ -47,8 +47,8 @@ export function PreferencesForm() {
         if (!user) {
             toast({
                 variant: "destructive",
-                title: t('Error') ,
-                description: t('You need to be logged in to save preferences') ,
+                title: t('error1'),
+                description: t('youNeedToBeLoggedInToSavePreferences'),
             });
             return;
         }
@@ -58,15 +58,15 @@ export function PreferencesForm() {
             await reloadUser();
             form.reset(values);
             toast({
-                title: t('Success') ,
-                description: t('Your preferences have been saved') ,
+                title: t('Success'),
+                description: t('yourPreferencesHaveBeenSaved'),
             });
             trackEvent("preferences_updated", values);
         } catch (error: any) {
             toast({
                 variant: "destructive",
-                title: t('Error saving') ,
-                description: t('An error occurred while saving your preferences. Please try again') ,
+                title: t('errorSaving'),
+                description: t('errorSavingPreferences'),
             });
         }
     }
@@ -76,29 +76,29 @@ export function PreferencesForm() {
     return (
         <Card variant="elevated">
             <CardHeader>
-                <CardTitle>{t('Preferences') }</CardTitle>
-                <CardDescription>{t('Customize the look and behavior of the app') }</CardDescription>
+                <CardTitle>{t('preferences')}</CardTitle>
+                <CardDescription>{t('customizeAppLookAndBehavior')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-6">
                         <div>
-                            <h4 className="text-body-large font-medium mb-4 text-on-surface">{t('Appearance') }</h4>
+                            <h4 className="text-body-large font-medium mb-4 text-on-surface">{t('appearance')}</h4>
                             <div className="space-y-2">
                                 <label className="text-body-small font-medium text-on-surface-variant">
-                                    {t('Theme') }
+                                    {t('theme')}
                                 </label>
                                 <Select
                                     value={form.watch("theme")}
                                     onValueChange={(value) => form.setValue("theme", value as "system" | "light" | "dark", { shouldDirty: true })}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder={t('Select a theme') } />
+                                        <SelectValue placeholder={t('selectTheme')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="light">{t('Light') }</SelectItem>
-                                        <SelectItem value="dark">{t('Dark') }</SelectItem>
-                                        <SelectItem value="system">{t('System') }</SelectItem>
+                                        <SelectItem value="light">{t('light')}</SelectItem>
+                                        <SelectItem value="dark">{t('dark')}</SelectItem>
+                                        <SelectItem value="system">{t('system')}</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -107,14 +107,14 @@ export function PreferencesForm() {
                         <Separator />
 
                         <div>
-                            <h4 className="text-body-large font-medium mb-4 text-on-surface">{t('Notifications') }</h4>
+                            <h4 className="text-body-large font-medium mb-4 text-on-surface">{t('notifications')}</h4>
                             <div className="flex items-center justify-between p-4 rounded-lg border border-outline bg-surface-variant/30">
                                 <div className="space-y-1">
                                     <label className="text-body-medium font-medium text-on-surface">
-                                        {t('Enable push notifications') }
+                                        {t('enablePushNotifications')}
                                     </label>
                                     <p className="text-body-small text-on-surface-variant">
-                                        {t('Receive updates and suggestions') }
+                                        {t('receiveUpdatesAndSuggestions')}
                                     </p>
                                 </div>
                                 <Switch
@@ -126,7 +126,7 @@ export function PreferencesForm() {
                     </div>
 
                     <FormSubmitButton disabled={!isDirty || !isValid || isSubmitting}>
-                        {isSubmitting ? t('Saving')  : t('Save preferences') }
+                        {isSubmitting ? t('saving'): t('savePreferences')}
                     </FormSubmitButton>
                 </form>
             </CardContent>

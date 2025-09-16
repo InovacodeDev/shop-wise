@@ -41,7 +41,7 @@ const { toast } = useToast();
         //     merchantCapabilities: ["supports3DS"],
         //     supportedNetworks: ["visa", "masterCard", "elo"],
         //     total: {
-        //         label: t('Premium') ,
+        //         label: t('premium'),
         //         amount: price.toFixed(2),
         //     },
         // };
@@ -98,7 +98,7 @@ const { toast } = useToast();
         },
         transactionInfo: {
             totalPriceStatus: "FINAL",
-            totalPriceLabel: t('Total') ,
+            totalPriceLabel: t('total'),
             totalPrice: planPrices[billingCycle].toFixed(2),
             currencyCode: paymentConfig.currency,
             countryCode: paymentConfig.country,
@@ -114,13 +114,13 @@ const { toast } = useToast();
                 paymentRequest={paymentRequest}
                 onLoadPaymentData={(paymentData) => {
                     console.log("Google Pay Success", paymentData.paymentMethodData);
-                    toast({ title: t('Payment success') , description: t('Your payment has been processed successfully')  });
+                    toast({ title: t('paymentSuccess'), description: t('yourPaymentProcessedSuccessfully')});
                     onPaymentSuccess();
                     return {};
                 }}
                 onError={(error: any) => {
                     console.error("Google Pay Error", error);
-                    toast({ variant: "destructive", title: t('Payment error') , description: error.message });
+                    toast({ variant: "destructive", title: t('paymentError'), description: error.message });
                 }}
             />
             {canMakeApplePay && (

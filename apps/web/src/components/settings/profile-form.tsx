@@ -21,13 +21,13 @@ export function ProfileForm() {
     const { t } = useI18n();
 
     const profileSchema = z.object({
-        displayName: z.string().min(2, { message: t('Name must be at least 2 characters')  }),
-        email: z.string().email({ message: t('Invalid email')  }),
+        displayName: z.string().min(2, { message: t('nameMustBeAtLeast2Characters')}),
+        email: z.string().email({ message: t('invalidEmail')}),
     });
 
     const passwordSchema = z.object({
-        currentPassword: z.string().min(6, { message: t('Current password is required')  }),
-        newPassword: z.string().min(6, { message: t('New password must be at least 6 characters')  }),
+        currentPassword: z.string().min(6, { message: t('currentPasswordIsRequired')}),
+        newPassword: z.string().min(6, { message: t('newPasswordMustBeAtLeast6Characters')}),
     });
 
     useEffect(() => {
@@ -70,14 +70,14 @@ export function ProfileForm() {
             await reloadUser();
             profileForm.reset(values); // Resets the dirty state
             toast({
-                title: t('Success') ,
-                description: t('Your profile has been updated') ,
+                title: t('Success'),
+                description: t('yourProfileHasBeenUpdated'),
             });
             trackEvent("profile_updated");
         } catch (error: any) {
             toast({
                 variant: "destructive",
-                title: t('Error updating profile') ,
+                title: t('errorUpdatingProfile'),
                 description: error.message,
             });
         }
@@ -104,32 +104,32 @@ export function ProfileForm() {
         <div className="space-y-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>{t('Profile information') }</CardTitle>
-                    <CardDescription>{t('Update your personal details') }</CardDescription>
+                    <CardTitle>{t('profileInformation')}</CardTitle>
+                    <CardDescription>{t('updateYourPersonalDetails')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...profileForm}>
                         <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
                             <FormInput
                                 name="displayName"
-                                label={t('Display name') }
+                                label={t('displayName')}
                                 required
                             />
 
                             <FormInput
                                 name="email"
-                                label={t('Email') }
+                                label={t('email')}
                                 type="email"
                                 disabled
-                                description={t('Your email address cannot be changed') }
+                                description={t('yourEmailAddressCannotBeChanged')}
                             />
 
                             <FormSubmitButton
                                 disabled={!isProfileDirty || !isProfileValid}
                                 loading={isProfileSubmitting}
-                                loadingText={t('Saving') }
+                                loadingText={t('Saving')}
                             >
-                                {t('Save changes') }
+                                {t('saveChanges')}
                             </FormSubmitButton>
                         </form>
                     </Form>
@@ -138,30 +138,30 @@ export function ProfileForm() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>{t('Change password') }</CardTitle>
-                    <CardDescription>{t('Choose a new strong password') }</CardDescription>
+                    <CardTitle>{t('changePassword')}</CardTitle>
+                    <CardDescription>{t('chooseANewStrongPassword')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...passwordForm}>
                         <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6">
                             <FormPasswordInput
                                 name="currentPassword"
-                                label={t('Current password') }
+                                label={t('currentPassword')}
                                 required
                             />
 
                             <FormPasswordInput
                                 name="newPassword"
-                                label={t('New password') }
+                                label={t('newPassword')}
                                 required
                             />
 
                             <FormSubmitButton
                                 disabled={!isPasswordDirty || !isPasswordValid}
                                 loading={isPasswordSubmitting}
-                                loadingText={t('Updating') }
+                                loadingText={t('Updating')}
                             >
-                                {t('Change password') }
+                                {t('changePassword')}
                             </FormSubmitButton>
                         </form>
                     </Form>

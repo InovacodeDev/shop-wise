@@ -14,12 +14,12 @@ function AdminSettingsPage() {
             <Card>
                 <CardHeader>
                     <CardTitle className="text-lg font-bold">
-                        {t('Global Settings') }
+                        {t('globalSettings')}
                     </CardTitle>
-                    <CardDescription>{t('Configure application-wide settings.') }</CardDescription>
+                    <CardDescription>{t('configureApplicationWide')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>{t('Global configuration options will be available here.') }</p>
+                    <p>{t('globalConfigurationOptions')}</p>
                 </CardContent>
             </Card>
         </div>

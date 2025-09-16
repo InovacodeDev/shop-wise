@@ -105,8 +105,8 @@
 //             expect(screen.getByTestId('empty-state')).toBeInTheDocument();
 //         });
 
-//         expect(screen.getByTestId('empty-state-title')).toHaveTextContent('No Purchases Found');
-//         expect(screen.getByTestId('empty-state-description')).toHaveTextContent('Start adding purchases to see your monthly spending history here.');
+//         expect(screen.getByTestId('empty-state-title')).toHaveTextContent('noPurchasesFound');
+//         expect(screen.getByTestId('empty-state-description')).toHaveTextContent('startAddingPurchases');
 //     });
 
 //     it('should render error state when API call fails', async () => {
@@ -120,7 +120,7 @@
 //         });
 
 //         expect(screen.getByTestId('alert-description')).toBeInTheDocument();
-//         expect(screen.getByTestId('button')).toHaveTextContent('Retry');
+//         expect(screen.getByTestId('button')).toHaveTextContent('retry');
 //     });
 
 //     it('should use provided familyId prop', async () => {

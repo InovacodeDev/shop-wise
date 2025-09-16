@@ -59,7 +59,7 @@ export function MonthlyPurchaseDisplay({
 
     const fetchMonthlyPurchases = async (showLoadingState = true, isRetryAttempt = false) => {
         if (!familyId) {
-            setError(t('Family ID is required to load purchases.'));
+            setError(t('familyIdIs'));
             setLoading(false);
             return;
         }
@@ -84,15 +84,15 @@ export function MonthlyPurchaseDisplay({
             }
         } catch (err) {
             const error = err as any;
-            let errorMessage = error.message || t('Failed to load purchase history.');
+            let errorMessage = error.message || t('failedToLoad');
 
             // Handle specific error cases
             if (error.status === 401 || error.status === 403) {
-                errorMessage = t('Please log in again to access your purchase history.');
+                errorMessage = t('pleaseLogIn');
             } else if (error.status === 404) {
-                errorMessage = t('Family not found. Please check your account settings.');
+                errorMessage = t('familyNotFound');
             } else if (error.message?.includes('Network connection failed')) {
-                errorMessage = t('No internet connection. Please check your network and try again.');
+                errorMessage = t('noInternetConnection');
             }
 
             setError(errorMessage);
@@ -108,7 +108,7 @@ export function MonthlyPurchaseDisplay({
                     if (flatPurchases.length > 0) {
                         const fallbackGroup: MonthlyPurchaseGroup = {
                             monthYear: 'fallback',
-                            displayName: t('All Purchases (Fallback Mode)'),
+                            displayName: t('allPurchasesFallback'),
                             totalAmount: flatPurchases.reduce((sum, p) => sum + (p.totalAmount || 0), 0),
                             purchaseCount: flatPurchases.length,
                             purchases: flatPurchases.sort((a, b) =>
@@ -121,8 +121,8 @@ export function MonthlyPurchaseDisplay({
                         setError(null);
 
                         toast({
-                            title: t('Fallback Mode Active'),
-                            description: t('Monthly grouping is temporarily unavailable. Showing all purchases in a single list.'),
+                            title: t('fallbackModeActive'),
+                            description: t('monthlyGroupingIs'),
                             variant: "default",
                         });
 
@@ -207,7 +207,7 @@ export function MonthlyPurchaseDisplay({
                                         icon={faRefresh}
                                         className={`h-4 w-4 mr-2 ${isRetrying ? 'animate-spin' : ''}`}
                                     />
-                                    {isRetrying ? t('Retrying...') : t('Retry')}
+                                    {isRetrying ? t('retrying'): t('retry')}
                                 </Button>
                             </div>
                             {retryCount > 0 && (
@@ -218,7 +218,7 @@ export function MonthlyPurchaseDisplay({
                             {fallbackMode && (
                                 <div className="text-sm text-blue-600">
                                     <FontAwesomeIcon icon={faExclamationTriangle} className="h-3 w-3 mr-1" />
-                                    {t('Running in fallback mode. Some features may be limited.')}
+                                    {t('runningInFallbackMode')}
                                 </div>
                             )}
                         </AlertDescription>
@@ -234,8 +234,8 @@ export function MonthlyPurchaseDisplay({
                 <CardContent className="pt-6">
                     <EmptyState
                         icon={faShoppingCart}
-                        title={t('No Purchases Found')}
-                        description={t('Start adding purchases to see your monthly spending history here.')}
+                        title={t('noPurchasesFound')}
+                        description={t('startAddingPurchases')}
                     />
                 </CardContent>
             </Card>
@@ -254,7 +254,7 @@ export function MonthlyPurchaseDisplay({
                         <Alert>
                             <FontAwesomeIcon icon={faExclamationTriangle} className="h-4 w-4" />
                             <AlertDescription>
-                                {t('Monthly grouping is temporarily unavailable. Showing all purchases in a single list.')}
+                                {t('monthlyGroupingIs')}
                             </AlertDescription>
                         </Alert>
                     </CardContent>
@@ -266,7 +266,7 @@ export function MonthlyPurchaseDisplay({
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2">
                         <FontAwesomeIcon icon={faCalendar} className="w-5 h-5 text-primary" />
-                        {t('Purchase History Summary')}
+                        {t('purchaseHistorySummary')}
                     </CardTitle>
                     <CardDescription>
                         <div className="flex flex-col sm:flex-row gap-4 mt-2">

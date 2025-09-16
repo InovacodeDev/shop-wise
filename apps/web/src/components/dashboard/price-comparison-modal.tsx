@@ -73,7 +73,7 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems }: Pro
             const avgPrice = totalQty > 0 ? (totalSpent / totalQty) : (monthItems.length > 0 ? (monthItems.reduce((s, x) => s + (x.price || 0), 0) / monthItems.length) : 0);
 
             return {
-                monthLabel: m.label + (m.isCurrent ? ` (${t('Current') })` : ""),
+                monthLabel: m.label + (m.isCurrent ? ` (${t('current')})` : ""),
                 monthYear: m.monthYear,
                 isCurrent: m.isCurrent,
                 avgPrice,
@@ -108,29 +108,29 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems }: Pro
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                    <DialogTitle>{item ? item.name || item.barcode || t('Product comparison')  : t('Product comparison') }</DialogTitle>
+                    <DialogTitle>{item ? item.name || item.barcode || t('productComparison'): t('productComparison')}</DialogTitle>
                 </DialogHeader>
 
                 <div className="pt-2 pb-4 px-6">
-                    <p className="text-sm text-muted-foreground mb-4">{t('Comparing unit price and quantity for the selected product across the last 6 months') }</p>
+                    <p className="text-sm text-muted-foreground mb-4">{t('comparingUnitPriceAndQuantity')}</p>
 
                     {currentData && (
                         <div className="mb-4 p-3 border rounded-md">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-sm text-muted-foreground">{t('Current month') }</div>
+                                    <div className="text-sm text-muted-foreground">{t('currentMonth')}</div>
                                     <div className="text-lg font-medium">{currentData.monthLabel}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-sm text-muted-foreground">{t('Avg unit price') }</div>
+                                    <div className="text-sm text-muted-foreground">{t('avgUnitPrice')}</div>
                                     <div className="text-lg font-bold">{currentData.avgPrice > 0 ? new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(currentData.avgPrice) : "--"}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-sm text-muted-foreground">{t('Total quantity') }</div>
+                                    <div className="text-sm text-muted-foreground">{t('totalQuantity')}</div>
                                     <div className="text-lg font-bold">{currentData.totalQty > 0 ? new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(currentData.totalQty) : "--"}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-sm text-muted-foreground">{t('Change vs last purchase month') }</div>
+                                    <div className="text-sm text-muted-foreground">{t('changeVsLast')}</div>
                                     <div className="text-lg font-bold">
                                         {baseline ? (
                                             baseline.avgPrice > 0 ? (
@@ -143,7 +143,7 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems }: Pro
                                                     ) : null}
                                                 </span>
                                             ) : "--"
-                                        ) : t('No previous purchase') }
+                                        ) : t('noPreviousPurchase')}
                                     </div>
                                 </div>
                             </div>
@@ -152,15 +152,15 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems }: Pro
 
                     {/* Line chart: 24 months (2 years) of average unit price */}
                     <div className="flex items-center justify-between mb-3">
-                        <div className="text-sm text-muted-foreground">{t('Price history 24 months') }</div>
+                        <div className="text-sm text-muted-foreground">{t('priceHistory24Months')}</div>
                         <div className="flex items-center gap-2">
-                            <Button size="sm" variant={"ghost"} onClick={() => setMode('price')} className={mode === 'price' ? 'font-semibold' : ''}>{t('Price') }</Button>
-                            <Button size="sm" variant={"ghost"} onClick={() => setMode('quantity')} className={mode === 'quantity' ? 'font-semibold' : ''}>{t('Quantity') }</Button>
+                            <Button size="sm" variant={"ghost"} onClick={() => setMode('price')} className={mode === 'price' ? 'font-semibold' : ''}>{t('price')}</Button>
+                            <Button size="sm" variant={"ghost"} onClick={() => setMode('quantity')} className={mode === 'quantity' ? 'font-semibold' : ''}>{t('quantity')}</Button>
                         </div>
                     </div>
 
                     {(() => {
-                        if (!item) return <div className="text-sm text-muted-foreground">{t('No product selected') }</div>;
+                        if (!item) return <div className="text-sm text-muted-foreground">{t('noProductSelected')}</div>;
 
                         const now = new Date();
 
@@ -252,9 +252,8 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems }: Pro
                                     <div className="text-lg font-bold mt-1">
                                         {has ? (mode === 'price' ? (value != null ? new Intl.NumberFormat(locale, { style: 'currency', currency }).format(value as number) : "--") : new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value as number)) : (
                                             interp != null ? (
-                                                <span>{mode === 'price' ? new Intl.NumberFormat(locale, { style: 'currency', currency }).format(interp as number) : new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(interp as number)} <span className="text-xs text-muted-foreground">({t('Estimate') })</span></span>
-                                            ) : t('No data') 
-                                        )}
+                                                <span>{mode === 'price' ? new Intl.NumberFormat(locale, { style: 'currency', currency }).format(interp as number) : new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(interp as number)} <span className="text-xs text-muted-foreground">({t('Estimate')})</span></span>
+                                            ) : t('noData'))}
                                     </div>
                                 </div>
                             );

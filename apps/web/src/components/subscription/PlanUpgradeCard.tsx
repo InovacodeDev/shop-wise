@@ -50,7 +50,7 @@ const PlanUpgradeCard: React.FC<PlanUpgradeCardProps> = ({
             alert(`Upgrade para ${plan.name} realizado com sucesso!`);
             onUpgrade?.(plan._id);
         } catch (error) {
-            alert('Não foi possível fazer o upgrade. Tente novamente.');
+            alert(t('upgradeFailedMessage'));
         } finally {
             setUpgrading(false);
         }

@@ -231,8 +231,8 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                 setProducts(finalResult.products);
 
                 toast({
-                    title: t('PDF data extracted successfully') ,
-                    description: t('PDF data was extracted successfully. Please review the items below before saving') ,
+                    title: t('pdfDataExtracted'),
+                    description: t('pdfDataExtractedSuccess'),
                 });
                 setProgress(100);
                 setIsLoading(false);
@@ -241,8 +241,8 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
             console.error("Failed to extract data:", error);
             toast({
                 variant: "destructive",
-                title: t('Failed to extract PDF data') ,
-                description: error.message || t('We could not extract data from the PDF. Please ensure it is a valid electronic fiscal receipt (NFCe) and try again. If the problem persists, you can enter the data manually') ,
+                title: t('failedToExtract'),
+                description: error.message || t('pdfExtractionFailedMessage'),
             });
             handleCancelImport();
             setIsLoading(false);
@@ -276,7 +276,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
             setProducts(products.map((p) => (p.barcode === editingProduct.barcode ? editingProduct : p)));
             setIsEditDialogOpen(false);
             setEditingProduct(null);
-            toast({ title: t('Item updated successfully')  });
+            toast({ title: t('itemUpdatedSuccessfully')});
         }
     };
 
@@ -316,8 +316,8 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
             <CardContent className="flex flex-col items-center gap-8 p-0">
                 <Alert>
                     <FontAwesomeIcon icon={faFilePdf} />
-                    <AlertTitle>{t('Import from PDF') }</AlertTitle>
-                    <AlertDescription>{t('Select the PDF of your electronic fiscal receipt (NFCe) to automatically extract the purchase data') }</AlertDescription>
+                    <AlertTitle>{t('importFromPdf')}</AlertTitle>
+                    <AlertDescription>{t('selectNfcePdfDescription')}</AlertDescription>
                 </Alert>
 
                 <Input
@@ -332,8 +332,8 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                 {isLoading ? (
                     <div className="w-full space-y-4">
                         <Loading
-                            text={t('Processing PDF') }
-                            description={t('Extracting purchase data from your receipt. This may take a few moments') }
+                            text={t('processingPdf')}
+                            description={t('extractingPurchaseData')}
                             layout="vertical"
                             size="md"
                         />
@@ -348,7 +348,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                         data-analytics-id="select-pdf-button"
                     >
                         <FontAwesomeIcon icon={faFilePdf} className="mr-2 h-5 w-5" />
-                        {t('Select PDF file') }
+                        {t('selectPdfFile')}
                     </Button>
                 )}
 
@@ -358,18 +358,18 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faHistory} className="w-5 h-5 text-primary" />{" "}
-                                    {t('Purchase data') }
+                                    {t('purchaseData')}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                     <div className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faStore} className="w-4 h-4 text-muted-foreground" />
-                                        <strong>{t('Store') }:</strong> {extractionResult.storeName}
+                                        <strong>{t('store')}:</strong> {extractionResult.storeName}
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faCalendar} className="w-4 h-4 text-muted-foreground" />
-                                        <strong>{t('Date') }:</strong>{" "}
+                                        <strong>{t('date')}:</strong>{" "}
                                         {new Date(extractionResult.date).toLocaleDateString("pt-BR", {
                                             timeZone: "UTC",
                                         })}
@@ -381,33 +381,33 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                                         <TableRow>
                                             <TableHead>
                                                 <FontAwesomeIcon icon={faBox} className="inline-block mr-1 w-4 h-4" />{" "}
-                                                {t('Product') }
+                                                {t('product')}
                                             </TableHead>
                                             <TableHead>
                                                 <FontAwesomeIcon
                                                     icon={faCopyright}
                                                     className="inline-block mr-1 w-4 h-4"
                                                 />{" "}
-                                                {t('Brand') }
+                                                {t('brand')}
                                             </TableHead>
                                             <TableHead className="w-[200px]">
                                                 <FontAwesomeIcon icon={faTags} className="inline-block mr-1 w-4 h-4" />{" "}
-                                                {t('Category') }
+                                                {t('category')}
                                             </TableHead>
                                             <TableHead className="text-center w-[80px]">
                                                 <FontAwesomeIcon
                                                     icon={faHashtag}
                                                     className="inline-block mr-1 w-4 h-4"
                                                 />{" "}
-                                                {t('Quantity') }
+                                                {t('quantity')}
                                             </TableHead>
                                             <TableHead className="text-right w-[120px]">
-                                                {t('Unit price') } (R$)
+                                                {t('unitPrice')} (R$)
                                             </TableHead>
                                             <TableHead className="text-right w-[120px]">
-                                                {t('Total price') } (R$)
+                                                {t('totalPrice')} (R$)
                                             </TableHead>
-                                            <TableHead className="text-right w-[100px]">{t('Actions') }</TableHead>
+                                            <TableHead className="text-right w-[100px]">{t('actions')}</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -466,20 +466,20 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                                 </Table>
                                 <Button variant="outlined" onClick={handleAddNewItem}>
                                     <FontAwesomeIcon icon={faPlusCircle} className="mr-2 h-4 w-4" />{" "}
-                                    {t('Add item manually') }
+                                    {t('addItemManually')}
                                 </Button>
                             </CardContent>
                             <CardFooter className="flex-col items-end space-y-2 pt-6">
                                 <p className="font-semibold text-lg">
-                                    {t('Total') }: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(totalAmount)}
+                                    {t('total')}: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(totalAmount)}
                                 </p>
                                 {extractionResult.discount && extractionResult.discount > 0 && (
                                     <>
                                         <p className="font-semibold text-primary text-md">
-                                            {t('Discounts') }: - {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(extractionResult.discount)}
+                                            {t('discounts')}: - {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(extractionResult.discount)}
                                         </p>
                                         <p className="font-bold text-xl text-accent">
-                                            {t('Total to pay') }: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(totalAmount - extractionResult.discount)}
+                                            {t('totalToPay')}: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(totalAmount - extractionResult.discount)}
                                         </p>
                                     </>
                                 )}
@@ -490,7 +490,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                                 <AccordionItem value="item-1">
                                     <AccordionTrigger>
                                         <span className="flex items-center gap-2">
-                                            <FontAwesomeIcon icon={faBug} /> {t('Debug raw data') }
+                                            <FontAwesomeIcon icon={faBug} /> {t('debugRawData')}
                                         </span>
                                     </AccordionTrigger>
                                     <AccordionContent>
@@ -503,7 +503,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                             <div className="flex w-full justify-between items-center">
                                 <Button variant="destructive" onClick={handleCancelImport} disabled={isSaving}>
                                     <FontAwesomeIcon icon={faTimesCircle} className="mr-2 h-4 w-4" />
-                                    {t('Cancel and start new import') }
+                                    {t('cancelAndStartNewImport')}
                                 </Button>
                                 <Button size="lg" onClick={handleConfirmPurchase} disabled={isSaving}>
                                     {isSaving ? (
@@ -511,7 +511,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                                     ) : (
                                         <FontAwesomeIcon icon={faSave} className="mr-2 h-4 w-4" />
                                     )}
-                                    {isSaving ? t('Saving')  : t('Confirm and save purchase') }
+                                    {isSaving ? t('saving'): t('confirmAndSavePurchase')}
                                 </Button>
                             </div>
                         </CardFooter>
@@ -522,14 +522,14 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent className="overflow-hidden">
                     <DialogHeader>
-                        <DialogTitle>{t('Edit item') }</DialogTitle>
-                        <DialogDescription>{t('Make corrections to the extracted item details here') }</DialogDescription>
+                        <DialogTitle>{t('editItem')}</DialogTitle>
+                        <DialogDescription>{t('editItemDescription')}</DialogDescription>
                     </DialogHeader>
                     {editingProduct && (
                         <div className="grid gap-4 py-4 overflow-x-hidden">
                             <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
                                 <Label htmlFor="name" className="sm:text-right">
-                                    {t('Name') }
+                                    {t('name')}
                                 </Label>
                                 <Input
                                     id="name"
@@ -540,7 +540,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
                                 <Label htmlFor="brand" className="sm:text-right">
-                                    {t('Brand') }
+                                    {t('brand')}
                                 </Label>
                                 <Input
                                     id="brand"
@@ -553,7 +553,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
                                 <Label htmlFor="category" className="sm:text-right">
-                                    {t('Category') }
+                                    {t('category')}
                                 </Label>
                                 <Select
                                     value={editingProduct.category}
@@ -566,7 +566,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                                     }}
                                 >
                                     <SelectTrigger className="sm:col-span-3">
-                                        <SelectValue placeholder={t('Select a category') } />
+                                        <SelectValue placeholder={t('selectCategory')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {mainCategories.map((cat) => (
@@ -579,7 +579,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
                                 <Label htmlFor="subcategory" className="sm:text-right">
-                                    {t('Subcategory') }
+                                    {t('subcategory')}
                                 </Label>
                                 <Select
                                     value={editingProduct.subcategory}
@@ -593,7 +593,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                                     }
                                 >
                                     <SelectTrigger className="sm:col-span-3">
-                                        <SelectValue placeholder={t('Select a subcategory') } />
+                                        <SelectValue placeholder={t('selectSubcategory')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {editingProduct.category &&
@@ -607,7 +607,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
                                 <Label htmlFor="quantity" className="sm:text-right">
-                                    {t('Quantity') }
+                                    {t('quantity')}
                                 </Label>
                                 <Input
                                     id="quantity"
@@ -624,7 +624,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
                                 <Label htmlFor="unitPrice" className="sm:text-right">
-                                    {t('Unit price') } (R$)
+                                    {t('unitPrice')} (R$)
                                 </Label>
                                 <Input
                                     id="unitPrice"
@@ -645,10 +645,10 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                     )}
                     <DialogFooter className="flex-col sm:flex-row gap-2">
                         <Button variant="ghost" onClick={() => setIsEditDialogOpen(false)}>
-                            {t('Cancel') }
+                            {t('cancel')}
                         </Button>
                         <Button onClick={handleSaveEdit}>
-                            <FontAwesomeIcon icon={faSave} className="mr-2 h-4 w-4" /> {t('Save changes') }
+                            <FontAwesomeIcon icon={faSave} className="mr-2 h-4 w-4" /> {t('saveChanges')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

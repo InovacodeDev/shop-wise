@@ -129,8 +129,8 @@ export function InsightModal({
         if (type !== "consumptionAnalysis" && (!data || data.length === 0)) {
             return (
                 <EmptyState
-                    title={t('No data to display') }
-                    description={t('There is no data available for the selected insight. Start adding purchases to see your data here') }
+                    title={t('noDataToDisplay')}
+                    description={t('noDataAvailableForInsight')}
                 />
             );
         }
@@ -146,17 +146,17 @@ export function InsightModal({
                             <div className="grid grid-cols-4 gap-4 text-sm font-medium text-on-surface-variant min-w-0">
                                 <div className="flex items-center gap-2 truncate">
                                     <FontAwesomeIcon icon={faStore} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t('Store') }</span>
+                                    <span className="truncate">{t('store')}</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-right truncate">
                                     <FontAwesomeIcon icon={faDollarSign} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t('This month') }</span>
+                                    <span className="truncate">{t('thisMonth')}</span>
                                 </div>
                                 <div className="text-right truncate">
-                                    {t('Avg month') }
+                                    {t('avgMonth')}
                                 </div>
                                 <div className="text-center truncate">
-                                    {t('Months active') }
+                                    {t('monthsActive')}
                                 </div>
                             </div>
                         </div>
@@ -195,15 +195,15 @@ export function InsightModal({
                             <div className="grid grid-cols-3 gap-4 text-sm font-medium text-on-surface-variant min-w-0">
                                 <div className="flex items-center gap-2 truncate">
                                     <FontAwesomeIcon icon={faBox} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t('Product') }</span>
+                                    <span className="truncate">{t('product')}</span>
                                 </div>
                                 <div className="flex items-center gap-2 truncate">
                                     <FontAwesomeIcon icon={faCalendar} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t('Purchase date') }</span>
+                                    <span className="truncate">{t('purchaseDate')}</span>
                                 </div>
                                 <div className="flex items-center gap-2 justify-end truncate">
                                     <FontAwesomeIcon icon={faDollarSign} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t('Price') }</span>
+                                    <span className="truncate">{t('price')}</span>
                                 </div>
                             </div>
                         </div>
@@ -235,11 +235,11 @@ export function InsightModal({
                                 <div className="grid grid-cols-2 gap-4 text-sm font-medium text-on-surface-variant min-w-0">
                                     <div className="flex items-center gap-2 truncate">
                                         <FontAwesomeIcon icon={faTags} className="h-3 w-3 flex-shrink-0" />
-                                        <span className="truncate">{t('Category') }</span>
+                                        <span className="truncate">{t('category')}</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-right justify-end truncate">
                                         <FontAwesomeIcon icon={faDollarSign} className="h-3 w-3 flex-shrink-0" />
-                                        <span className="truncate">{t('Amount spent') }</span>
+                                        <span className="truncate">{t('amountSpent')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -294,10 +294,10 @@ export function InsightModal({
                             <TableRow>
                                 <TableHead>
                                     <FontAwesomeIcon icon={faBox} className="mr-2 h-4 w-4" />
-                                    {t('Product') }
+                                    {t('product')}
                                 </TableHead>
-                                <TableHead>{t('Cheapest at') }</TableHead>
-                                <TableHead className="text-right">{t('Potential savings') }</TableHead>
+                                <TableHead>{t('cheapestAt')}</TableHead>
+                                <TableHead className="text-right">{t('potentialSavings')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -318,10 +318,10 @@ export function InsightModal({
                     <div className="rounded-lg border border-outline-variant bg-surface overflow-hidden">
                         <div className="p-4 border-b border-outline-variant bg-surface-variant/30">
                             <div className="grid grid-cols-4 gap-4 text-sm font-medium text-on-surface-variant min-w-0">
-                                <div className="truncate">{t('Goal') }</div>
-                                <div className="text-right truncate">{t('Target') }</div>
-                                <div className="text-right truncate">{t('Current') }</div>
-                                <div className="text-right truncate">{t('Progress') }</div>
+                                <div className="truncate">{t('goal')}</div>
+                                <div className="text-right truncate">{t('target')}</div>
+                                <div className="text-right truncate">{t('current')}</div>
+                                <div className="text-right truncate">{t('progress')}</div>
                             </div>
                         </div>
                         <div className="divide-y divide-outline-variant">
@@ -347,7 +347,7 @@ export function InsightModal({
                                                 {g.progress.toFixed(1)}%
                                             </Chip>
                                         ) : (
-                                            <span className="text-on-surface-variant">{t('N/A') }</span>
+                                            <span className="text-on-surface-variant">{t('N/A')}</span>
                                         )}
                                     </div>
                                 </div>
@@ -361,13 +361,13 @@ export function InsightModal({
                         <Alert className="border-primary/50 text-center">
                             <FontAwesomeIcon icon={faGem} className="h-5 w-5 text-primary" />
                             <AlertTitle className="text-lg font-bold text-primary">
-                                {t('Premium feature') }
+                                {t('premiumFeature')}
                             </AlertTitle>
-                            <DialogDescription>{t('Unlock detailed consumption analyses and personalized insights by upgrading to our premium plan') }</DialogDescription>
+                            <DialogDescription>{t('unlockDetailedAnalyses')}</DialogDescription>
                             <Button asChild className="mt-4">
                                 <Link to="/family" search={{ tab: 'plan' }}>
                                     <FontAwesomeIcon icon={faRocket} className="mr-2" />
-                                    {t('Upgrade your plan') }
+                                    {t('upgradeYourPlan')}
                                 </Link>
                             </Button>
                         </Alert>
@@ -378,7 +378,7 @@ export function InsightModal({
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 text-muted-foreground">
                                 <FontAwesomeIcon icon={faWandMagicSparkles} className="h-5 w-5 animate-pulse" />
-                                <p>{t('Our AI is analyzing your data, this may take a moment') }</p>
+                                <p>{t('aiAnalyzingData')}</p>
                             </div>
                             <Skeleton className="h-6 w-3/4" />
                             <Skeleton className="h-4 w-full" />
@@ -397,8 +397,8 @@ export function InsightModal({
 
                 return (
                     <EmptyState
-                        title={t('No analysis available') }
-                        description={t('We could not generate an analysis for this dataset. Try again later or add more purchase data') }
+                        title={t('noAnalysisAvailable')}
+                        description={t('couldNotGenerateAnalysis')}
                     />
                 );
             default:

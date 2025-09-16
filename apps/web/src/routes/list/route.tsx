@@ -16,8 +16,8 @@ function ListPage() {
         <SideBarLayout>
             <div className="container mx-auto pt-4">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-headline">{t('Shopping List')}</CardTitle>
-                    <CardDescription>{t('Manage your active shopping list, add, remove and check items.')}</CardDescription>
+                    <CardTitle className="text-2xl font-headline">{t('shoppingList')}</CardTitle>
+                    <CardDescription>{t('manageYourActive')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ShoppingListComponent />

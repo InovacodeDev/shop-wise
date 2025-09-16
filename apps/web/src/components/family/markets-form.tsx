@@ -61,14 +61,14 @@ export function MarketsForm() {
     const marketTypes = ["supermercado", "atacado", "feira", "acougue", "padaria", "marketplace", "farmacia", "outro"];
 
     const marketTypeLabels: Record<string, string> = {
-        supermercado: t('Supermarket'),
-        atacado: t('Wholesale'),
-        feira: t('Market'),
-        acougue: t('Butcher'),
-        padaria: t('Bakery'),
-        marketplace: t('Marketplace'),
-        farmacia: t('Pharmacy'),
-        outro: t('Other'),
+        supermercado: t('supermarket'),
+        atacado: t('wholesale'),
+        feira: t('market'),
+        acougue: t('butcher'),
+        padaria: t('bakery'),
+        marketplace: t('marketplace'),
+        farmacia: t('pharmacy'),
+        outro: t('other'),
     };
 
     const form = useForm<MarketData>({
@@ -93,7 +93,7 @@ export function MarketsForm() {
         form.reset();
         setSelectedType("supermercado");
         toast({
-            title: t('Market added'),
+            title: t('marketAdded'),
             description: t('{0} was added to your favorites.', { 0: marketData.name }),
         });
     };
@@ -102,7 +102,7 @@ export function MarketsForm() {
         setFavoriteStores(favoriteStores.filter((s) => s.id !== store.id));
         setIgnoredStores([...ignoredStores, store]);
         toast({
-            title: t('Moved to Ignored'),
+            title: t('movedToIgnored'),
             description: t('{0} will now be ignored in price comparisons.', { 0: store.name }),
         });
     };
@@ -111,7 +111,7 @@ export function MarketsForm() {
         setIgnoredStores(ignoredStores.filter((s) => s.id !== store.id));
         setFavoriteStores([...favoriteStores, store]);
         toast({
-            title: t('Moved to Favorites'),
+            title: t('movedToFavorites'),
             description: t('{0} is now a favorite store.', { 0: store.name }),
         });
     };
@@ -122,15 +122,15 @@ export function MarketsForm() {
         } else {
             setIgnoredStores(ignoredStores.filter((s) => s.id !== storeId));
         }
-        toast({ title: t('Store removed'), description: t('The store was removed from your lists.') });
+        toast({ title: t('storeRemoved'), description: t('storeWasRemoved')});
     };
 
     return (
         <div className="space-y-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>{t('Add New Store')}</CardTitle>
-                    <CardDescription>{t('Add a new supermarket, wholesale or market to your preferred locations.')}</CardDescription>
+                    <CardTitle>{t('addStore')}</CardTitle>
+                    <CardDescription>{t('addNewSupermarket')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -138,26 +138,26 @@ export function MarketsForm() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormInput
                                     name="name"
-                                    label={t('Store Name')}
-                                    placeholder={t('e.g. Neighborhood Supermarket')}
+                                    label={t('storeName')}
+                                    placeholder={t('egNeighborhoodSupermarket')}
                                     required
                                 />
                                 <FormInput
                                     name="cnpj"
-                                    label={t('CNPJ (Optional)')}
+                                    label={t('cnpjOptional')}
                                     placeholder="00.000.000/0001-00"
                                 />
                             </div>
 
                             <FormInput
                                 name="address"
-                                label={t('Address (Optional)')}
-                                placeholder={t('e.g. 123 Flower St, City')}
+                                label={t('addressOptional')}
+                                placeholder={t('egAddress')}
                             />
 
                             <div className="space-y-3">
                                 <label className="text-body-small font-medium text-on-surface-variant block">
-                                    {t('Store Type')}
+                                    {t('storeType')}
                                 </label>
                                 <div className="flex flex-wrap gap-2">
                                     {marketTypes.map((type) => (
@@ -178,7 +178,7 @@ export function MarketsForm() {
 
                             <FormSubmitButton>
                                 <FontAwesomeIcon icon={faPlusCircle} className="mr-2 h-4 w-4" />
-                                {t('Add to Favorites')}
+                                {t('addToFavorites')}
                             </FormSubmitButton>
                         </form>
                     </Form>
@@ -186,26 +186,26 @@ export function MarketsForm() {
             </Card>
 
             <MarketList
-                title={t('Favorite Stores')}
-                description={t('These are the stores you shop at most often. We\'ll use them to generate personalized insights.')}
+                title={t('favoriteStores')}
+                description={t('storesDescription')}
                 icon={faThumbsUp}
                 stores={favoriteStores}
                 onAction={moveToIgnored}
                 onRemove={removeFromFamily}
                 actionIcon={faThumbsDown}
-                actionTooltip={t('Move to Ignored')}
+                actionTooltip={t('moveToIgnored')}
                 listType="favorite"
             />
 
             <MarketList
-                title={t('Ignored Stores')}
-                description={t('We will not use data from these stores for price comparison insights.')}
+                title={t('ignoredStores')}
+                description={t('weWillNot')}
                 icon={faThumbsDown}
                 stores={ignoredStores}
                 onAction={moveToFavorites}
                 onRemove={removeFromFamily}
                 actionIcon={faThumbsUp}
-                actionTooltip={t('Move to Favorites')}
+                actionTooltip={t('moveToFavorites')}
                 listType="ignored"
             />
         </div>
@@ -238,14 +238,14 @@ function MarketList({
     const { t } = useI18n();
     
     const marketTypeLabels: Record<string, string> = {
-        supermercado: t('Supermarket'),
-        atacado: t('Wholesale'),
-        feira: t('Market'),
-        acougue: t('Butcher'),
-        padaria: t('Bakery'),
-        marketplace: t('Marketplace'),
-        farmacia: t('Pharmacy'),
-        outro: t('Other'),
+        supermercado: t('supermarket'),
+        atacado: t('wholesale'),
+        feira: t('market'),
+        acougue: t('butcher'),
+        padaria: t('bakery'),
+        marketplace: t('marketplace'),
+        farmacia: t('pharmacy'),
+        outro: t('other'),
     };
 
     return (
@@ -260,7 +260,7 @@ function MarketList({
             <CardContent>
                 {stores.length === 0 ? (
                     <div className="text-center py-8 text-on-surface-variant">
-                        {t('This list is empty')}
+                        {t('thisListIsEmpty')}
                     </div>
                 ) : (
                     <div className="rounded-lg border border-outline-variant bg-surface">
@@ -268,11 +268,11 @@ function MarketList({
                             <div className="grid grid-cols-4 gap-4 text-sm font-medium text-on-surface-variant">
                                 <div className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faStore} className="h-3 w-3" />
-                                    {t('Name')}
+                                    {t('name')}
                                 </div>
-                                <div>{t('Type')}</div>
-                                <div>{t('Address')}</div>
-                                <div className="text-right">{t('Actions')}</div>
+                                <div>{t('type')}</div>
+                                <div>{t('address')}</div>
+                                <div className="text-right">{t('actions')}</div>
                             </div>
                         </div>
                         <div className="divide-y divide-outline-variant">
@@ -302,7 +302,7 @@ function MarketList({
                                         <Button
                                             variant="text"
                                             size="sm"
-                                            title={t('Remove from my lists')}
+                                            title={t('removeFromMy')}
                                             onClick={() => onRemove(store.id, listType)}
                                             className="text-error hover:bg-error-container/50"
                                         >

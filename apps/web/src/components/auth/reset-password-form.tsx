@@ -51,10 +51,10 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     }, [token]);
 
     const formSchema = z.object({
-        password: z.string().min(8, { message: t('Password must be at least 8 characters')  }),
+        password: z.string().min(8, { message: t('passwordMustBeAtLeast8Characters')}),
         confirmPassword: z.string(),
     }).refine((data) => data.password === data.confirmPassword, {
-        message: t('Passwords do not match') ,
+        message: t('passwordsDoNotMatch'),
         path: ["confirmPassword"],
     });
 
@@ -73,8 +73,8 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             await apiService.resetPassword(token, values.password);
             
             toast({
-                title: t('Password reset successful') ,
-                description: t('Your password has been changed. Logging you in') ,
+                title: t('passwordResetSuccessful'),
+                description: t('passwordChangedLoggingIn'),
             });
 
             // Attempt auto-login if we have the user's email
@@ -117,8 +117,8 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-headline">{t('Validating reset link') }</CardTitle>
-                    <CardDescription>{t('Please wait while we validate your reset link') }</CardDescription>
+                    <CardTitle className="text-2xl font-headline">{t('validatingResetLink')}</CardTitle>
+                    <CardDescription>{t('pleaseWaitValidatingLink')}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex justify-center p-8">
                     <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
@@ -132,13 +132,13 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-headline">{t('Invalid reset link') }</CardTitle>
-                    <CardDescription>{t('This password reset link is invalid or has expired') }</CardDescription>
+                    <CardTitle className="text-2xl font-headline">{t('invalidResetLink')}</CardTitle>
+                    <CardDescription>{t('resetLinkInvalidOrExpired')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="text-center">
                         <p className="text-sm text-muted-foreground">
-                            {t('Please request a new password reset link') }
+                            {t('pleaseRequestNewResetLink')}
                         </p>
                     </div>
                 </CardContent>
@@ -146,14 +146,14 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                     <div className="w-full space-y-2">
                         <Link to="/forgot-password">
                             <Button variant="filled" className="w-full">
-                                {t('Request new reset link') }
+                                {t('requestNewResetLink')}
                             </Button>
                         </Link>
                         <p className="text-sm text-muted-foreground w-full text-center">
-                            {t('Remembered your password') }{" "}
+                            {t('rememberedYourPassword')}{" "}
                             <Link to="/login">
                                 <Button variant="link" className="px-0 h-auto">
-                                    {t('Login') }
+                                    {t('login')}
                                 </Button>
                             </Link>
                         </p>
@@ -166,8 +166,8 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-2xl font-headline">{t('Reset your password') }</CardTitle>
-                <CardDescription>{t('Enter your new password below') }</CardDescription>
+                <CardTitle className="text-2xl font-headline">{t('resetYourPassword')}</CardTitle>
+                <CardDescription>{t('enterNewPasswordBelow')}</CardDescription>
             </CardHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -177,7 +177,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t('New password') }</FormLabel>
+                                    <FormLabel>{t('newPassword')}</FormLabel>
                                     <FormControl>
                                         <div className="relative">
                                             <Input 
@@ -209,7 +209,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                             name="confirmPassword"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t('Confirm new password') }</FormLabel>
+                                    <FormLabel>{t('confirmNewPassword')}</FormLabel>
                                     <FormControl>
                                         <div className="relative">
                                             <Input 
@@ -242,20 +242,20 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                             disabled={!isValid}
                             loading={resetOperation.isLoading}
                         >
-                            {t('Reset password') }
+                            {t('resetPassword')}
                         </LoadingButton>
                     </CardContent>
                     <CardFooter>
                         <p className="text-sm text-muted-foreground w-full text-center">
-                                                        {t('Remembered your password') }{" "}
+                                                        {t('rememberedYourPassword')}{" "}
                             <Link to="/login" className="text-primary-500">
                                 <Button variant="link" className="px-0 h-auto">
-                                    {t('Login') }
+                                    {t('login')}
                                 </Button>
                             </Link>" "
                             <Link to="/login">
                                 <Button variant="link" className="px-0 h-auto">
-                                    {t('Login') }
+                                    {t('login')}
                                 </Button>
                             </Link>
                         </p>

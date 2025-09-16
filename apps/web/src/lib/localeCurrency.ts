@@ -14,7 +14,7 @@ export function getCurrencyFromLocale(locale: string): string {
   if (!locale) return 'USD';
   return (
     localeToCurrency[locale] ||
-    localeToCurrency[locale.split('-')[0]] ||
+    localeToCurrency[locale.split('dash')[0]] ||
     'USD'
   );
 }
@@ -34,7 +34,7 @@ export function getPaymentConfigFromLocale(locale: string) {
   if (!locale) return { currency: 'USD', country: 'US' };
   return (
     localeToPaymentConfig[locale] ||
-    localeToPaymentConfig[locale.split('-')[0]] ||
+    localeToPaymentConfig[locale.split('dash')[0]] ||
     { currency: 'USD', country: 'US' }
   );
 }

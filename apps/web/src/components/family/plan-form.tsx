@@ -43,20 +43,20 @@ export function PlanForm() {
     // Explicit feature lists with AI gating notes
     const planFeatures = {
         free: [
-            t('Create and manage shopping lists') ,
-            t('Manual expense tracking') ,
-            t('Basic spending insights') ,
-            t('Sync across devices') ,
-            t('NFCe reading raw data extraction only') ,
+            t('createAndManage'),
+            t('manualExpenseTracking'),
+            t('basicSpendingInsights'),
+            t('syncAcrossDevices'),
+            t('nfceRawDataOnly'),
         ],
         premium: [
-            t('Automatic receipt scanning PDF image import') ,
-            t('AI enhanced NFCe parsing and product enrichment') ,
-            t('Advanced AI driven insights and consumption analysis') ,
-            t('Price comparison across stores') ,
-            t('Personalized budgeting recommendations') ,
-            t('Exportable reports and CSV') ,
-            t('Priority support and higher usage limits') ,
+            t('automaticReceiptScanning'),
+            t('aiEnhancedNfceParsing'),
+            t('advancedAiInsights'),
+            t('priceComparisonAcross'),
+            t('personalizedBudgetingRecommendations'),
+            t('exportableReportsAnd'),
+            t('prioritySupportHigherLimits'),
         ],
     };
 
@@ -92,8 +92,8 @@ export function PlanForm() {
         await new Promise((res) => setTimeout(res, 1500));
         setIsSaving(false);
         toast({
-            title: t('Success') ,
-            description: t('Plan updated successfully') ,
+            title: t('Success'),
+            description: t('planUpdatedSuccessfully'),
         });
         trackEvent("plan_changed", {
             newPlan: values.plan,
@@ -125,8 +125,8 @@ export function PlanForm() {
         setShowDowngradeModal(false);
         // Here you would call your backend to schedule the downgrade
         toast({
-            title: t('Plan downgrade scheduled') ,
-            description: t('Your plan will change to free at the end of your billing period') ,
+            title: t('planDowngradeScheduled'),
+            description: t('planDowngradeMessage'),
         });
     };
 
@@ -151,8 +151,8 @@ export function PlanForm() {
     return (
         <div>
             <CardHeader>
-                <CardTitle>{t('Manage your plan') }</CardTitle>
-                <CardDescription>{t('Choose the plan that best fits your needs') }</CardDescription>
+                <CardTitle>{t('manageYourPlan')}</CardTitle>
+                <CardDescription>{t('choosePlanDescription')}</CardDescription>
             </CardHeader>
             <Form {...form}>
                 <form className="space-y-8">
@@ -180,8 +180,8 @@ export function PlanForm() {
                                                                 <FontAwesomeIcon icon={faCheckCircle} className="w-6 h-6 text-gray-600" />
                                                             </div>
                                                         </div>
-                                                        <CardTitle className="text-2xl font-bold">{t('Free') }</CardTitle>
-                                                        <CardDescription className="text-sm text-muted-foreground">{t('Meet basic needs') }</CardDescription>
+                                                        <CardTitle className="text-2xl font-bold">{t('free')}</CardTitle>
+                                                        <CardDescription className="text-sm text-muted-foreground">{t('meetBasicNeeds')}</CardDescription>
                                                         <div className="pt-2">
                                                             <div className="text-3xl font-bold">{formatCurrency(0)}</div>
                                                         </div>
@@ -196,7 +196,7 @@ export function PlanForm() {
                                                             ))}
                                                             <div className="flex items-start gap-3 text-muted-foreground">
                                                                 <FontAwesomeIcon icon={faLock} className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                                                                <span>{t('AI features locked') }</span>
+                                                                <span>{t('aiFeaturesLocked')}</span>
                                                             </div>
                                                         </div>
                                                     </CardContent>
@@ -228,9 +228,9 @@ export function PlanForm() {
                                                                 <FontAwesomeIcon icon={faGem} className="w-6 h-6 text-blue-600" />
                                                             </div>
                                                         </div>
-                                                        <CardTitle className="text-2xl font-bold">{t('Pro') }</CardTitle>
+                                                        <CardTitle className="text-2xl font-bold">{t('Pro')}</CardTitle>
                                                         <CardDescription className="text-sm text-muted-foreground">
-                                                            {t('Research code and organize') }
+                                                            {t('researchCodeOrganize')}
                                                         </CardDescription>
 
                                                         {/* Billing cycle selection - small and compact */}
@@ -249,7 +249,7 @@ export function PlanForm() {
                                                                             : "text-gray-600 hover:text-gray-900"
                                                                     )}
                                                                 >
-                                                                    {t('Monthly') }
+                                                                    {t('monthly')}
                                                                 </button>
                                                                 <button
                                                                     type="button"
@@ -264,7 +264,7 @@ export function PlanForm() {
                                                                             : "text-gray-600 hover:text-gray-900"
                                                                     )}
                                                                 >
-                                                                    {t('Yearly') }
+                                                                    {t('yearly')}
                                                                     <span className="ml-1 text-xs text-blue-600 font-bold">
                                                                         Save 17%
                                                                     </span>
@@ -276,13 +276,13 @@ export function PlanForm() {
                                                             <div className="text-3xl font-bold">
                                                                 {formatCurrency(billingCycle === 'monthly' ? MONTHLY_PRICE : ANNUAL_PRICE / 12)}
                                                                 <span className="text-sm font-normal text-muted-foreground">
-                                                                    /{billingCycle === 'monthly' ? t('month')  : t('month billed annually') }
+                                                                    /{billingCycle === 'monthly' ? t('month'): t('monthBilledAnnually')}
                                                                 </span>
                                                             </div>
                                                         </div>
                                                     </CardHeader>
                                                     <CardContent className="px-6 pb-6">
-                                                        <div className="text-sm font-medium mb-3">{t('Everything in free and') }</div>
+                                                        <div className="text-sm font-medium mb-3">{t('everythingInFreeAnd')}</div>
                                                         <div className="space-y-3 text-sm">
                                                             {planFeatures.premium.slice(0, 6).map((feature) => (
                                                                 <div key={feature} className="flex items-start gap-3">
@@ -307,9 +307,9 @@ export function PlanForm() {
             <AlertDialog open={showPaymentModal} onOpenChange={setShowPaymentModal}>
                 <AlertDialogContent className="max-w-md">
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t('Upgrade to pro plan') }</AlertDialogTitle>
+                        <AlertDialogTitle>{t('upgradeToProPlan')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t('Complete your upgrade to access all premium features') }
+                            {t('completeUpgradeDescription')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
 
@@ -327,7 +327,7 @@ export function PlanForm() {
                                             : "text-gray-600 hover:text-gray-900"
                                     )}
                                 >
-                                    {t('Monthly') } - {formatCurrency(MONTHLY_PRICE)}
+                                    {t('monthly')} - {formatCurrency(MONTHLY_PRICE)}
                                 </button>
                                 <button
                                     type="button"
@@ -339,7 +339,7 @@ export function PlanForm() {
                                             : "text-gray-600 hover:text-gray-900"
                                     )}
                                 >
-                                    {t('Yearly') } - {formatCurrency(ANNUAL_PRICE)}
+                                    {t('yearly')} - {formatCurrency(ANNUAL_PRICE)}
                                     <div className="text-xs text-blue-600 font-bold">Save 17%</div>
                                 </button>
                             </div>
@@ -349,16 +349,16 @@ export function PlanForm() {
                         <div className="border rounded-lg p-4 bg-gray-50">
                             <div className="text-center text-gray-600">
                                 <FontAwesomeIcon icon={faGem} className="w-8 h-8 mb-2" />
-                                <p className="text-sm mb-2">{t('Payment processing will be integrated here') }</p>
+                                <p className="text-sm mb-2">{t('paymentProcessingMessage')}</p>
                                 <p className="text-xs text-gray-500">
-                                    {t('Total') } {formatCurrency(billingCycle === 'monthly' ? MONTHLY_PRICE : ANNUAL_PRICE)}
+                                    {t('total')} {formatCurrency(billingCycle === 'monthly' ? MONTHLY_PRICE : ANNUAL_PRICE)}
                                 </p>
                             </div>
                         </div>
                     </div>
 
                     <AlertDialogFooter>
-                        <AlertDialogCancel>{t('Cancel') }</AlertDialogCancel>
+                        <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
                         <AlertDialogAction
                             onClick={() => {
                                 // Simulate payment success
@@ -366,7 +366,7 @@ export function PlanForm() {
                                 handlePaymentSuccess();
                             }}
                         >
-                            {t('Complete upgrade') }
+                            {t('completeUpgrade')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
@@ -376,33 +376,33 @@ export function PlanForm() {
             <AlertDialog open={showDowngradeModal} onOpenChange={setShowDowngradeModal}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t('Downgrade to free plan') }</AlertDialogTitle>
+                        <AlertDialogTitle>{t('downgradeToFreePlan')}</AlertDialogTitle>
                         <AlertDialogDescription>
                             {expirationInfo ? (
                                 <>
-                                    {t('Your pro plan will remain active until') } {' '}
+                                    {t('proPlanActiveUntil')} {' '}
                                     <strong>{expirationInfo.date.toLocaleDateString()}</strong> {' '}
-                                    ({expirationInfo.daysRemaining} {t('days remaining') }).
+                                    ({expirationInfo.daysRemaining} {t('daysRemaining')}).
                                     <br /><br />
-                                    {t('After that you will lose access to') }
+                                    {t('afterThatLoseAccess')}
                                     <ul className="list-disc list-inside mt-2 space-y-1">
-                                        <li>{t('AI enhanced NFCe parsing') }</li>
-                                        <li>{t('Advanced consumption analysis') }</li>
-                                        <li>{t('Automatic receipt scanning') }</li>
-                                        <li>{t('Premium features and support') }</li>
+                                        <li>{t('aiEnhancedNfceParsing')}</li>
+                                        <li>{t('advancedConsumptionAnalysis')}</li>
+                                        <li>{t('automaticReceiptScanning')}</li>
+                                        <li>{t('premiumFeaturesSupport')}</li>
                                     </ul>
                                 </>
                             ) : (
                                 <>
-                                    {t('You are about to downgrade to the free plan. You will lose access to premium features immediately') }
+                                    {t('downgradeWarningMessage')}
                                 </>
                             )}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>{t('Keep pro plan') }</AlertDialogCancel>
+                        <AlertDialogCancel>{t('keepProPlan')}</AlertDialogCancel>
                         <AlertDialogAction onClick={handleConfirmDowngrade}>
-                            {t('Confirm downgrade') }
+                            {t('confirmDowngrade')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

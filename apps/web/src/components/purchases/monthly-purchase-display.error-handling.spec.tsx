@@ -116,7 +116,7 @@
 //                 expect(screen.getByTestId('button')).toBeInTheDocument();
 //             });
 
-//             expect(screen.getByTestId('button')).toHaveTextContent('Retry');
+//             expect(screen.getByTestId('button')).toHaveTextContent('retry');
 //             expect(screen.getByTestId('button')).not.toBeDisabled();
 //         });
 //     });
@@ -202,7 +202,7 @@
 //             fireEvent.click(screen.getByTestId('button'));
 
 //             // Should show retrying state immediately
-//             expect(screen.getByTestId('button')).toHaveTextContent('Retrying...');
+//             expect(screen.getByTestId('button')).toHaveTextContent('retrying');
 //             expect(screen.getByTestId('button')).toBeDisabled();
 //         });
 
@@ -296,7 +296,7 @@
 //             render(<MonthlyPurchaseDisplay />);
 
 //             await waitFor(() => {
-//                 expect(screen.getByText('Monthly grouping is temporarily unavailable. Showing all purchases in a single list.')).toBeInTheDocument();
+//                 expect(screen.getByText('monthlyGroupingIs')).toBeInTheDocument();
 //             });
 //         });
 

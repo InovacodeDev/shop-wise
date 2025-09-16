@@ -40,8 +40,8 @@ function FamilyPage() {
         <SideBarLayout>
             <div className="container mx-auto pt-4">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-headline">{t('Family Settings')}</CardTitle>
-                    <CardDescription>{t('Manage your family composition, preferred stores and your plan.')}</CardDescription>
+                    <CardTitle className="text-2xl font-headline">{t('familySettings')}</CardTitle>
+                    <CardDescription>{t('manageYourFamily')}</CardDescription>
                 </CardHeader>
                 <div className="p-6 pt-0">
                     <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
@@ -51,16 +51,16 @@ function FamilyPage() {
                             alignment="fill"
                         >
                             <TabsTrigger value="composition" className="flex-1 min-w-0">
-                                <FontAwesomeIcon icon={faUsers} className="mr-2 h-4 w-4" /> {t('Composition')}
+                                <FontAwesomeIcon icon={faUsers} className="mr-2 h-4 w-4" /> {t('composition')}
                             </TabsTrigger>
                             <TabsTrigger value="markets" className="flex-1 min-w-0">
-                                <FontAwesomeIcon icon={faStore} className="mr-2 h-4 w-4" /> {t('Markets')}
+                                <FontAwesomeIcon icon={faStore} className="mr-2 h-4 w-4" /> {t('markets')}
                             </TabsTrigger>
                             <TabsTrigger value="history" className="flex-1 min-w-0">
-                                <FontAwesomeIcon icon={faHistory} className="mr-2 h-4 w-4" /> {t('Purchase History')}
+                                <FontAwesomeIcon icon={faHistory} className="mr-2 h-4 w-4" /> {t('purchaseHistory')}
                             </TabsTrigger>
                             <TabsTrigger value="plan" className="flex-1 min-w-0">
-                                <FontAwesomeIcon icon={faGem} className="mr-2 h-4 w-4" /> {t('Plan')}
+                                <FontAwesomeIcon icon={faGem} className="mr-2 h-4 w-4" /> {t('plan')}
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="composition" className="mt-6">

@@ -109,7 +109,7 @@ const ComparisonBadge = ({ value }: { value: number | null }) => {
             <FontAwesomeIcon icon={icon} className="h-3 w-3" />
             <span>
                 {isPositive ? "+" : ""}
-                {new Intl.NumberFormat(locale, { maximumFractionDigits: 1, style: "percent" }).format(value)} {t('vs last month') }
+                {new Intl.NumberFormat(locale, { maximumFractionDigits: 1, style: "percent" }).format(value)} {t('vsLastMonth')}
             </span>
         </p>
     );
@@ -159,50 +159,50 @@ function DashboardPage() {
 
     const chartConfig = useMemo<any>(
         () => ({
-            total: { label: t('Total')  },
+            total: { label: t('total')},
             produce_and_eggs: {
-                label: t('Produce and Eggs') ,
+                label: t('produceAndEggs'),
                 color: "hsl(var(--color-category-produce-and-eggs))",
             },
             meat_and_seafood: {
-                label: t('Meat and Seafood') ,
+                label: t('meatAndSeafood'),
                 color: "hsl(var(--color-category-meat-and-seafood))",
             },
             bakery_and_deli: {
-                label: t('Bakery and Deli') ,
+                label: t('bakeryAndDeli'),
                 color: "hsl(var(--color-category-bakery-and-deli))",
             },
             dairy_and_chilled: {
-                label: t('Dairy and Chilled') ,
+                label: t('dairyAndChilled'),
                 color: "hsl(var(--color-category-dairy-and-chilled))",
             },
             pantry_and_dry_goods: {
-                label: t('Pantry and Dry Goods') ,
+                label: t('pantryAndDryGoods'),
                 color: "hsl(var(--color-category-pantry-and-dry-goods))",
             },
             breakfast_and_snacks: {
-                label: t('Breakfast and Snacks') ,
+                label: t('breakfastAndSnacks'),
                 color: "hsl(var(--color-category-breakfast-and-snacks))",
             },
-            frozen_foods: { label: t('Frozen Foods') , color: "hsl(var(--color-category-frozen-foods))" },
-            beverages: { label: t('Beverages') , color: "hsl(var(--color-category-beverages))" },
+            frozen_foods: { label: t('frozenFoods'), color: "hsl(var(--color-category-frozen-foods))" },
+            beverages: { label: t('beverages'), color: "hsl(var(--color-category-beverages))" },
             cleaning_and_household: {
-                label: t('Cleaning and Household') ,
+                label: t('cleaningAndHousehold'),
                 color: "hsl(var(--color-category-cleaning-and-household))",
             },
-            personal_care: { label: t('Personal Care') , color: "hsl(var(--color-category-personal-care))" },
+            personal_care: { label: t('personalCare'), color: "hsl(var(--color-category-personal-care))" },
             baby_and_child_care: {
-                label: t('Baby and Child Care') ,
+                label: t('babyAndChildCare'),
                 color: "hsl(var(--color-category-baby-and-child-care))",
             },
-            pet_supplies: { label: t('Pet Supplies') , color: "hsl(var(--color-category-pet-supplies))" },
+            pet_supplies: { label: t('petSupplies'), color: "hsl(var(--color-category-pet-supplies))" },
             home_and_general: {
-                label: t('Home and General') ,
+                label: t('homeAndGeneral'),
                 color: "hsl(var(--color-category-home-and-general))",
             },
-            pharmacy: { label: t('Pharmacy') , color: "hsl(var(--color-category-pharmacy))" },
-            others: { label: t('Others') , color: "hsl(var(--muted))" },
-            value: { label: t('Spending')  },
+            pharmacy: { label: t('pharmacy'), color: "hsl(var(--color-category-pharmacy))" },
+            others: { label: t('others'), color: "hsl(var(--muted))" },
+            value: { label: t('spending')},
         }),
         [t]
     );
@@ -378,7 +378,7 @@ function DashboardPage() {
                     totalAmount: groupData?.totalAmount || 0,
                     purchaseCount: groupData?.purchaseCount || 0,
                     isCurrentMonth: isCurrentMonth,
-                    displayName: isCurrentMonth ? `${monthKey} (${t('Current') })` : monthKey,
+                    displayName: isCurrentMonth ? `${monthKey} (${t('current')})` : monthKey,
                     ...Object.fromEntries(
                         Object.keys(chartConfig)
                             .filter((k) => !["total", "value"].includes(k))
@@ -634,8 +634,8 @@ function DashboardPage() {
             console.error("Error fetching consumption analysis:", error);
             toast({
                 variant: "destructive",
-                title: t('Error') ,
-                description: error.message || t('Error fetching consumption analysis') ,
+                title: t('error1'),
+                description: error.message || t('errorFetchingConsumptionAnalysis'),
             });
         } finally {
             setIsAnalysisLoading(false);
@@ -643,7 +643,7 @@ function DashboardPage() {
     };
 
     const topCategory = useMemo(() => {
-        if (translatedSpendingByCategory.length === 0) return { name: t('Others') , value: 0 };
+        if (translatedSpendingByCategory.length === 0) return { name: t('others'), value: 0 };
         return translatedSpendingByCategory.reduce((prev, current) => (prev.value > current.value ? prev : current));
     }, [translatedSpendingByCategory, t]);
 
@@ -718,7 +718,7 @@ function DashboardPage() {
                             >
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
-                                        {t('Total Spending') }
+                                        {t('totalSpending')}
                                     </CardTitle>
                                     <FontAwesomeIcon icon={faDollarSign} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
@@ -757,7 +757,7 @@ function DashboardPage() {
                                 className="transition-all duration-300 ease-in-out"
                             >
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">{t('Items Purchased')}</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t('itemsPurchased')}</CardTitle>
                                     <FontAwesomeIcon icon={faShoppingBag} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
@@ -785,14 +785,14 @@ function DashboardPage() {
                         >
                             <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">{t('Top Category')}</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t('topCategory')}</CardTitle>
                                     <FontAwesomeIcon icon={faChartSimple} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">{topCategory.name}</div>
                                     <div className="text-xs text-muted-foreground mb-1">{currentMonthName}</div>
                                     <p className="text-xs text-muted-foreground">
-                                        {new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(topCategoryPercent)} {t('of total spending')}
+                                        {new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(topCategoryPercent)} {t('ofTotalSpending')}
                                     </p>
                                     {historicalInsights && (
                                         <p className="text-xs text-muted-foreground mt-1">
@@ -805,52 +805,52 @@ function DashboardPage() {
 
                         <InsightModal
                             title={t('Spending Trend ({{currentMonthName}})', { currentMonthName: currentMonthName })}
-                            description={t('Analysis of your spending patterns and trends based on historical data')}
+                            description={t('analysisOfSpendingPatterns')}
                             data={[]}
                             type="savingsOpportunities"
                         >
                             <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
-                                        {t('Spending Trend')}
+                                        {t('spendingTrend')}
                                     </CardTitle>
                                     <FontAwesomeIcon icon={faArrowTrendUp} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">
                                         {historicalInsights?.spendingTrend === 'increasing' && (
-                                            <span className="text-orange-600">↗ {t('Increasing')}</span>
+                                            <span className="text-orange-600">↗ {t('increasing')}</span>
                                         )}
                                         {historicalInsights?.spendingTrend === 'decreasing' && (
-                                            <span className="text-green-600">↘ {t('Decreasing')}</span>
+                                            <span className="text-green-600">↘ {t('decreasing')}</span>
                                         )}
                                         {historicalInsights?.spendingTrend === 'stable' && (
-                                            <span className="text-blue-600">→ {t('Stable')}</span>
+                                            <span className="text-blue-600">→ {t('stable')}</span>
                                         )}
-                                        {!historicalInsights && <span className="text-muted-foreground">{t('--')}</span>}
+                                        {!historicalInsights && <span className="text-muted-foreground">{t('doubleDash')}</span>}
                                     </div>
-                                    <div className="text-xs text-muted-foreground mb-1">{t('Last 3 months')}</div>
+                                    <div className="text-xs text-muted-foreground mb-1">{t('last3Months')}</div>
                                     <p className="text-xs text-muted-foreground">
-                                        {historicalInsights ? t('Based on spending pattern analysis') : t('Need more data for analysis')}
+                                        {historicalInsights ? t('basedOnSpending'): t('needMoreData')}
                                     </p>
                                 </CardContent>
                             </Card>
                         </InsightModal>
 
                         {/* <InsightModal
-                            title={t('Goals summary') }
-                            description={t('Overview of your active goals and their progress') }
+                            title={t('goalsSummary')}
+                            description={t('overviewOfActiveGoals')}
                             data={goals}
                             type="goalsSummary"
                         >
                             <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">{t('Goals') }</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t('Goals')}</CardTitle>
                                     <FontAwesomeIcon icon={faChartColumn} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
                                     {goals.length === 0 ? (
-                                        <div className="text-sm text-muted-foreground">{t('No active goals') }</div>
+                                        <div className="text-sm text-muted-foreground">{t('noActiveGoals')}</div>
                                     ) : (
                                         <div className="space-y-2">
                                             {goals.slice(0, 3).map((g) => {
@@ -859,11 +859,11 @@ function DashboardPage() {
                                                     <div key={g._id} className="rounded border p-2">
                                                         <div className="font-medium">{g.name}</div>
                                                         <div className="text-xs text-muted-foreground">
-                                                            {t('Target') }: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(g.targetAmount)}
-                                                            &nbsp;•&nbsp;{t('Current') }: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(g.currentAmount)}
+                                                            {t('target')}: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(g.targetAmount)}
+                                                            &nbsp;•&nbsp;{t('current')}: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(g.currentAmount)}
                                                         </div>
                                                         {pr && (
-                                                            <div className="text-xs text-muted-foreground">{t('Progress') }: {pr.progressPercentage.toFixed(1)}%</div>
+                                                            <div className="text-xs text-muted-foreground">{t('progress')}: {pr.progressPercentage.toFixed(1)}%</div>
                                                         )}
                                                     </div>
                                                 );
@@ -889,7 +889,7 @@ function DashboardPage() {
                             <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl col-span-1 lg:col-span-2">
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
-                                        {t('Consumption Overview')}
+                                        {t('consumptionOverview')}
                                         <span className="text-sm font-normal text-muted-foreground">
                                             ({t('Current: {{currentMonthName}}', { currentMonthName: currentMonthName })})
                                         </span>
@@ -946,7 +946,7 @@ function DashboardPage() {
                                                                     <div className="mb-3">
                                                                         <p className="font-medium text-foreground">
                                                                             {typeof label === 'string' && label.includes('(Current)')
-                                                                                ? `${label} - ${t('This month')}`
+                                                                                ? `${label} - ${t('thisMonth')}`
                                                                                 : label}
                                                                         </p>
                                                                         <p className="text-xl font-bold text-primary">
@@ -961,8 +961,8 @@ function DashboardPage() {
                                                                             {avgSpending > 0 && displayTotal > 0 && (
                                                                                 <p className="text-sm text-muted-foreground">
                                                                                     {displayTotal > avgSpending
-                                                                                        ? `+${((displayTotal - avgSpending) / avgSpending * 100).toFixed(0)}% ${t('vs avg')}`
-                                                                                        : `${((displayTotal - avgSpending) / avgSpending * 100).toFixed(0)}% ${t('vs avg')}`
+                                                                                        ? `+${((displayTotal - avgSpending) / avgSpending * 100).toFixed(0)}% ${t('vsAvg')}`
+                                                                                        : `${((displayTotal - avgSpending) / avgSpending * 100).toFixed(0)}% ${t('vsAvg')}`
                                                                                     }
                                                                                 </p>
                                                                             )}
@@ -970,7 +970,7 @@ function DashboardPage() {
                                                                     </div>
                                                                     {payload.some((entry) => entry.value && (entry.value as number) > 0) && (
                                                                         <div className="space-y-1 border-t pt-2">
-                                                                            <p className="text-xs font-medium text-muted-foreground mb-2">{t('Category breakdown')}</p>
+                                                                            <p className="text-xs font-medium text-muted-foreground mb-2">{t('categoryBreakdown')}</p>
                                                                             {payload
                                                                                 .filter(entry => entry.value && (entry.value as number) > 0)
                                                                                 .sort((a, b) => (b.value as number) - (a.value as number))
@@ -999,7 +999,7 @@ function DashboardPage() {
                                                                                 })}
                                                                             <div className="border-t pt-1 mt-2">
                                                                                 <div className="flex items-center justify-between gap-3">
-                                                                                    <span className="text-sm font-medium">{t('Total')}</span>
+                                                                                    <span className="text-sm font-medium">{t('total')}</span>
                                                                                     <span className="text-sm font-bold">
                                                                                         {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(displayTotal)}
                                                                                     </span>
@@ -1028,8 +1028,8 @@ function DashboardPage() {
                                         </ChartContainer>
                                     ) : (
                                         <EmptyState
-                                            title={t('Insufficient data')}
-                                            description={t('Start adding purchases to see your spending analysis')}
+                                            title={t('insufficientData')}
+                                            description={t('startAddingPurchasesToSeeAnalysis')}
                                             className="h-[350px]"
                                         />
                                     )}
@@ -1053,28 +1053,28 @@ function DashboardPage() {
                                         <div className="grid grid-cols-7 gap-4 text-sm font-medium text-on-surface-variant">
                                             <div className="flex items-center gap-2">
                                                 <FontAwesomeIcon icon={faBarcode} className="h-3 w-3" />
-                                                {t('Barcode')}
+                                                {t('barcode')}
                                             </div>
-                                            <div>{t('Product')}</div>
+                                            <div>{t('product')}</div>
                                             <div className="flex items-center gap-2">
                                                 <FontAwesomeIcon icon={faCopyright} className="h-3 w-3" />
-                                                {t('Brand')}
+                                                {t('brand')}
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <FontAwesomeIcon icon={faTag} className="h-3 w-3" />
-                                                {t('Category')}
+                                                {t('category')}
                                             </div>
                                             <div className="text-center">
                                                 <FontAwesomeIcon icon={faHashtag} className="h-3 w-3 mr-1" />
-                                                {t('Qty')}
+                                                {t('qty')}
                                             </div>
                                             <div className="text-right">
                                                 <FontAwesomeIcon icon={faScaleBalanced} className="h-3 w-3 mr-1" />
-                                                {t('Unit Price')}
+                                                {t('unitPrice')}
                                             </div>
                                             <div className="text-right">
                                                 <FontAwesomeIcon icon={faDollarSign} className="h-3 w-3 mr-1" />
-                                                {t('Total Price')}
+                                                {t('totalPrice')}
                                             </div>
                                         </div>
                                     </div>
@@ -1128,8 +1128,8 @@ function DashboardPage() {
                                 </div>
                             ) : (
                                 <EmptyState
-                                    title={t('No expenses this month')}
-                                    description={t('Add a new purchase to see your top expenses here')}
+                                    title={t('noExpensesThisMonth')}
+                                    description={t('addNewPurchaseToSeeTopExpenses')}
                                 />
                             )}
                         </CardContent>

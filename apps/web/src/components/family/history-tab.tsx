@@ -202,8 +202,8 @@ export function HistoryTab() {
         if (!profile?.familyId) {
             toast({
                 variant: "destructive",
-                title: t('Error') ,
-                description: t('You need to be logged in to perform this action') ,
+                title: t('error1'),
+                description: t('youNeedTo'),
             });
             return;
         }
@@ -215,16 +215,16 @@ export function HistoryTab() {
             setPurchases((prev) => prev.filter((p) => p.id !== purchaseId));
 
             toast({
-                title: t('Success') ,
-                description: t('Purchase deleted successfully') ,
+                title: t('success'),
+                description: t('purchaseDeletedSuccessfully'),
             });
             trackEvent("purchase_deleted", { purchaseId });
         } catch (error) {
             console.error("Error deleting purchase:", error);
             toast({
                 variant: "destructive",
-                title: t('Error') ,
-                description: t('An error occurred while deleting the purchase. Please try again') ,
+                title: t('error1'),
+                description: t('errorDeleting'),
             });
         }
     };const filteredPurchases = useMemo(
@@ -296,14 +296,14 @@ export function HistoryTab() {
                                     fontSize: materialTypography.titleMedium.fontSize,
                                     fontWeight: materialTypography.titleMedium.fontWeight,
                                 }}
-                            >{t('Loading purchase') }</div>
+                            >{t('loadingPurchase')}</div>
                             <div
                                 className="text-on-surface-variant"
                                 style={{
                                     fontSize: materialTypography.bodyMedium.fontSize,
                                     fontWeight: materialTypography.bodyMedium.fontWeight,
                                 }}
-                            >{t('Your request is queued to avoid API rate limits') }</div>
+                            >{t('requestQueuedToAvoidApiRateLimits')}</div>
                         </div>
                     </div>
                 </div>
@@ -342,7 +342,7 @@ export function HistoryTab() {
                             setSelectedPurchase(localPurchase);
                         } catch (err) {
                             console.error('Error loading purchase items', err);
-                            toast({ title: t('Error') , description: t('Failed to load purchase items')  });
+                            toast({ title: t('error1'), description: t('failedToLoadPurchaseItems')});
                         } finally {
                             setLoadingSelectedItems(false);
                         }
@@ -353,13 +353,11 @@ export function HistoryTab() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-2xl font-headline flex items-center gap-2">
-                            <FontAwesomeIcon icon={faHistory} className="w-6 h-6" /> {t('Purchase History') }
+                            <FontAwesomeIcon icon={faHistory} className="w-6 h-6" /> {t('purchaseHistory')}
                         </CardTitle>
                         <CardDescription>
                             {useMonthlyView
-                                ? t('Filtered view - clear filters to see monthly organization') 
-                                : t('View and filter all your past purchases') 
-                            }
+                                ? t('filteredViewClearFilters'): t('viewAndFilterAllPastPurchases')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -370,7 +368,7 @@ export function HistoryTab() {
                                     className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
                                 />
                                 <Input
-                                    placeholder={t('Search by store or product') }
+                                    placeholder={t('searchByStoreOrProduct')}
                                     className="pl-10"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -378,10 +376,10 @@ export function HistoryTab() {
                             </div>
                             <Select value={selectedStore} onValueChange={setSelectedStore}>
                                 <SelectTrigger className="w-full md:w-[200px]">
-                                    <SelectValue placeholder={t('Filter by store') } />
+                                    <SelectValue placeholder={t('filterByStore')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">{t('All stores') }</SelectItem>
+                                    <SelectItem value="all">{t('allStores')}</SelectItem>
                                     {availableStores.map((store) => (
                                         <SelectItem key={store} value={store}>
                                             {store}
@@ -391,14 +389,14 @@ export function HistoryTab() {
                             </Select>
                             <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
                                 <SelectTrigger className="w-full md:w-[200px]">
-                                    <SelectValue placeholder={t('Filter by period') } />
+                                    <SelectValue placeholder={t('filterByPeriod')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">{t('All periods') }</SelectItem>
-                                    <SelectItem value="last_month">{t('Last month') }</SelectItem>
-                                    <SelectItem value="last_3_months">{t('Last 3 months') }</SelectItem>
-                                    <SelectItem value="last_6_months">{t('Last 6 months') }</SelectItem>
-                                    <SelectItem value="last_year">{t('Last year') }</SelectItem>
+                                    <SelectItem value="all">{t('allPeriods')}</SelectItem>
+                                    <SelectItem value="last_month">{t('lastMonth')}</SelectItem>
+                                    <SelectItem value="last_3_months">{t('last3Months')}</SelectItem>
+                                    <SelectItem value="last_6_months">{t('last6Months')}</SelectItem>
+                                    <SelectItem value="last_year">{t('lastYear')}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -432,8 +430,8 @@ export function HistoryTab() {
                                     </div>
                                 ) : (
                                     <EmptyState
-                                        title={t('No purchases found') }
-                                        description={t('Try adjusting your filters or add a new purchase to get started') }
+                                        title={t('noPurchasesFound')}
+                                        description={t('tryAdjustingFilters')}
                                     />
                                 )}
                             </>
@@ -464,7 +462,7 @@ export function HistoryTab() {
                                         >
                                             <FontAwesomeIcon icon={faReceipt} className="w-5 h-5" />
                                         </span>
-                                        <span className="leading-tight">{t('Purchase Details') }</span>
+                                        <span className="leading-tight">{t('purchaseDetails')}</span>
                                     </DialogTitle>
                                     <DialogDescription className="text-on-surface-variant">
                                         {selectedPurchase.storeName} • {new Date(selectedPurchase.date).toLocaleString()}
@@ -477,7 +475,7 @@ export function HistoryTab() {
                                             fontSize: materialTypography.labelMedium.fontSize,
                                             fontWeight: materialTypography.labelMedium.fontWeight,
                                         }}
-                                    >{t('Total') }</div>
+                                    >{t('total')}</div>
                                     <div
                                         className="text-on-surface font-semibold"
                                         style={{
@@ -513,7 +511,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.titleSmall.fontWeight,
                                                 }}
                                             >
-                                                {t('Product') }
+                                                {t('product')}
                                             </TableHead>
                                             <TableHead 
                                                 className="w-[120px] text-center font-semibold text-on-surface"
@@ -522,7 +520,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.titleSmall.fontWeight,
                                                 }}
                                             >
-                                                {t('Qty') }
+                                                {t('qty')}
                                             </TableHead>
                                             <TableHead 
                                                 className="w-[140px] text-right font-semibold text-on-surface"
@@ -531,7 +529,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.titleSmall.fontWeight,
                                                 }}
                                             >
-                                                {t('Unit price') }
+                                                {t('unitPrice')}
                                             </TableHead>
                                             <TableHead 
                                                 className="w-[140px] text-right font-semibold text-on-surface"
@@ -541,7 +539,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.titleSmall.fontWeight,
                                                 }}
                                             >
-                                                {t('Total price') }
+                                                {t('totalPrice')}
                                             </TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -649,7 +647,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.bodyMedium.fontWeight,
                                                 }}
                                             >
-                                                {t('Total') }
+                                                {t('total')}
                                             </span>
                                             <span 
                                                 className="text-primary font-bold text-xl"
@@ -731,8 +729,8 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
         try {
             await updatePurchaseItems(profile.familyId, purchase.id, items);
             toast({
-                title: t('Success') ,
-                description: t('Purchase updated successfully') ,
+                title: t('success'),
+                description: t('purchaseUpdatedSuccessfully'),
             });
             trackEvent("purchase_items_updated", {
                 purchaseId: purchase.id,
@@ -743,8 +741,8 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
             console.error("Error updating purchase:", error);
             toast({
                 variant: "destructive",
-                title: t('Error') ,
-                description: t('An error occurred while updating the purchase. Please try again') ,
+                title: t('error1'),
+                description: t('errorUpdating'),
             });
         } finally {
             setIsSaving(false);
@@ -838,24 +836,24 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                 <TableRow>
                                     <TableHead className="w-[180px]">
                                         <FontAwesomeIcon icon={faBox} className="inline-block mr-1 w-4 h-4" />{" "}
-                                        {t('Product') }
+                                        {t('product')}
                                     </TableHead>
                                     <TableHead className="w-[120px]">
                                         <FontAwesomeIcon icon={faTags} className="inline-block mr-1 w-4 h-4" />{" "}
-                                        {t('Category') }
+                                        {t('category')}
                                     </TableHead>
                                     <TableHead className="w-[120px]">
                                         <FontAwesomeIcon icon={faWeightHanging} className="inline-block mr-1 w-4 h-4" />{" "}
-                                        {t('Volume') }
+                                        {t('volume')}
                                     </TableHead>
                                     <TableHead className="text-center w-[100px]">
                                         <FontAwesomeIcon icon={faHashtag} className="inline-block mr-1 w-4 h-4" />{" "}
-                                        {t('Qty') }
+                                        {t('qty')}
                                     </TableHead>
-                                    <TableHead className="text-center w-[120px]">{t('Unit price') }</TableHead>
-                                    <TableHead className="text-right w-[120px]">{t('Total price') }</TableHead>
-                                    <TableHead className="text-right w-[120px]">{t('Change') }</TableHead>
-                                    <TableHead className="w-[100px] text-right">{t('Actions') }</TableHead>
+                                    <TableHead className="text-center w-[120px]">{t('unitPrice')}</TableHead>
+                                    <TableHead className="text-right w-[120px]">{t('totalPrice')}</TableHead>
+                                    <TableHead className="text-right w-[120px]">{t('change')}</TableHead>
+                                    <TableHead className="w-[100px] text-right">{t('actions')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -869,7 +867,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                                             <Input
                                                                 value={item.name}
                                                                 onChange={(e) => handleItemChange(index, "name", e.target.value)}
-                                                                placeholder={t('Item name') }
+                                                                placeholder={t('itemName')}
                                                                 className="text-sm"
                                                             />
                                                         ) : (
@@ -884,7 +882,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                                                     maxHeight: '2.4em'
                                                                 }}
                                                             >
-                                                                {item.name || t('Item name') }
+                                                                {item.name || t('itemName')}
                                                             </div>
                                                         )}
                                                     </div>
@@ -898,7 +896,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                             <Input
                                                 value={(item as any).category || ''}
                                                 onChange={(e) => handleItemChange(index, "category", e.target.value)}
-                                                placeholder={t('Category') }
+                                                placeholder={t('category')}
                                                 disabled={editingItemId !== item.id}
                                                 className="text-sm"
                                             />
@@ -907,7 +905,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                             <Input
                                                 value={item.volume || ''}
                                                 onChange={(e) => handleItemChange(index, "volume", e.target.value)}
-                                                placeholder={t('e.g. 1kg, 500ml') }
+                                                placeholder={t('egUnits')}
                                                 disabled={editingItemId !== item.id}
                                             />
                                         </TableCell>
@@ -971,14 +969,14 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                                     }
                                                 }
 
-                                                if (matches.length === 0) return <span className="text-muted-foreground">{t('No history') }</span>;
+                                                if (matches.length === 0) return <span className="text-muted-foreground">{t('noHistory')}</span>;
 
                                                 // Sort matches descending by date
                                                 matches.sort((a, b) => b.date.getTime() - a.date.getTime());
 
                                                 // previous is the most recent before this purchase date
                                                 const prev = matches.find(m => m.date.getTime() < purchase.date.getTime()) || null;
-                                                if (!prev) return <span className="text-muted-foreground">{t('No previous') }</span>;
+                                                if (!prev) return <span className="text-muted-foreground">{t('noPrevious')}</span>;
 
                                                 const diff = item.price - prev.price;
                                                 const pct = prev.price > 0 ? (diff / prev.price) : 0;
@@ -1052,7 +1050,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                     </div>
                     <Button variant="outlined" className="mt-4" onClick={handleAddItem} disabled={!!editingItemId}>
                         <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
-                        {t('Add item') }
+                        {t('addItem')}
                     </Button>
                 </div>
                 <DialogFooter className="pt-4 border-t flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -1061,23 +1059,23 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                             <AlertDialogTrigger asChild>
                                 <Button variant="destructive-outlined">
                                     <FontAwesomeIcon icon={faTrash} className="mr-2 h-4 w-4" />
-                                    {t('Delete purchase') }
+                                    {t('deletePurchase')}
                                 </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>{t('Delete purchase') }</AlertDialogTitle>
-                                    <AlertDialogDescription>{t('This will permanently delete the purchase and its items. This action cannot be undone') }</AlertDialogDescription>
+                                    <AlertDialogTitle>{t('deletePurchase')}</AlertDialogTitle>
+                                    <AlertDialogDescription>{t('confirmDeletePurchase')}</AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel>{t('Cancel') }</AlertDialogCancel>
+                                    <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
                                     <AlertDialogAction
                                         onClick={() => {
                                             onDelete(purchase.id);
                                             setIsDialogOpen(false);
                                         }}
                                     >
-                                        {t('Yes, delete') }
+                                        {t('yesDelete')}
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
@@ -1086,7 +1084,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                     <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:gap-4">
                         <Button onClick={handleSaveChanges} disabled={isSaving || !isDirty || !!editingItemId}>
                             <FontAwesomeIcon icon={faSave} className="mr-2 h-4 w-4" />
-                            {isSaving ? t('Saving')  : t('Save changes') }
+                            {isSaving ? t('saving'): t('saveChanges')}
                         </Button>
                     </div>
                 </DialogFooter>

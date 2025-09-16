@@ -50,15 +50,15 @@ export function DeleteConfirmationDialog({
         try {
             await onConfirm();
             toast({
-                title: t('Success') ,
-                description: t('Operation completed successfully') ,
+                title: t('Success'),
+                description: t('operationCompletedSuccessfully'),
             });
             setIsOpen(false);
         } catch (error: any) {
             toast({
                 variant: "destructive",
-                title: t('Error') ,
-                description: error.message || t('An unexpected error occurred. Please try again') ,
+                title: t('error1'),
+                description: error.message || t('unexpectedErrorTryAgain'),
             });
         } finally {
             setIsLoading(false);
@@ -84,14 +84,14 @@ export function DeleteConfirmationDialog({
                     <Input
                         value={inputCode}
                         onChange={(e) => setInputCode(e.target.value)}
-                        placeholder={t('Enter the confirmation code') }
+                        placeholder={t('enterConfirmationCode')}
                         autoFocus
                     />
                 </div>
                 <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isLoading}>{t('Cancel') }</AlertDialogCancel>
+                    <AlertDialogCancel disabled={isLoading}>{t('cancel')}</AlertDialogCancel>
                     <Button variant="destructive" onClick={handleConfirm} disabled={!isCodeMatch || isLoading}>
-                        {isLoading ? t('Processing')  : confirmButtonText}
+                        {isLoading ? t('Processing'): confirmButtonText}
                     </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>

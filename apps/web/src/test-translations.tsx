@@ -19,9 +19,9 @@ export function TestTranslations() {
       </div>
       
       <div className="mt-4">
-        <p>Welcome: {t('Welcome Back!')}</p>
-        <p>Email: {t('Email')}</p>
-        <p>Login: {t('Login')}</p>
+        <p>Welcome: {t('welcomeBack')}</p>
+        <p>Email: {t('email')}</p>
+        <p>Login: {t('login')}</p>
       </div>
     </div>
   )

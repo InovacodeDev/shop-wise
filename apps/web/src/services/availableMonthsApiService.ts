@@ -1,5 +1,6 @@
-import { apiService } from './api';
 import type { AvailableMonth, AvailableMonthsSummary } from '@/types/api';
+
+import { apiService } from './api';
 
 /**
  * Gets all available months/years that have purchase data for insights and filtering
@@ -7,14 +8,17 @@ import type { AvailableMonth, AvailableMonthsSummary } from '@/types/api';
  * @returns Promise resolving to array of available months with metadata
  */
 export async function getAvailableMonths(familyId: string): Promise<AvailableMonth[]> {
-  try {
-    return await apiService.getAvailableMonths(familyId);
-  } catch (error) {
-    console.error('Error fetching available months:', error);
-    throw new Error(`Failed to fetch available months: ${error instanceof Error ? error.message : 'Unknown error'}`, {
-      cause: error,
-    });
-  }
+    try {
+        return await apiService.getAvailableMonths(familyId);
+    } catch (error) {
+        console.error('Error fetching available months:', error);
+        throw new Error(
+            `Failed to fetch available months: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            {
+                cause: error,
+            },
+        );
+    }
 }
 
 /**
@@ -23,14 +27,17 @@ export async function getAvailableMonths(familyId: string): Promise<AvailableMon
  * @returns Promise resolving to summary statistics object
  */
 export async function getAvailableMonthsSummary(familyId: string): Promise<AvailableMonthsSummary> {
-  try {
-    return await apiService.getAvailableMonthsSummary(familyId);
-  } catch (error) {
-    console.error('Error fetching available months summary:', error);
-    throw new Error(`Failed to fetch available months summary: ${error instanceof Error ? error.message : 'Unknown error'}`, {
-      cause: error,
-    });
-  }
+    try {
+        return await apiService.getAvailableMonthsSummary(familyId);
+    } catch (error) {
+        console.error('Error fetching available months summary:', error);
+        throw new Error(
+            `Failed to fetch available months summary: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            {
+                cause: error,
+            },
+        );
+    }
 }
 
 /**
@@ -41,25 +48,28 @@ export async function getAvailableMonthsSummary(familyId: string): Promise<Avail
  * @returns Promise resolving to filtered array of available months
  */
 export async function getAvailableMonthsInRange(
-  familyId: string, 
-  startMonth: string, 
-  endMonth: string
+    familyId: string,
+    startMonth: string,
+    endMonth: string,
 ): Promise<AvailableMonth[]> {
-  try {
-    const allMonths = await getAvailableMonths(familyId);
-    
-    return allMonths.filter(month => {
-      // Skip 'no-date' entries for range filtering
-      if (month.monthYear === 'no-date') return false;
-      
-      return month.monthYear >= startMonth && month.monthYear <= endMonth;
-    });
-  } catch (error) {
-    console.error('Error fetching available months in range:', error);
-    throw new Error(`Failed to fetch available months in range: ${error instanceof Error ? error.message : 'Unknown error'}`, {
-      cause: error,
-    });
-  }
+    try {
+        const allMonths = await getAvailableMonths(familyId);
+
+        return allMonths.filter((month) => {
+            // Skip 'no-date' entries for range filtering
+            if (month.monthYear === 'no-date') return false;
+
+            return month.monthYear >= startMonth && month.monthYear <= endMonth;
+        });
+    } catch (error) {
+        console.error('Error fetching available months in range:', error);
+        throw new Error(
+            `Failed to fetch available months in range: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            {
+                cause: error,
+            },
+        );
+    }
 }
 
 /**
@@ -69,19 +79,22 @@ export async function getAvailableMonthsInRange(
  * @returns Promise resolving to array of recent months
  */
 export async function getRecentAvailableMonths(familyId: string, count: number = 6): Promise<AvailableMonth[]> {
-  try {
-    const allMonths = await getAvailableMonths(familyId);
-    
-    // Filter out 'no-date' entries and take the most recent N months
-    const monthsWithDates = allMonths.filter(month => month.monthYear !== 'no-date');
-    
-    return monthsWithDates.slice(0, count);
-  } catch (error) {
-    console.error('Error fetching recent available months:', error);
-    throw new Error(`Failed to fetch recent available months: ${error instanceof Error ? error.message : 'Unknown error'}`, {
-      cause: error,
-    });
-  }
+    try {
+        const allMonths = await getAvailableMonths(familyId);
+
+        // Filter out 'no-date' entries and take the most recent N months
+        const monthsWithDates = allMonths.filter((month) => month.monthYear !== 'no-date');
+
+        return monthsWithDates.slice(0, count);
+    } catch (error) {
+        console.error('Error fetching recent available months:', error);
+        throw new Error(
+            `Failed to fetch recent available months: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            {
+                cause: error,
+            },
+        );
+    }
 }
 
 /**
@@ -91,22 +104,25 @@ export async function getRecentAvailableMonths(familyId: string, count: number =
  * @returns Promise resolving to array of months for the specified year
  */
 export async function getAvailableMonthsForYear(familyId: string, year: number): Promise<AvailableMonth[]> {
-  try {
-    const allMonths = await getAvailableMonths(familyId);
-    
-    return allMonths.filter(month => {
-      // Skip 'no-date' entries
-      if (month.monthYear === 'no-date') return false;
-      
-      const monthYear = parseInt(month.monthYear.split('-')[0], 10);
-      return monthYear === year;
-    });
-  } catch (error) {
-    console.error('Error fetching available months for year:', error);
-    throw new Error(`Failed to fetch available months for year: ${error instanceof Error ? error.message : 'Unknown error'}`, {
-      cause: error,
-    });
-  }
+    try {
+        const allMonths = await getAvailableMonths(familyId);
+
+        return allMonths.filter((month) => {
+            // Skip 'no-date' entries
+            if (month.monthYear === 'no-date') return false;
+
+            const monthYear = parseInt(month.monthYear.split('-')[0], 10);
+            return monthYear === year;
+        });
+    } catch (error) {
+        console.error('Error fetching available months for year:', error);
+        throw new Error(
+            `Failed to fetch available months for year: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            {
+                cause: error,
+            },
+        );
+    }
 }
 
 /**
@@ -115,26 +131,29 @@ export async function getAvailableMonthsForYear(familyId: string, year: number):
  * @returns Promise resolving to array of years in descending order
  */
 export async function getAvailableYears(familyId: string): Promise<number[]> {
-  try {
-    const allMonths = await getAvailableMonths(familyId);
-    
-    const years = new Set<number>();
-    
-    allMonths.forEach(month => {
-      // Skip 'no-date' entries
-      if (month.monthYear === 'no-date') return;
-      
-      const year = parseInt(month.monthYear.split('-')[0], 10);
-      if (!isNaN(year)) {
-        years.add(year);
-      }
-    });
-    
-    return Array.from(years).sort((a, b) => b - a); // Descending order
-  } catch (error) {
-    console.error('Error fetching available years:', error);
-    throw new Error(`Failed to fetch available years: ${error instanceof Error ? error.message : 'Unknown error'}`, {
-      cause: error,
-    });
-  }
+    try {
+        const allMonths = await getAvailableMonths(familyId);
+
+        const years = new Set<number>();
+
+        allMonths.forEach((month) => {
+            // Skip 'no-date' entries
+            if (month.monthYear === 'no-date') return;
+
+            const year = parseInt(month.monthYear.split('-')[0], 10);
+            if (!isNaN(year)) {
+                years.add(year);
+            }
+        });
+
+        return Array.from(years).sort((a, b) => b - a); // Descending order
+    } catch (error) {
+        console.error('Error fetching available years:', error);
+        throw new Error(
+            `Failed to fetch available years: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            {
+                cause: error,
+            },
+        );
+    }
 }

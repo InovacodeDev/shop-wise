@@ -25,14 +25,14 @@ export function ManualUrlInput({ onSubmit, isLoading = false, className = '' }: 
                 url.includes('nfe.');
 
             if (!isNfceUrl) {
-                setError(t('Invalid NFCe URL'));
+                setError(t('invalidNfceUrl'));
                 return false;
             }
 
             setError('');
             return true;
         } catch {
-            setError(t('Invalid URL'));
+            setError(t('invalidUrl'));
             return false;
         }
     };
@@ -41,7 +41,7 @@ export function ManualUrlInput({ onSubmit, isLoading = false, className = '' }: 
         e.preventDefault();
 
         if (!url.trim()) {
-            setError(t('URL is required'));
+            setError(t('urlIsRequired'));
             return;
         }
 
@@ -64,11 +64,11 @@ export function ManualUrlInput({ onSubmit, isLoading = false, className = '' }: 
         <div className={`space-y-4 ${className}`}>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="nfce-url">{t('NFCe URL')}</Label>
+                    <Label htmlFor="nfce-url">{t('nfceUrl')}</Label>
                     <Input
                         id="nfce-url"
                         type="url"
-                        placeholder={t('Paste the NFCe URL here')}
+                        placeholder={t('pasteTheNfceUrlHere')}
                         value={url}
                         onChange={handleUrlChange}
                         disabled={isLoading}
@@ -78,7 +78,7 @@ export function ManualUrlInput({ onSubmit, isLoading = false, className = '' }: 
                         <p className="text-sm text-red-600">{error}</p>
                     )}
                     <p className="text-sm text-gray-600">
-                        {t('Paste the full NFCe URL from the QR code')}
+                        {t('pasteTheFullNfceUrlFromQrCode')}
                     </p>
                 </div>
 
@@ -95,18 +95,18 @@ export function ManualUrlInput({ onSubmit, isLoading = false, className = '' }: 
                     ) : (
                         <>
                             <FontAwesomeIcon icon={faLink} className="w-4 h-4 mr-2" />
-                            {t('Analyze NFCe')}
+                            {t('analyzeNfce')}
                         </>
                     )}
                 </Button>
             </form>
 
             <div className="text-xs text-gray-500 space-y-1">
-                <p className="font-medium">{t('How to get the NFCe URL')}</p>
+                <p className="font-medium">{t('howToGetTheNfceUrl')}</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
-                    <li>{t('Find the QR code on your receipt')}</li>
-                    <li>{t('Use a QR code reader on your phone')}</li>
-                    <li>{t('Copy and paste the full URL here')}</li>
+                    <li>{t('findTheQrCodeOnYourReceipt')}</li>
+                    <li>{t('useAQrCodeReaderOnYourPhone')}</li>
+                    <li>{t('copyAndPasteTheFullUrlHere')}</li>
                 </ul>
             </div>
         </div>

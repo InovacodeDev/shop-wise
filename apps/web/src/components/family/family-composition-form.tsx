@@ -49,8 +49,8 @@ export function FamilyCompositionForm() {
         if (!profile?.familyId) {
             toast({
                 variant: "destructive",
-                title: t('Error') ,
-                description: t('You need to be logged in to save preferences') ,
+                title: t('error1'),
+                description: t('youNeedToBeLoggedInToSavePreferences'),
             });
             return;
         }
@@ -60,14 +60,14 @@ export function FamilyCompositionForm() {
             await reloadUser();
             form.reset(values);
             toast({
-                title: t('Success') ,
-                description: t('Your preferences have been saved') ,
+                title: t('Success'),
+                description: t('yourPreferencesHaveBeenSaved'),
             });
         } catch (error: any) {
             toast({
                 variant: "destructive",
-                title: t('Save Error') ,
-                description: t('An unexpected error occurred while saving your preferences. Please try again later') ,
+                title: t('error8'),
+                description: t('unexpectedErrorSavingPreferences'),
             });
         }
     }
@@ -77,8 +77,8 @@ export function FamilyCompositionForm() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>{t('Family Composition') }</CardTitle>
-                <CardDescription>{t('Help our AI provide better suggestions by telling us about your family') }</CardDescription>
+                <CardTitle>{t('familyComposition')}</CardTitle>
+                <CardDescription>{t('helpAiWithFamilyInfo')}</CardDescription>
             </CardHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -89,7 +89,7 @@ export function FamilyCompositionForm() {
                                 name="adults"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('Adults') }</FormLabel>
+                                        <FormLabel>{t('adults')}</FormLabel>
                                         <FormControl>
                                             <Input type="number" min="1" {...field} />
                                         </FormControl>
@@ -102,7 +102,7 @@ export function FamilyCompositionForm() {
                                 name="children"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('Children') }</FormLabel>
+                                        <FormLabel>{t('children')}</FormLabel>
                                         <FormControl>
                                             <Input type="number" min="0" {...field} />
                                         </FormControl>
@@ -115,7 +115,7 @@ export function FamilyCompositionForm() {
                                 name="pets"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('Pets') }</FormLabel>
+                                        <FormLabel>{t('pets')}</FormLabel>
                                         <FormControl>
                                             <Input type="number" min="0" {...field} />
                                         </FormControl>
@@ -127,7 +127,7 @@ export function FamilyCompositionForm() {
                     </CardContent>
                     <CardFooter>
                         <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>
-                            {isSubmitting ? t('Saving')  : t('Save Preferences') }
+                            {isSubmitting ? t('saving'): t('savePreferences')}
                         </Button>
                     </CardFooter>
                 </form>

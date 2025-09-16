@@ -91,8 +91,8 @@ function SettingsPage() {
         <SideBarLayout>
             <div className="container max-w-4xl mx-auto p-6">
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold">{t('Settings') }</h1>
-                    <p className="text-muted-foreground mt-2">{t('Manage your account settings and preferences') }</p>
+                    <h1 className="text-3xl font-bold">{t('settings')}</h1>
+                    <p className="text-muted-foreground mt-2">{t('manageAccountSettings')}</p>
                 </div>
 
                 <div>
@@ -100,15 +100,15 @@ function SettingsPage() {
                         <TabsList className="grid w-full grid-cols-3">
                             <TabsTrigger value="profile">
                                 <FontAwesomeIcon icon={faUser} className="mr-2 h-4 w-4" />
-                                {t('Profile') }
+                                {t('profile')}
                             </TabsTrigger>
                             <TabsTrigger value="preferences">
                                 <FontAwesomeIcon icon={faGears} className="mr-2 h-4 w-4" />
-                                {t('Preferences') }
+                                {t('preferences')}
                             </TabsTrigger>
                             <TabsTrigger value="security">
                                 <FontAwesomeIcon icon={faShieldHalved} className="mr-2 h-4 w-4" />
-                                {t('Security') }
+                                {t('security')}
                             </TabsTrigger>
                         </TabsList>
 
@@ -126,21 +126,21 @@ function SettingsPage() {
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faTrash} className="w-5 h-5 text-destructive" />
-                                        {t('Delete all data') }
+                                        {t('deleteAllData')}
                                     </CardTitle>
-                                    <CardDescription>{t('Permanently delete all your shopping data while keeping your account') }</CardDescription>
+                                    <CardDescription>{t('deleteShoppingDataKeepAccount')}</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <p className="text-sm text-muted-foreground">
-                                        {t('This action is irreversible. All your shopping lists, history, and insights will be permanently deleted. This cannot be undone') }
+                                        {t('irreversibleActionWarning')}
                                     </p>
                                 </CardContent>
                                 <CardFooter>
                                     <DeleteConfirmationDialog
                                         onConfirm={handleDeleteData}
-                                        title={t('Are you absolutely sure?') }
-                                        description={t('This will permanently delete all your data') }
-                                        confirmButtonText={t('Yes, delete my data') }
+                                        title={t('areYouAbsolutely')}
+                                        description={t('permanentlyDeleteAllData')}
+                                        confirmButtonText={t('yesDeleteMy1')}
                                         triggerButton={
                                             <LoadingButton 
                                                 variant="destructive" 
@@ -148,7 +148,7 @@ function SettingsPage() {
                                                 disabled={deleteDataOperation.isLoading}
                                             >
                                                 <FontAwesomeIcon icon={faTrash} className="mr-2 h-4 w-4" />
-                                                {t('Delete all data') }
+                                                {t('deleteAllData')}
                                             </LoadingButton>
                                         }
                                     />
@@ -160,21 +160,21 @@ function SettingsPage() {
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faUserXmark} className="w-5 h-5 text-destructive" />
-                                        {t('Delete my account') }
+                                        {t('deleteMyAccount')}
                                     </CardTitle>
-                                    <CardDescription>{t('Permanently delete your ShopWise account') }</CardDescription>
+                                    <CardDescription>{t('permanentlyDeleteShopWiseAccount')}</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <p className="text-sm text-muted-foreground">
-                                        {t('This action is irreversible. Your account, profile, and all associated data will be permanently deleted. This cannot be undone') }
+                                        {t('irreversibleAccountDeletion')}
                                     </p>
                                 </CardContent>
                                 <CardFooter>
                                     <DeleteConfirmationDialog
                                         onConfirm={handleDeleteAccount}
-                                        title={t('Are you absolutely sure?') }
-                                        description={t('This will permanently delete your account') }
-                                        confirmButtonText={t('Yes, delete my account') }
+                                        title={t('areYouAbsolutely')}
+                                        description={t('permanentlyDeleteAccount')}
+                                        confirmButtonText={t('yesDeleteMy')}
                                         triggerButton={
                                             <LoadingButton 
                                                 variant="destructive" 
@@ -182,7 +182,7 @@ function SettingsPage() {
                                                 disabled={deleteAccountOperation.isLoading}
                                             >
                                                 <FontAwesomeIcon icon={faUserXmark} className="mr-2 h-4 w-4" />
-                                                {t('Delete account') }
+                                                {t('deleteAccount')}
                                             </LoadingButton>
                                         }
                                     />

@@ -29,7 +29,7 @@ jobs:
                   corepack prepare pnpm@10.14.0 --activate
 
             - name: Install dependencies (dev)
-              run: pnpm install --frozen-lockfile
+              run: pnpm install
 
             - name: Build application
               run: pnpm run build
@@ -63,7 +63,7 @@ jobs:
                       set -e
                       cd ~/app/backend
                       # install only production deps on server using pnpm
-                      pnpm install --prod --frozen-lockfile
+                      pnpm install --prod
                       # restart app (assumes pm2 or systemd present)
                       if command -v pm2 >/dev/null 2>&1; then
                         pm2 restart all || pm2 start dist/main.js --name shop-wise-api

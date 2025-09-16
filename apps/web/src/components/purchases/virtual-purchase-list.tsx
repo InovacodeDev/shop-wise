@@ -117,7 +117,7 @@ const listRef = useRef<List>(null);
     if (purchases.length === 0) {
         return (
             <div className="flex items-center justify-center h-32 text-muted-foreground">
-                {t('No purchases to display') }
+                {t('noPurchasesTo')}
             </div>
         );
     }

@@ -28,7 +28,7 @@ describe('QrScannerComponent', () => {
         );
 
         // Check for basic elements
-        expect(screen.getByText('Start Scanning')).toBeInTheDocument();
+        expect(screen.getByText('startScanning')).toBeInTheDocument();
     });
 
     it('shows loading state initially', () => {
@@ -40,6 +40,6 @@ describe('QrScannerComponent', () => {
             />
         );
 
-        expect(screen.getByText('Initializing camera...')).toBeInTheDocument();
+        expect(screen.getByText('initializingCamera')).toBeInTheDocument();
     });
 });

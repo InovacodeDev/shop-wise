@@ -24,8 +24,8 @@ function ScanPage() {
         if (!user || !profile || !profile.familyId) {
             toast({
                 variant: 'destructive',
-                title: t('Error'),
-                description: t('You need to be logged in to perform this action'),
+                title: t('error1'),
+                description: t('youNeedTo'),
             });
             return;
         }
@@ -35,13 +35,13 @@ function ScanPage() {
         if (result.error) {
             toast({
                 variant: 'destructive',
-                title: t('Save Error'),
+                title: t('error8'),
                 description: result.error,
             });
         } else {
             toast({
-                title: t('Success'),
-                description: t('Purchase saved successfully'),
+                title: t('success'),
+                description: t('purchaseSavedSuccessfully'),
             });
             trackEvent('purchase_saved', {
                 method: entryMethod,
@@ -55,9 +55,9 @@ function ScanPage() {
         <SideBarLayout>
             <div className="container mx-auto pt-4">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-headline">{t('Add New Purchase')}</CardTitle>
+                    <CardTitle className="text-2xl font-headline">{t('addPurchase1')}</CardTitle>
                     <CardDescription>
-                        {t('Import from scan NFCe QR code, enter NFCe URL, or add manually')}
+                        {t('importFromScanOrAddManually')}
                     </CardDescription>
                 </CardHeader>
                 <div className="p-6 pt-0">

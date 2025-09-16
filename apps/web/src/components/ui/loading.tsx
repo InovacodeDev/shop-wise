@@ -21,7 +21,7 @@ export function Loading({
     variant = 'default'
 }: LoadingProps) {
     const { t } = useI18n();
-    const defaultText = text || t('Loading') ;
+    const defaultText = text || t('loading') ;
 
     const sizeMap = {
         sm: 'sm' as const,

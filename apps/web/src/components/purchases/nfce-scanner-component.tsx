@@ -88,7 +88,7 @@ const { toast } = useToast();
             }));
         } catch (error) {
             console.error('Error processing NFCe:', error);
-            const errorMessage = error instanceof Error ? error.message : t('Error processing NFCe') ;
+            const errorMessage = error instanceof Error ? error.message : t('errorProcessing') ;
 
             setAnalysisState(prev => ({
                 ...prev,
@@ -98,7 +98,7 @@ const { toast } = useToast();
 
             toast({
                 variant: 'destructive',
-                title: t('Error processing NFCe') ,
+                title: t('errorProcessing'),
                 description: errorMessage,
             });
         }
@@ -162,8 +162,8 @@ const { toast } = useToast();
 
     const renderLoadingStep = () => (
         <Loading
-            text={t('Analyzing NFCe') }
-            description={t('We are extracting information from your fiscal receipt. This may take a few seconds') }
+            text={t('analyzingNfce')}
+            description={t('extractingInformationFromReceipt')}
             layout="vertical"
             size="lg"
         />
@@ -172,13 +172,13 @@ const { toast } = useToast();
     const renderErrorStep = () => (
         <div className="flex flex-col items-center justify-center space-y-4 py-12">
             <FontAwesomeIcon icon={faExclamationTriangle} className="w-12 h-12 text-red-500" />
-            <h3 className="text-xl font-semibold text-red-600">{t('Error processing NFCe') }</h3>
+            <h3 className="text-xl font-semibold text-red-600">{t('errorProcessing')}</h3>
             <p className="text-muted-foreground text-center max-w-md">
-                {analysisState.error || t('Could not process the NFCe. Please check if the URL is correct and try again') }
+                {analysisState.error || t('couldNotProcessNfce')}
             </p>
             <Button onClick={resetScan} variant="outlined">
                 <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4 mr-2" />
-                {t('Try again') }
+                {t('tryAgain')}
             </Button>
         </div>
     );
@@ -197,14 +197,14 @@ const { toast } = useToast();
                     <div className="flex items-center gap-2">
                         <FontAwesomeIcon icon={faStore} className="w-5 h-5 text-primary" />
                         <div>
-                            <span className="font-medium text-gray-600">{t('Store') }</span>
+                            <span className="font-medium text-gray-600">{t('store')}</span>
                             <span className="ml-2 font-semibold">{data.storeName}</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
                         <FontAwesomeIcon icon={faCalendar} className="w-5 h-5 text-primary" />
                         <div>
-                            <span className="font-medium text-gray-600">{t('Date') }</span>
+                            <span className="font-medium text-gray-600">{t('date')}</span>
                             <span className="ml-2 font-semibold">{new Date(data.date).toLocaleDateString()}</span>
                         </div>
                     </div>
@@ -217,30 +217,30 @@ const { toast } = useToast();
                             <TableRow className="bg-gray-50">
                                 <TableHead className="w-auto text-left font-semibold">
                                     <FontAwesomeIcon icon={faBox} className="w-4 h-4 mr-2" />
-                                    {t('Product') }
+                                    {t('product')}
                                 </TableHead>
                                 <TableHead className="text-center font-semibold">
                                     <FontAwesomeIcon icon={faCopyright} className="w-4 h-4 mr-2" />
-                                    {t('Brand') }
+                                    {t('brand')}
                                 </TableHead>
                                 <TableHead className="text-center font-semibold">
                                     <FontAwesomeIcon icon={faTags} className="w-4 h-4 mr-2" />
-                                    {t('Category') }
+                                    {t('category')}
                                 </TableHead>
                                 <TableHead className="w-[100px] text-center font-semibold">
                                     <FontAwesomeIcon icon={faHashtag} className="w-4 h-4 mr-2" />
-                                    {t('Quantity') }
+                                    {t('quantity')}
                                 </TableHead>
                                 <TableHead className="w-[140px] text-center font-semibold">
-                                    {t('Unit price') }<br />
+                                    {t('unitPrice')}<br />
                                     <span className="text-xs text-muted-foreground">(R$)</span>
                                 </TableHead>
                                 <TableHead className="w-[140px] text-center font-semibold">
-                                    {t('Total price') }<br />
+                                    {t('totalPrice')}<br />
                                     <span className="text-xs text-muted-foreground">(R$)</span>
                                 </TableHead>
                                 <TableHead className="w-[100px] text-center font-semibold">
-                                    {t('Actions') }
+                                    {t('actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -295,7 +295,7 @@ const { toast } = useToast();
                     <div className="p-4 border-t">
                         <Button variant="outlined" className="w-fit">
                             <FontAwesomeIcon icon={faPlusCircle} className="w-4 h-4 mr-2" />
-                            {t('Add item manually') }
+                            {t('addItemManually')}
                         </Button>
                     </div>
 
@@ -317,23 +317,23 @@ const { toast } = useToast();
                                 <FontAwesomeIcon icon={faExclamationTriangle} className="w-5 h-5 text-yellow-700" />
                             </div>
                             <div className="text-sm">
-                                <div className="font-medium">{t('Enhanced parsing available in premium') }</div>
-                                <div className="text-muted-foreground">{t('Upgrade to premium to get AI enriched product names, categories and automatic corrections') }</div>
+                                <div className="font-medium">{t('enhancedParsingPremium')}</div>
+                                <div className="text-muted-foreground">{t('upgradeForAiEnrichedData')}</div>
                             </div>
                         </div>
                     )}
                     <Button variant="destructive" onClick={resetScan} className="flex items-center gap-2">
                         <FontAwesomeIcon icon={faTimesCircle} className="w-4 h-4" />
-                        {t('Cancel and start new import') }
+                        {t('cancelAndStartNewImport')}
                     </Button>
                     <div className="flex items-center gap-2">
                         <Button onClick={handleSaveData} className="flex items-center gap-2 bg-green-600 hover:bg-green-700">
                             <FontAwesomeIcon icon={faSave} className="w-4 h-4" />
-                            {t('Confirm and save purchase') }
+                            {t('confirmAndSavePurchase')}
                         </Button>
                         {!isPremium && (
                             <Button variant="outlined" onClick={() => router.navigate({ to: '/family', search: { tab: 'plan' } })}>
-                                {t('Upgrade to premium') }
+                                {t('upgradeToPremium')}
                             </Button>
                         )}
                     </div>
@@ -351,20 +351,20 @@ const { toast } = useToast();
             >
                 <TabsTrigger value="url-manual" className='flex-1 min-w-0'>
                     <FontAwesomeIcon icon={faKeyboard} className="mr-2 h-4 w-4" />
-                    {t('URL manual') }
+                    {t('urlManual')}
                 </TabsTrigger>
                 <TabsTrigger value="qr-code" className='flex-1 min-w-0'>
                     <FontAwesomeIcon icon={faQrcode} className="mr-2 h-4 w-4" />
-                    {t('QR code') }
+                    {t('qrCode')}
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="qr-code" className="mt-6">
                 {analysisState.step === 'scan' ? (
                     <div className="space-y-6">
                         <div className="text-center space-y-2">
-                            <h3 className="text-lg font-semibold">{t('Scanner QR code') }</h3>
+                            <h3 className="text-lg font-semibold">{t('scannerQrCode')}</h3>
                             <p className="text-sm text-muted-foreground">
-                                {t('Position the NFCe QR code in front of the camera') }
+                                {t('positionNfceQr')}
                             </p>
                         </div>
                         <QrScannerComponent
@@ -373,7 +373,7 @@ const { toast } = useToast();
                                 console.error('QR Scanner error:', error);
                                 toast({
                                     variant: 'destructive',
-                                    title: t('Scanner error') ,
+                                    title: t('error9'),
                                     description: error.message,
                                 });
                             }}
@@ -392,9 +392,9 @@ const { toast } = useToast();
                 {analysisState.step === 'scan' ? (
                     <div className="space-y-6">
                         <div className="text-center space-y-2">
-                            <h3 className="text-lg font-semibold">{t('Insert URL manually') }</h3>
+                            <h3 className="text-lg font-semibold">{t('insertUrlManually')}</h3>
                             <p className="text-sm text-muted-foreground">
-                                {t('Paste the NFCe URL obtained through a QR code reader') }
+                                {t('pasteNfceUrl')}
                             </p>
                         </div>
                         <ManualUrlInput onSubmit={handleManualUrl} />

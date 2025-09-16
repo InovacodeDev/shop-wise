@@ -34,8 +34,8 @@ export function LoginForm() {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('resetSuccess') === 'true') {
             toast({
-                title: t('Password reset successful'),
-                description: t('Your password has been changed. You can now log in with your new password.'),
+                title: t('passwordResetSuccessful'),
+                description: t('passwordChangedCanLogin'),
             });
             // Clean up the URL
             window.history.replaceState({}, '', window.location.pathname);
@@ -43,8 +43,8 @@ export function LoginForm() {
     }, [toast, t]);
 
     const formSchema = z.object({
-        email: z.string().email({ message: t('Please enter a valid email.') }),
-        password: z.string().min(6, { message: t('Please enter a password with at least 6 characters.') }),
+        email: z.string().email({ message: t('pleaseEnterValid')}),
+        password: z.string().min(6, { message: t('pleaseEnterPassword')}),
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -80,15 +80,15 @@ export function LoginForm() {
 
     return (
         <FormCard
-            title={t('Welcome Back!')}
-            description={t('Enter your credentials to access your account')}
+            title={t('welcomeBack')}
+            description={t('enterCredentialsToAccess')}
             variant="elevated"
         >
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormInput
                         name="email"
-                        label={t('Email')}
+                        label={t('email')}
                         placeholder={t('seu_email_com')}
                         type="email"
                         required
@@ -97,14 +97,14 @@ export function LoginForm() {
                     <div className="space-y-2">
                         <FormPasswordInput
                             name="password"
-                            label={t('Password')}
+                            label={t('password')}
                             placeholder="••••••••"
                             required
                         />
                         <div className="flex justify-end">
                             <Link to="/forgot-password">
                                 <Button variant="text" size="sm" className="p-0 h-auto text-body-small">
-                                    {t('Forgot Password?')}
+                                    {t('forgotPassword')}
                                 </Button>
                             </Link>
                         </div>
@@ -113,10 +113,10 @@ export function LoginForm() {
                     <FormSubmitButton
                         disabled={!isValid || loginOperation.isLoading}
                         loading={loginOperation.isLoading}
-                        loadingText={t('Signing in...')}
+                        loadingText={t('signingIn')}
                         className="mt-6"
                     >
-                        {t('Login')}
+                        {t('login')}
                     </FormSubmitButton>
 
                     <div className="relative">
@@ -128,10 +128,10 @@ export function LoginForm() {
 
                     <div className="text-center pt-4">
                         <p className="text-body-small text-on-surface-variant">
-                            {t("Don't have an account?")}{" "}
+                            {t('donTHave')}{" "}
                             <Link to="/signup">
                                 <Button variant="text" size="sm" className="p-0 h-auto text-primary">
-                                    {t('Create account')}
+                                    {t('createAccount')}
                                 </Button>
                             </Link>
                         </p>

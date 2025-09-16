@@ -8,9 +8,9 @@ describe('ManualUrlInput', () => {
 
         render(<ManualUrlInput onSubmit={mockOnSubmit} />);
 
-        expect(screen.getByText('NFCe URL')).toBeInTheDocument();
-        expect(screen.getByPlaceholderText('https://nfce.fazenda...')).toBeInTheDocument();
-        expect(screen.getByText('Analyze NFCe')).toBeInTheDocument();
+        expect(screen.getByText('nfceUrl')).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('httpsNfceFazenda')).toBeInTheDocument();
+        expect(screen.getByText('analyzeNfce')).toBeInTheDocument();
     });
 
     it('validates URL correctly', () => {
@@ -18,14 +18,14 @@ describe('ManualUrlInput', () => {
 
         render(<ManualUrlInput onSubmit={mockOnSubmit} />);
 
-        const input = screen.getByPlaceholderText('https://nfce.fazenda...');
-        const button = screen.getByText('Analyze NFCe');
+        const input = screen.getByPlaceholderText('httpsNfceFazenda');
+        const button = screen.getByText('analyzeNfce');
 
         // Test invalid URL
         fireEvent.change(input, { target: { value: 'invalid-url' } });
         fireEvent.click(button);
 
-        expect(screen.getByText('Please enter a valid URL')).toBeInTheDocument();
+        expect(screen.getByText('pleaseEnterValid2')).toBeInTheDocument();
         expect(mockOnSubmit).not.toHaveBeenCalled();
     });
 
@@ -34,8 +34,8 @@ describe('ManualUrlInput', () => {
 
         render(<ManualUrlInput onSubmit={mockOnSubmit} />);
 
-        const input = screen.getByPlaceholderText('https://nfce.fazenda...');
-        const button = screen.getByText('Analyze NFCe');
+        const input = screen.getByPlaceholderText('httpsNfceFazenda');
+        const button = screen.getByText('analyzeNfce');
 
         const validUrl = 'https://nfce.fazenda.sp.gov.br/qrcode?p=35220316716114000119650010000000001000000001|2|1|1|6DD5...';
 
@@ -50,9 +50,9 @@ describe('ManualUrlInput', () => {
 
         render(<ManualUrlInput onSubmit={mockOnSubmit} isLoading={true} />);
 
-        expect(screen.getByText('Analyzing...')).toBeInTheDocument();
+        expect(screen.getByText('analyzing')).toBeInTheDocument();
 
-        const input = screen.getByPlaceholderText('https://nfce.fazenda...');
+        const input = screen.getByPlaceholderText('httpsNfceFazenda');
         expect(input).toBeDisabled();
     });
 });

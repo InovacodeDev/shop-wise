@@ -14,12 +14,12 @@ function AdminPage() {
             <Card>
                 <CardHeader>
                     <CardTitle className="text-lg font-bold">
-                        {t('Admin Dashboard') }
+                        {t('adminDashboard')}
                     </CardTitle>
-                    <CardDescription>{t('System overview and management.') }</CardDescription>
+                    <CardDescription>{t('systemOverviewAndManagement')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>{t('Welcome to the admin dashboard. Here you can manage users, view reports, and configure the system.') }</p>
+                    <p>{t('welcomeToAdmin')}</p>
                 </CardContent>
             </Card>
         </div>
