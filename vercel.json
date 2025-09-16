@@ -1,6 +1,6 @@
 {
-    "buildCommand": "pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist ./dist",
-    "outputDirectory": "dist",
+    "buildCommand": "pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist/* ./",
+    "outputDirectory": ".",
     "installCommand": "pnpm install --frozen-lockfile",
     "framework": null,
     "functions": {

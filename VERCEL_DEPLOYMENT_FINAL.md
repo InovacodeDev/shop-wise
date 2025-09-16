@@ -13,8 +13,8 @@ Este projeto é um monorepo que precisa de configuração específica no Vercel.
 
 ### 1. Build Settings
 
--   **Build Command**: `pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist ./dist`
--   **Output Directory**: `dist`
+-   **Build Command**: `pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist/* ./`
+-   **Output Directory**: `.`
 -   **Install Command**: `pnpm install --frozen-lockfile`
 -   **Root Directory**: Leave empty (use project root)
 
@@ -36,13 +36,13 @@ SERVERLESS=true
 ### Como funciona:
 
 1. **Build no monorepo**: `pnpm turbo run build --filter=@shop-wise/web` gera arquivos em `apps/web/dist`
-2. **Copia para raiz**: `cp -r apps/web/dist ./dist` move arquivos para onde o Vercel espera
-3. **Vercel encontra**: O Vercel encontra o diretório `dist` na raiz e faz o deploy
+2. **Copia para raiz**: `cp -r apps/web/dist/* ./` move arquivos diretamente para a raiz do projeto
+3. **Vercel encontra**: O Vercel encontra o `index.html`, `assets/`, `locales/` na raiz e faz o deploy
 
 ### Arquivos de configuração atualizados:
 
 -   `vercel.json`: Build command atualizado
--   `VERCEL_DEPLOYMENT.md`: Documentação completa
+-   `VERCEL_DEPLOYMENT_FINAL.md`: Documentação completa
 
 ## 🧪 Teste Local Completo
 
@@ -50,13 +50,13 @@ Para verificar se tudo está funcionando:
 
 ```bash
 # 1. Limpa builds anteriores
-rm -rf dist apps/web/dist
+rm -rf index.html assets locales apps/web/dist
 
 # 2. Executa o mesmo comando que o Vercel vai executar
-pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist ./dist
+pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist/* ./
 
-# 3. Verifica se os arquivos foram gerados corretamente
-ls -la dist/
+# 3. Verifica se os arquivos foram gerados corretamente na raiz
+ls -la index.html assets/ locales/
 # ✅ Deve mostrar: index.html, assets/, locales/
 
 # 4. Verifica arquivos específicos
