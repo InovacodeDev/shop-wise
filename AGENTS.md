@@ -169,4 +169,4 @@ Before submitting any changes, verify:
 
 ---
 
-**Remember**: Quality over speed. Take time to understand the project thoroughly before making changes. This ensures maintainable, consistent, and high-quality code contributions.
+**Remember**: Quality over speed. Take time to understand the project thoroughly before making changes. This ensures maintainable, consistent, and high-quality code contributions. And do not touch vercel.json or turbo.json unless explicitly instructed.
