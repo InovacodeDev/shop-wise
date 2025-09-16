@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { FixedSizeList as List } from 'react-window';
-import { Purchase } from '@/types/api';
 import { Card, CardContent } from '@/components/md3/card';
+import { useI18n } from '@/hooks/useI18n';
+import { Purchase } from '@/types/api';
+import { faDollarSign, faShoppingCart, faStore } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStore, faShoppingCart, faDollarSign } from '@fortawesome/free-solid-svg-icons';
-import { useLingui, Plural } from '@lingui/react/macro';
-
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { FixedSizeList as List } from 'react-window';
 interface VirtualPurchaseListProps {
     purchases: Purchase[];
     onPurchaseSelect?: (purchase: Purchase) => void;
@@ -76,7 +75,7 @@ const PurchaseItem = React.memo(function PurchaseItem({ index, style, data }: Pu
                             {itemCount > 0 && (
                                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                     <FontAwesomeIcon icon={faShoppingCart} className="w-3 h-3" />
-                                    <Plural value={itemCount} one="# item" other="# items" />
+                                    /* Plural component removed */
                                 </div>
                             )}
                             <div className="flex items-center gap-1 font-semibold">
@@ -99,9 +98,8 @@ export function VirtualPurchaseList({
     onPurchaseSelect,
     height = 400,
     itemHeight = 80
-}: VirtualPurchaseListProps) {
-    const { t } = useLingui();
-    const listRef = useRef<List>(null);
+}: VirtualPurchaseListProps) {    const { t } = useI18n();
+const listRef = useRef<List>(null);
 
     const itemData = useMemo(() => ({
         purchases,
@@ -119,7 +117,7 @@ export function VirtualPurchaseList({
     if (purchases.length === 0) {
         return (
             <div className="flex items-center justify-center h-32 text-muted-foreground">
-                {t`No purchases to display`}
+                {t('No purchases to display') }
             </div>
         );
     }

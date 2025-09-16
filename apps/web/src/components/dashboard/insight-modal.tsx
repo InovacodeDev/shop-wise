@@ -1,3 +1,5 @@
+import { Button } from "@/components/md3/button";
+import { Chip } from "@/components/md3/chip";
 import {
     Dialog,
     DialogContent,
@@ -6,38 +8,35 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/md3/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useLingui } from '@lingui/react/macro';
 import {
     ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
     ChartLegend,
     ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Pie, PieChart as RechartsPieChart, Cell, ResponsiveContainer } from "recharts";
-import { ReactNode } from "react";
-import { EmptyState } from "../ui/empty-state";
-import {
-    faStore,
-    faBox,
-    faCalendar,
-    faTags,
-    faDollarSign,
-    faWandMagicSparkles,
-    faGem,
-    faRocket,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Badge } from "@/components/md3/badge";
-import { Chip } from "@/components/md3/chip";
-import { Skeleton } from "../ui/skeleton";
-import { Button } from "@/components/md3/button";
-import { Alert, AlertTitle } from "../ui/alert";
-import ReactMarkdown from "react-markdown";
-import { Link } from "@tanstack/react-router";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useI18n } from '@/hooks/useI18n';
 import { getCurrencyFromLocale } from "@/lib/localeCurrency";
 import { cn } from "@/lib/utils";
+import {
+    faBox,
+    faCalendar,
+    faDollarSign,
+    faGem,
+    faRocket,
+    faStore,
+    faTags,
+    faWandMagicSparkles,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "@tanstack/react-router";
+import { ReactNode } from "react";
+import ReactMarkdown from "react-markdown";
+import { Cell, Pie, PieChart as RechartsPieChart, ResponsiveContainer } from "recharts";
+import { Alert, AlertTitle } from "../ui/alert";
+import { EmptyState } from "../ui/empty-state";
+import { Skeleton } from "../ui/skeleton";
 
 interface InsightModalProps {
     title: string;
@@ -126,14 +125,12 @@ export function InsightModal({
     onOpen,
     isPremium,
 }: InsightModalProps) {
-    const { i18n, t } = useLingui();
-
-    const renderContent = () => {
+    const { t, locale } = useI18n();const renderContent = () => {
         if (type !== "consumptionAnalysis" && (!data || data.length === 0)) {
             return (
                 <EmptyState
-                    title={t`No Data to Display`}
-                    description={t`There is no data available for the selected insight. Start adding purchases to see your data here.`}
+                    title={t('No data to display') }
+                    description={t('There is no data available for the selected insight. Start adding purchases to see your data here') }
                 />
             );
         }
@@ -149,17 +146,17 @@ export function InsightModal({
                             <div className="grid grid-cols-4 gap-4 text-sm font-medium text-on-surface-variant min-w-0">
                                 <div className="flex items-center gap-2 truncate">
                                     <FontAwesomeIcon icon={faStore} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t`Store`}</span>
+                                    <span className="truncate">{t('Store') }</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-right truncate">
                                     <FontAwesomeIcon icon={faDollarSign} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t`This Month`}</span>
+                                    <span className="truncate">{t('This month') }</span>
                                 </div>
                                 <div className="text-right truncate">
-                                    {t`Avg/Month`}
+                                    {t('Avg month') }
                                 </div>
                                 <div className="text-center truncate">
-                                    {t`Months Active`}
+                                    {t('Months active') }
                                 </div>
                             </div>
                         </div>
@@ -170,24 +167,16 @@ export function InsightModal({
                                         {item.name}
                                     </div>
                                     <div className="text-right font-medium text-primary truncate">
-                                        {i18n.number(
-                                            item.value,
-                                            {
-                                                style: 'currency',
+                                        {new Intl.NumberFormat(locale, { style: 'currency',
                                                 currencySign: 'accounting',
-                                                currency: getCurrencyFromLocale(i18n.locale),
-                                            }
-                                        )}
+                                                currency: getCurrencyFromLocale(locale),
+                                             }).format(item.value)}
                                     </div>
                                     <div className="text-right text-on-surface-variant truncate">
-                                        {i18n.number(
-                                            item.historicalAverage || item.value,
-                                            {
-                                                style: 'currency',
+                                        {new Intl.NumberFormat(locale, { style: 'currency',
                                                 currencySign: 'accounting',
-                                                currency: getCurrencyFromLocale(i18n.locale),
-                                            }
-                                        )}
+                                                currency: getCurrencyFromLocale(locale),
+                                             }).format(item.historicalAverage || item.value)}
                                     </div>
                                     <div className="text-center flex justify-center">
                                         <Chip variant="assist" size="small" className="bg-secondary text-on-secondary">
@@ -206,15 +195,15 @@ export function InsightModal({
                             <div className="grid grid-cols-3 gap-4 text-sm font-medium text-on-surface-variant min-w-0">
                                 <div className="flex items-center gap-2 truncate">
                                     <FontAwesomeIcon icon={faBox} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t`Product`}</span>
+                                    <span className="truncate">{t('Product') }</span>
                                 </div>
                                 <div className="flex items-center gap-2 truncate">
                                     <FontAwesomeIcon icon={faCalendar} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t`Purchase Date`}</span>
+                                    <span className="truncate">{t('Purchase date') }</span>
                                 </div>
                                 <div className="flex items-center gap-2 justify-end truncate">
                                     <FontAwesomeIcon icon={faDollarSign} className="h-3 w-3 flex-shrink-0" />
-                                    <span className="truncate">{t`Price`}</span>
+                                    <span className="truncate">{t('Price') }</span>
                                 </div>
                             </div>
                         </div>
@@ -225,21 +214,13 @@ export function InsightModal({
                                         {item.name}
                                     </div>
                                     <div className="text-on-surface-variant truncate">
-                                        {i18n.date(item.purchaseDate, {
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                            year: 'numeric',
-                                        })}
+                                        {item.purchaseDate.toLocaleDateString(locale)}
                                     </div>
                                     <div className="text-right font-medium text-primary truncate">
-                                        {i18n.number(
-                                            item.price,
-                                            {
-                                                style: 'currency',
+                                        {new Intl.NumberFormat(locale, { style: 'currency',
                                                 currencySign: 'accounting',
-                                                currency: getCurrencyFromLocale(i18n.locale),
-                                            }
-                                        )}
+                                                currency: getCurrencyFromLocale(locale),
+                                             }).format(item.price)}
                                     </div>
                                 </div>
                             ))}
@@ -254,11 +235,11 @@ export function InsightModal({
                                 <div className="grid grid-cols-2 gap-4 text-sm font-medium text-on-surface-variant min-w-0">
                                     <div className="flex items-center gap-2 truncate">
                                         <FontAwesomeIcon icon={faTags} className="h-3 w-3 flex-shrink-0" />
-                                        <span className="truncate">{t`Category`}</span>
+                                        <span className="truncate">{t('Category') }</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-right justify-end truncate">
                                         <FontAwesomeIcon icon={faDollarSign} className="h-3 w-3 flex-shrink-0" />
-                                        <span className="truncate">{t`Amount Spent`}</span>
+                                        <span className="truncate">{t('Amount spent') }</span>
                                     </div>
                                 </div>
                             </div>
@@ -275,14 +256,10 @@ export function InsightModal({
                                             </Chip>
                                         </div>
                                         <div className="text-right font-medium text-primary truncate">
-                                            {i18n.number(
-                                                item.value,
-                                                {
-                                                    style: 'currency',
+                                            {new Intl.NumberFormat(locale, { style: 'currency',
                                                     currencySign: 'accounting',
-                                                    currency: getCurrencyFromLocale(i18n.locale),
-                                                }
-                                            )}
+                                                    currency: getCurrencyFromLocale(locale),
+                                                 }).format(item.value)}
                                         </div>
                                     </div>
                                 ))}
@@ -317,10 +294,10 @@ export function InsightModal({
                             <TableRow>
                                 <TableHead>
                                     <FontAwesomeIcon icon={faBox} className="mr-2 h-4 w-4" />
-                                    {t`Product`}
+                                    {t('Product') }
                                 </TableHead>
-                                <TableHead>{t`Cheapest at`}</TableHead>
-                                <TableHead className="text-right">{t`Potential Savings`}</TableHead>
+                                <TableHead>{t('Cheapest at') }</TableHead>
+                                <TableHead className="text-right">{t('Potential savings') }</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -341,10 +318,10 @@ export function InsightModal({
                     <div className="rounded-lg border border-outline-variant bg-surface overflow-hidden">
                         <div className="p-4 border-b border-outline-variant bg-surface-variant/30">
                             <div className="grid grid-cols-4 gap-4 text-sm font-medium text-on-surface-variant min-w-0">
-                                <div className="truncate">{t`Goal`}</div>
-                                <div className="text-right truncate">{t`Target`}</div>
-                                <div className="text-right truncate">{t`Current`}</div>
-                                <div className="text-right truncate">{t`Progress`}</div>
+                                <div className="truncate">{t('Goal') }</div>
+                                <div className="text-right truncate">{t('Target') }</div>
+                                <div className="text-right truncate">{t('Current') }</div>
+                                <div className="text-right truncate">{t('Progress') }</div>
                             </div>
                         </div>
                         <div className="divide-y divide-outline-variant">
@@ -354,10 +331,10 @@ export function InsightModal({
                                         {g.name}
                                     </div>
                                     <div className="text-right font-medium text-on-surface truncate">
-                                        {i18n.number(g.targetAmount || 0, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                        {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(g.targetAmount || 0)}
                                     </div>
                                     <div className="text-right text-on-surface-variant truncate">
-                                        {i18n.number(g.currentAmount || 0, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                        {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(g.currentAmount || 0)}
                                     </div>
                                     <div className="text-right flex justify-end">
                                         {typeof g.progress === 'number' ? (
@@ -370,7 +347,7 @@ export function InsightModal({
                                                 {g.progress.toFixed(1)}%
                                             </Chip>
                                         ) : (
-                                            <span className="text-on-surface-variant">{t`-`}</span>
+                                            <span className="text-on-surface-variant">{t('N/A') }</span>
                                         )}
                                     </div>
                                 </div>
@@ -384,13 +361,13 @@ export function InsightModal({
                         <Alert className="border-primary/50 text-center">
                             <FontAwesomeIcon icon={faGem} className="h-5 w-5 text-primary" />
                             <AlertTitle className="text-lg font-bold text-primary">
-                                {t`Premium Feature`}
+                                {t('Premium feature') }
                             </AlertTitle>
-                            <DialogDescription>{t`Unlock detailed consumption analyses and personalized insights by upgrading to our Premium plan.`}</DialogDescription>
+                            <DialogDescription>{t('Unlock detailed consumption analyses and personalized insights by upgrading to our premium plan') }</DialogDescription>
                             <Button asChild className="mt-4">
                                 <Link to="/family" search={{ tab: 'plan' }}>
                                     <FontAwesomeIcon icon={faRocket} className="mr-2" />
-                                    {t`Upgrade your Plan`}
+                                    {t('Upgrade your plan') }
                                 </Link>
                             </Button>
                         </Alert>
@@ -401,7 +378,7 @@ export function InsightModal({
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 text-muted-foreground">
                                 <FontAwesomeIcon icon={faWandMagicSparkles} className="h-5 w-5 animate-pulse" />
-                                <p>{t`Our AI is analyzing your data... this may take a moment.`}</p>
+                                <p>{t('Our AI is analyzing your data, this may take a moment') }</p>
                             </div>
                             <Skeleton className="h-6 w-3/4" />
                             <Skeleton className="h-4 w-full" />
@@ -420,8 +397,8 @@ export function InsightModal({
 
                 return (
                     <EmptyState
-                        title={t`No Analysis Available`}
-                        description={t`We couldn't generate an analysis for this dataset. Try again later or add more purchase data.`}
+                        title={t('No analysis available') }
+                        description={t('We could not generate an analysis for this dataset. Try again later or add more purchase data') }
                     />
                 );
             default:

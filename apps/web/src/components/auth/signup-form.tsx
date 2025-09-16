@@ -13,23 +13,23 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Separator } from "../ui/separator";
 
+import { useI18n } from '@/hooks/useI18n';
 import { trackEvent } from "@/services/analytics-service";
-import { useLingui } from '@lingui/react/macro';
 import { Link, useRouter } from "@tanstack/react-router";
 
 export function SignupForm() {
     const router = useRouter();
     const { toast } = useToast();
-    const { t } = useLingui();
+    const { t } = useI18n();
     const [showPassword, setShowPassword] = useState(false);
     
     // Add async operation for signup
     const signupOperation = useAsyncOperation();
 
     const formSchema = z.object({
-        name: z.string().min(2, { message: t`Please enter at least two caracters.` }),
-        email: z.string().email({ message: t`Please enter a valid email.` }),
-        password: z.string().min(6, { message: t`Password must have at least 6 characters.` }),
+        name: z.string().min(2, { message: t('Please enter at least two characters')  }),
+        email: z.string().email({ message: t('Please enter a valid email')  }),
+        password: z.string().min(6, { message: t('Password must have at least 6 characters')  }),
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -59,8 +59,8 @@ export function SignupForm() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-2xl font-headline">{t`Create Your Account`}</CardTitle>
-                <CardDescription>{t`Join thousands of families who are transforming their financial lives.`}</CardDescription>
+                <CardTitle className="text-2xl font-headline">{t('Create your account') }</CardTitle>
+                <CardDescription>{t('Join thousands of families who are transforming their financial lives') }</CardDescription>
             </CardHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -71,9 +71,9 @@ export function SignupForm() {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t`Name`}</FormLabel>
+                                        <FormLabel>{t('Name') }</FormLabel>
                                         <FormControl>
-                                            <Input placeholder={t`Your Name`} {...field} />
+                                            <Input placeholder={t('Your name') } {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -84,9 +84,9 @@ export function SignupForm() {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t`Email`}</FormLabel>
+                                        <FormLabel>{t('Email') }</FormLabel>
                                         <FormControl>
-                                            <Input placeholder={t`seu@email.com`} {...field} />
+                                            <Input placeholder={t('seu@email.com') } {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -97,7 +97,7 @@ export function SignupForm() {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t`Password`}</FormLabel>
+                                        <FormLabel>{t('Password') }</FormLabel>
                                         <div className="relative">
                                             <FormControl>
                                                 <Input
@@ -127,7 +127,7 @@ export function SignupForm() {
                                                     />
                                                 )}
                                                 <span className="sr-only">
-                                                    {showPassword ? t`Hide password` : t`Show password`}
+                                                    {showPassword ? t('Hide password')  : t('Show password') }
                                                 </span>
                                             </Button>
                                         </div>
@@ -141,23 +141,23 @@ export function SignupForm() {
                             className="w-full" 
                             disabled={!isValid || signupOperation.isLoading}
                             loading={signupOperation.isLoading}
-                            loadingText={t`Creating Account...`}
+                            loadingText={t('Creating account') }
                         >
-                            {t`Create Account`}
+                            {t('Create account') }
                         </LoadingButton>
                         <div className="relative">
                             <Separator />
                             <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-sm text-muted-foreground">
-                                {t`OR`}
+                                {t('or') }
                             </p>
                         </div>
                     </CardContent>
                     <CardFooter>
                         <p className="text-sm text-muted-foreground">
-                            {t`Already have an account?`}{" "}
+                            {t('Already have an account') }{" "}
                             <Link to="/login">
                                 <Button variant="link" className="px-0 h-auto">
-                                    {t`Login`}
+                                    {t('Login') }
                                 </Button>
                             </Link>
                         </p>

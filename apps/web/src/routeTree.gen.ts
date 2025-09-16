@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as I18nTestRouteImport } from './routes/i18n-test'
 import { Route as SignupRouteRouteImport } from './routes/signup/route'
 import { Route as SettingsRouteRouteImport } from './routes/settings/route'
 import { Route as ResetPasswordRouteRouteImport } from './routes/reset-password/route'
@@ -37,6 +38,11 @@ import { Route as AdminMarketInsightsRouteRouteImport } from './routes/admin/mar
 import { Route as AdminLogsRouteRouteImport } from './routes/admin/logs/route'
 import { Route as AdminAuditRouteRouteImport } from './routes/admin/audit/route'
 
+const I18nTestRoute = I18nTestRouteImport.update({
+  id: '/i18n-test',
+  path: '/i18n-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRouteRoute = SignupRouteRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -194,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRouteRoute
   '/settings': typeof SettingsRouteRoute
   '/signup': typeof SignupRouteRoute
+  '/i18n-test': typeof I18nTestRoute
   '/admin/audit': typeof AdminAuditRouteRoute
   '/admin/logs': typeof AdminLogsRouteRoute
   '/admin/market-insights': typeof AdminMarketInsightsRouteRoute
@@ -223,6 +230,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRouteRoute
   '/settings': typeof SettingsRouteRoute
   '/signup': typeof SignupRouteRoute
+  '/i18n-test': typeof I18nTestRoute
   '/admin/audit': typeof AdminAuditRouteRoute
   '/admin/logs': typeof AdminLogsRouteRoute
   '/admin/market-insights': typeof AdminMarketInsightsRouteRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRouteRoute
   '/settings': typeof SettingsRouteRoute
   '/signup': typeof SignupRouteRoute
+  '/i18n-test': typeof I18nTestRoute
   '/admin/audit': typeof AdminAuditRouteRoute
   '/admin/logs': typeof AdminLogsRouteRoute
   '/admin/market-insights': typeof AdminMarketInsightsRouteRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/settings'
     | '/signup'
+    | '/i18n-test'
     | '/admin/audit'
     | '/admin/logs'
     | '/admin/market-insights'
@@ -313,6 +323,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/settings'
     | '/signup'
+    | '/i18n-test'
     | '/admin/audit'
     | '/admin/logs'
     | '/admin/market-insights'
@@ -342,6 +353,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/settings'
     | '/signup'
+    | '/i18n-test'
     | '/admin/audit'
     | '/admin/logs'
     | '/admin/market-insights'
@@ -372,10 +384,18 @@ export interface RootRouteChildren {
   ResetPasswordRouteRoute: typeof ResetPasswordRouteRoute
   SettingsRouteRoute: typeof SettingsRouteRoute
   SignupRouteRoute: typeof SignupRouteRoute
+  I18nTestRoute: typeof I18nTestRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/i18n-test': {
+      id: '/i18n-test'
+      path: '/i18n-test'
+      fullPath: '/i18n-test'
+      preLoaderRoute: typeof I18nTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -614,6 +634,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRouteRoute: ResetPasswordRouteRoute,
   SettingsRouteRoute: SettingsRouteRoute,
   SignupRouteRoute: SignupRouteRoute,
+  I18nTestRoute: I18nTestRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

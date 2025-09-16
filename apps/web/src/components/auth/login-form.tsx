@@ -1,5 +1,5 @@
+import { useI18n } from '@/hooks/useI18n';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLingui } from '@lingui/react/macro';
 import { Link, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -23,7 +23,7 @@ import { Separator } from "../ui/separator";
 export function LoginForm() {
     const router = useRouter();
     const { toast } = useToast();
-    const { t } = useLingui();
+    const { t } = useI18n();
     const { user, loading, reloadUser } = useAuth();
     
     // Add async operation for login
@@ -34,8 +34,8 @@ export function LoginForm() {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('resetSuccess') === 'true') {
             toast({
-                title: t`Password reset successful!`,
-                description: t`Your password has been changed. You can now log in with your new password.`,
+                title: t('Password reset successful'),
+                description: t('Your password has been changed. You can now log in with your new password.'),
             });
             // Clean up the URL
             window.history.replaceState({}, '', window.location.pathname);
@@ -43,8 +43,8 @@ export function LoginForm() {
     }, [toast, t]);
 
     const formSchema = z.object({
-        email: z.string().email({ message: t`Please enter a valid email.` }),
-        password: z.string().min(6, { message: t`Please enter a password with at least 6 characters.` }),
+        email: z.string().email({ message: t('Please enter a valid email.') }),
+        password: z.string().min(6, { message: t('Please enter a password with at least 6 characters.') }),
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -80,16 +80,16 @@ export function LoginForm() {
 
     return (
         <FormCard
-            title={t`Welcome Back!`}
-            description={t`Enter your credentials to access your account.`}
+            title={t('Welcome Back!')}
+            description={t('Enter your credentials to access your account')}
             variant="elevated"
         >
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormInput
                         name="email"
-                        label={t`Email`}
-                        placeholder={t`seu@email.com`}
+                        label={t('Email')}
+                        placeholder={t('seu_email_com')}
                         type="email"
                         required
                     />
@@ -97,14 +97,14 @@ export function LoginForm() {
                     <div className="space-y-2">
                         <FormPasswordInput
                             name="password"
-                            label={t`Password`}
+                            label={t('Password')}
                             placeholder="••••••••"
                             required
                         />
                         <div className="flex justify-end">
                             <Link to="/forgot-password">
                                 <Button variant="text" size="sm" className="p-0 h-auto text-body-small">
-                                    {t`Forgot password?`}
+                                    {t('Forgot Password?')}
                                 </Button>
                             </Link>
                         </div>
@@ -113,25 +113,25 @@ export function LoginForm() {
                     <FormSubmitButton
                         disabled={!isValid || loginOperation.isLoading}
                         loading={loginOperation.isLoading}
-                        loadingText={t`Signing in...`}
+                        loadingText={t('Signing in...')}
                         className="mt-6"
                     >
-                        {t`Login`}
+                        {t('Login')}
                     </FormSubmitButton>
 
                     <div className="relative">
                         <Separator />
                         <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface px-3 text-body-small text-on-surface-variant">
-                            {t`or`}
+                            {t('or')}
                         </p>
                     </div>
 
                     <div className="text-center pt-4">
                         <p className="text-body-small text-on-surface-variant">
-                            {t`Don't have an account?`}{" "}
+                            {t("Don't have an account?")}{" "}
                             <Link to="/signup">
                                 <Button variant="text" size="sm" className="p-0 h-auto text-primary">
-                                    {t`Create Account`}
+                                    {t('Create account')}
                                 </Button>
                             </Link>
                         </p>

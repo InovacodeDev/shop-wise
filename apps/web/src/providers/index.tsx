@@ -1,25 +1,6 @@
-import { AuthProvider, useAuth } from "@/hooks/use-auth";
-import { useEffect, useState, ReactNode } from "react";
 import { Toaster } from "@/components/ui/toaster";
-import { i18n } from "@lingui/core"
-import { I18nProvider } from "@lingui/react"
-import { messages as ptMessages } from "../locales/pt/messages";
-import { messages as enMessages } from "../locales/en/messages";
-
-i18n.load({
-    en: enMessages,
-    pt: ptMessages,
-});
-// Activate an initial locale based on the browser language (prefer pt) or default to English.
-const getInitialLocale = () => {
-    if (typeof window !== "undefined") {
-        const nav = (navigator && (navigator.language || (navigator as any).userLanguage)) || "en";
-        if (typeof nav === "string" && nav.toLowerCase().startsWith("pt")) return "pt";
-    }
-    return "en";
-};
-
-i18n.activate(getInitialLocale());
+import { AuthProvider, useAuth } from "@/hooks/use-auth";
+import { useEffect } from "react";
 
 function PageViewTracker(): React.ReactNode {
     return null;
@@ -59,14 +40,12 @@ export default function Providers({
     children: React.ReactNode;
 }) {
     return (
-        <I18nProvider i18n={i18n}>
-            <AuthProvider>
-                <PageViewTracker />
-                <AppTheme>
-                    {children}
-                </AppTheme>
-                <Toaster />
-            </AuthProvider>
-        </I18nProvider>
-    )
+        <AuthProvider>
+            <PageViewTracker />
+            <AppTheme>
+                {children}
+            </AppTheme>
+            <Toaster />
+        </AuthProvider>
+    );
 }

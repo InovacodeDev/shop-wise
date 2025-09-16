@@ -1,63 +1,52 @@
-import { useState } from 'react';
-import { QrScannerComponent } from '@/components/qr-scanner';
 import { ManualUrlInput } from '@/components/manual-url-input';
-import { Button } from '@/components/md3/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/md3/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/md3/tabs';
 import { Badge } from '@/components/md3/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/md3/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/md3/tabs';
+import { QrScannerComponent } from '@/components/qr-scanner';
 import { Loading } from '@/components/ui/loading';
-import { PdfImportComponent } from './pdf-import-component';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/hooks/useI18n';
+import { analyticsConfig } from '@/lib/analytics';
+import { getCurrencyFromLocale } from '@/lib/localeCurrency';
+import { apiService } from '@/services/api';
+import type { ExtractProductDataOutput, Product } from '@/types/ai-flows';
+import type { EnhancedNfceData, NfceAnalysisState, QrScanResult } from '@/types/webcrawler';
+import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import {
-    faQrcode,
-    faKeyboard,
-    faStore,
-    faReceipt,
-    faCheck,
-    faExclamationTriangle,
     faArrowLeft,
-    faShoppingCart,
-    faBarcode,
-    faHashtag,
-    faTags,
-    faSpinner,
     faBox,
     faCopyright,
+    faExclamationTriangle,
+    faHashtag,
+    faKeyboard,
     faPencil,
-    faTrash,
     faPlusCircle,
-    faTimesCircle,
+    faQrcode,
     faSave,
-    faFilePdf
+    faStore,
+    faTags,
+    faTimesCircle,
+    faTrash
 } from '@fortawesome/free-solid-svg-icons';
-import { faCalendar } from '@fortawesome/free-regular-svg-icons';
-import { apiService } from '@/services/api';
-import { useAuth } from '@/hooks/use-auth';
-import type { NfceAnalysisState, QrScanResult, NfceData, EnhancedNfceData } from '@/types/webcrawler';
-import { useLingui } from '@lingui/react/macro';
-import { useToast } from '@/hooks/use-toast';
-import { getCurrencyFromLocale } from '@/lib/localeCurrency';
-import type { ExtractProductDataOutput, Product } from '@/types/ai-flows';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from '@tanstack/react-router';
-import { track } from '@vercel/analytics';
-import { analyticsConfig } from '@/lib/analytics';
+import { useState } from 'react';
 
 interface NfceScannerComponentProps {
     onSave: (purchaseData: ExtractProductDataOutput, products: Product[], entryMethod?: 'import' | 'nfce') => Promise<void>;
 }
 
-export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
-    const { t, i18n } = useLingui();
-    const { toast } = useToast();
+export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {    const { t, locale } = useI18n();
+const { toast } = useToast();
     const { profile } = useAuth();
     const [analysisState, setAnalysisState] = useState<NfceAnalysisState>({
         step: 'scan'
     });
 
     const formatCurrency = (amount: number) =>
-        i18n.number(amount, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) });
+        new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(amount);
 
     const handleQrScan = (result: QrScanResult) => {
         processUrl(result.data);
@@ -99,7 +88,7 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
             }));
         } catch (error) {
             console.error('Error processing NFCe:', error);
-            const errorMessage = error instanceof Error ? error.message : t`Error processing NFCe`;
+            const errorMessage = error instanceof Error ? error.message : t('Error processing NFCe') ;
 
             setAnalysisState(prev => ({
                 ...prev,
@@ -109,7 +98,7 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
 
             toast({
                 variant: 'destructive',
-                title: t`Error processing NFCe`,
+                title: t('Error processing NFCe') ,
                 description: errorMessage,
             });
         }
@@ -173,8 +162,8 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
 
     const renderLoadingStep = () => (
         <Loading
-            text={t`Analyzing NFCe...`}
-            description={t`We are extracting information from your fiscal receipt. This may take a few seconds.`}
+            text={t('Analyzing NFCe') }
+            description={t('We are extracting information from your fiscal receipt. This may take a few seconds') }
             layout="vertical"
             size="lg"
         />
@@ -183,13 +172,13 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
     const renderErrorStep = () => (
         <div className="flex flex-col items-center justify-center space-y-4 py-12">
             <FontAwesomeIcon icon={faExclamationTriangle} className="w-12 h-12 text-red-500" />
-            <h3 className="text-xl font-semibold text-red-600">{t`Error processing NFCe`}</h3>
+            <h3 className="text-xl font-semibold text-red-600">{t('Error processing NFCe') }</h3>
             <p className="text-muted-foreground text-center max-w-md">
-                {analysisState.error || t`Could not process the NFCe. Please check if the URL is correct and try again.`}
+                {analysisState.error || t('Could not process the NFCe. Please check if the URL is correct and try again') }
             </p>
             <Button onClick={resetScan} variant="outlined">
                 <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4 mr-2" />
-                {t`Try Again`}
+                {t('Try again') }
             </Button>
         </div>
     );
@@ -208,14 +197,14 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
                     <div className="flex items-center gap-2">
                         <FontAwesomeIcon icon={faStore} className="w-5 h-5 text-primary" />
                         <div>
-                            <span className="font-medium text-gray-600">{t`Store:`}</span>
+                            <span className="font-medium text-gray-600">{t('Store') }</span>
                             <span className="ml-2 font-semibold">{data.storeName}</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
                         <FontAwesomeIcon icon={faCalendar} className="w-5 h-5 text-primary" />
                         <div>
-                            <span className="font-medium text-gray-600">{t`Date:`}</span>
+                            <span className="font-medium text-gray-600">{t('Date') }</span>
                             <span className="ml-2 font-semibold">{new Date(data.date).toLocaleDateString()}</span>
                         </div>
                     </div>
@@ -228,30 +217,30 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
                             <TableRow className="bg-gray-50">
                                 <TableHead className="w-auto text-left font-semibold">
                                     <FontAwesomeIcon icon={faBox} className="w-4 h-4 mr-2" />
-                                    {t`Product`}
+                                    {t('Product') }
                                 </TableHead>
                                 <TableHead className="text-center font-semibold">
                                     <FontAwesomeIcon icon={faCopyright} className="w-4 h-4 mr-2" />
-                                    {t`Brand`}
+                                    {t('Brand') }
                                 </TableHead>
                                 <TableHead className="text-center font-semibold">
                                     <FontAwesomeIcon icon={faTags} className="w-4 h-4 mr-2" />
-                                    {t`Category`}
+                                    {t('Category') }
                                 </TableHead>
                                 <TableHead className="w-[100px] text-center font-semibold">
                                     <FontAwesomeIcon icon={faHashtag} className="w-4 h-4 mr-2" />
-                                    {t`Quantity`}
+                                    {t('Quantity') }
                                 </TableHead>
                                 <TableHead className="w-[140px] text-center font-semibold">
-                                    {t`Unit Price`}<br />
+                                    {t('Unit price') }<br />
                                     <span className="text-xs text-muted-foreground">(R$)</span>
                                 </TableHead>
                                 <TableHead className="w-[140px] text-center font-semibold">
-                                    {t`Total Price`}<br />
+                                    {t('Total price') }<br />
                                     <span className="text-xs text-muted-foreground">(R$)</span>
                                 </TableHead>
                                 <TableHead className="w-[100px] text-center font-semibold">
-                                    {t`Actions`}
+                                    {t('Actions') }
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -306,7 +295,7 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
                     <div className="p-4 border-t">
                         <Button variant="outlined" className="w-fit">
                             <FontAwesomeIcon icon={faPlusCircle} className="w-4 h-4 mr-2" />
-                            {t`Add Item Manually`}
+                            {t('Add item manually') }
                         </Button>
                     </div>
 
@@ -314,7 +303,7 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
                     <div className="p-4 bg-gray-50 border-t">
                         <div className="flex justify-end">
                             <div className="text-right">
-                                <span className="text-xl font-bold">{t`Total: ${formatCurrency(data.totalAmount)}`}</span>
+                                <span className="text-xl font-bold">{t('Total: {currency} {amount}', {currency: 'R$', amount: data.totalAmount}) }</span>
                             </div>
                         </div>
                     </div>
@@ -328,23 +317,23 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
                                 <FontAwesomeIcon icon={faExclamationTriangle} className="w-5 h-5 text-yellow-700" />
                             </div>
                             <div className="text-sm">
-                                <div className="font-medium">{t`Enhanced parsing available in Premium`}</div>
-                                <div className="text-muted-foreground">{t`Upgrade to Premium to get AI-enriched product names, categories, and automatic corrections.`}</div>
+                                <div className="font-medium">{t('Enhanced parsing available in premium') }</div>
+                                <div className="text-muted-foreground">{t('Upgrade to premium to get AI enriched product names, categories and automatic corrections') }</div>
                             </div>
                         </div>
                     )}
                     <Button variant="destructive" onClick={resetScan} className="flex items-center gap-2">
                         <FontAwesomeIcon icon={faTimesCircle} className="w-4 h-4" />
-                        {t`Cancel and Start New Import`}
+                        {t('Cancel and start new import') }
                     </Button>
                     <div className="flex items-center gap-2">
                         <Button onClick={handleSaveData} className="flex items-center gap-2 bg-green-600 hover:bg-green-700">
                             <FontAwesomeIcon icon={faSave} className="w-4 h-4" />
-                            {t`Confirm and Save Purchase`}
+                            {t('Confirm and save purchase') }
                         </Button>
                         {!isPremium && (
                             <Button variant="outlined" onClick={() => router.navigate({ to: '/family', search: { tab: 'plan' } })}>
-                                {t`Upgrade to Premium`}
+                                {t('Upgrade to premium') }
                             </Button>
                         )}
                     </div>
@@ -362,20 +351,20 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
             >
                 <TabsTrigger value="url-manual" className='flex-1 min-w-0'>
                     <FontAwesomeIcon icon={faKeyboard} className="mr-2 h-4 w-4" />
-                    {t`URL Manual`}
+                    {t('URL manual') }
                 </TabsTrigger>
                 <TabsTrigger value="qr-code" className='flex-1 min-w-0'>
                     <FontAwesomeIcon icon={faQrcode} className="mr-2 h-4 w-4" />
-                    {t`QR Code`}
+                    {t('QR code') }
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="qr-code" className="mt-6">
                 {analysisState.step === 'scan' ? (
                     <div className="space-y-6">
                         <div className="text-center space-y-2">
-                            <h3 className="text-lg font-semibold">{t`Scanner QR Code`}</h3>
+                            <h3 className="text-lg font-semibold">{t('Scanner QR code') }</h3>
                             <p className="text-sm text-muted-foreground">
-                                {t`Position the NFCe QR code in front of the camera`}
+                                {t('Position the NFCe QR code in front of the camera') }
                             </p>
                         </div>
                         <QrScannerComponent
@@ -384,7 +373,7 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
                                 console.error('QR Scanner error:', error);
                                 toast({
                                     variant: 'destructive',
-                                    title: t`Scanner error`,
+                                    title: t('Scanner error') ,
                                     description: error.message,
                                 });
                             }}
@@ -403,9 +392,9 @@ export function NfceScannerComponent({ onSave }: NfceScannerComponentProps) {
                 {analysisState.step === 'scan' ? (
                     <div className="space-y-6">
                         <div className="text-center space-y-2">
-                            <h3 className="text-lg font-semibold">{t`Inserir URL Manualmente`}</h3>
+                            <h3 className="text-lg font-semibold">{t('Insert URL manually') }</h3>
                             <p className="text-sm text-muted-foreground">
-                                {t`Paste the NFCe URL obtained through a QR code reader`}
+                                {t('Paste the NFCe URL obtained through a QR code reader') }
                             </p>
                         </div>
                         <ManualUrlInput onSubmit={handleManualUrl} />

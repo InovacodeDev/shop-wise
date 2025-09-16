@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import QrScanner from 'qr-scanner';
 import { Button } from '@/components/md3/button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faStop, faRotate } from '@fortawesome/free-solid-svg-icons';
-import type { QrScannerProps, QrScanResult } from '@/types/webcrawler';
 import { Loading } from '@/components/ui/loading';
-import { useLingui } from '@lingui/react/macro';
+import { useI18n } from '@/hooks/useI18n';
+import type { QrScannerProps, QrScanResult } from '@/types/webcrawler';
+import { faCamera, faRotate, faStop } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import QrScanner from 'qr-scanner';
+import { useEffect, useRef, useState } from 'react';
 
 export function QrScannerComponent({
     onScan,
@@ -14,7 +14,7 @@ export function QrScannerComponent({
     preferredCamera = 'environment',
     scanDelay = 300
 }: QrScannerProps) {
-    const { t } = useLingui();
+    const { t } = useI18n();
     const videoRef = useRef<HTMLVideoElement>(null);
     const qrScannerRef = useRef<QrScanner | null>(null);
     const [isScanning, setIsScanning] = useState(false);
@@ -31,7 +31,7 @@ export function QrScannerComponent({
                 const hasCamera = await QrScanner.hasCamera();
                 if (!hasCamera) {
                     setHasPermission(false);
-                    onError?.(new Error(t`No camera found on device`));
+                    onError?.(new Error(t('No camera found on device') ));
                     return;
                 }
 
@@ -126,17 +126,17 @@ export function QrScannerComponent({
             <div className={`flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg ${className}`}>
                 <FontAwesomeIcon icon={faCamera} className="w-12 h-12 text-gray-400 mb-4" />
                 <p className="text-gray-600 text-center mb-4">
-                    {t`Camera access is required to scan QR codes`}
+                    {t('Camera access is required to scan QR codes') }
                 </p>
                 <Button onClick={() => window.location.reload()} variant="outlined">
-                    {t`Refresh to retry`}
+                    {t('Refresh to retry') }
                 </Button>
             </div>
         );
     }
 
     if (hasPermission === null) {
-        return <Loading text={t`Initializing camera...`} className={className} />;
+        return <Loading text={t('Initializing camera') } className={className} />;
     }
 
     return (
@@ -158,7 +158,7 @@ export function QrScannerComponent({
                         icon={isScanning ? faStop : faCamera}
                         className="w-4 h-4 mr-2"
                     />
-                    {isScanning ? t`Stop Scanning` : t`Start Scanning`}
+                    {isScanning ? t('Stop scanning')  : t('Start scanning') }
                 </Button>
 
                 {cameras.length > 1 && (
@@ -174,7 +174,7 @@ export function QrScannerComponent({
 
             {isScanning && (
                 <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
-                    {t`Scanning for QR codes...`}
+                    {t('Scanning for QR codes') }
                 </div>
             )}
         </div>

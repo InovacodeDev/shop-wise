@@ -1,34 +1,33 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/md3/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
 import {
     Form,
     FormInput,
     FormPasswordInput,
     FormSubmitButton
 } from "@/components/ui/md3-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
 import { useAuth } from "@/hooks/use-auth";
-import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useI18n } from '@/hooks/useI18n';
 import { trackEvent } from "@/services/analytics-service";
-import { useLingui } from '@lingui/react/macro';
 import { apiService } from "@/services/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export function ProfileForm() {
     const { user, reloadUser } = useAuth();
     const { toast } = useToast();
-    const { t } = useLingui();
+    const { t } = useI18n();
 
     const profileSchema = z.object({
-        displayName: z.string().min(2, { message: t`O nome deve ter pelo menos 2 caracteres.` }),
-        email: z.string().email({ message: t`Email inválido.` }),
+        displayName: z.string().min(2, { message: t('Name must be at least 2 characters')  }),
+        email: z.string().email({ message: t('Invalid email')  }),
     });
 
     const passwordSchema = z.object({
-        currentPassword: z.string().min(6, { message: t`Senha atual é obrigatória.` }),
-        newPassword: z.string().min(6, { message: t`A nova senha deve ter pelo menos 6 caracteres.` }),
+        currentPassword: z.string().min(6, { message: t('Current password is required')  }),
+        newPassword: z.string().min(6, { message: t('New password must be at least 6 characters')  }),
     });
 
     useEffect(() => {
@@ -71,14 +70,14 @@ export function ProfileForm() {
             await reloadUser();
             profileForm.reset(values); // Resets the dirty state
             toast({
-                title: t`Success!`,
-                description: t`Your profile has been updated.`,
+                title: t('Success') ,
+                description: t('Your profile has been updated') ,
             });
             trackEvent("profile_updated");
         } catch (error: any) {
             toast({
                 variant: "destructive",
-                title: t`Error updating profile.`,
+                title: t('Error updating profile') ,
                 description: error.message,
             });
         }
@@ -105,32 +104,32 @@ export function ProfileForm() {
         <div className="space-y-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>{t`Profile Information`}</CardTitle>
-                    <CardDescription>{t`Update your personal details.`}</CardDescription>
+                    <CardTitle>{t('Profile information') }</CardTitle>
+                    <CardDescription>{t('Update your personal details') }</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...profileForm}>
                         <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
                             <FormInput
                                 name="displayName"
-                                label={t`Display Name`}
+                                label={t('Display name') }
                                 required
                             />
 
                             <FormInput
                                 name="email"
-                                label={t`Email`}
+                                label={t('Email') }
                                 type="email"
                                 disabled
-                                description={t`Your email address cannot be changed.`}
+                                description={t('Your email address cannot be changed') }
                             />
 
                             <FormSubmitButton
                                 disabled={!isProfileDirty || !isProfileValid}
                                 loading={isProfileSubmitting}
-                                loadingText={t`Saving...`}
+                                loadingText={t('Saving') }
                             >
-                                {t`Save Changes`}
+                                {t('Save changes') }
                             </FormSubmitButton>
                         </form>
                     </Form>
@@ -139,30 +138,30 @@ export function ProfileForm() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>{t`Change Password`}</CardTitle>
-                    <CardDescription>{t`Choose a new strong password.`}</CardDescription>
+                    <CardTitle>{t('Change password') }</CardTitle>
+                    <CardDescription>{t('Choose a new strong password') }</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...passwordForm}>
                         <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6">
                             <FormPasswordInput
                                 name="currentPassword"
-                                label={t`Current Password`}
+                                label={t('Current password') }
                                 required
                             />
 
                             <FormPasswordInput
                                 name="newPassword"
-                                label={t`New Password`}
+                                label={t('New password') }
                                 required
                             />
 
                             <FormSubmitButton
                                 disabled={!isPasswordDirty || !isPasswordValid}
                                 loading={isPasswordSubmitting}
-                                loadingText={t`Updating...`}
+                                loadingText={t('Updating') }
                             >
-                                {t`Change Password`}
+                                {t('Change password') }
                             </FormSubmitButton>
                         </form>
                     </Form>

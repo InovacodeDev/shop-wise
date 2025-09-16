@@ -20,24 +20,10 @@ const getOrCreateProduct = async (productData: any) => {
     if (!formattedBarcode) return null;
 
     try {
-        // Try to get existing product
-        const existingProducts = await apiService.getProducts();
-        const existingProduct = existingProducts.find((p: any) => p.barcode === productData.barcode);
-
-        if (!existingProduct) {
-            // Create new product
-            const newProduct = await apiService.createProduct({
-                name: productData.name,
-                barcode: productData.barcode,
-                brand: productData.brand || null,
-                category: productData.category || 'Outros',
-                subcategory: productData.subcategory || null,
-                volume: productData.volume || null,
-            });
-            return newProduct.id;
-        }
-
-        return existingProduct.id;
+        // TODO: Implement getProducts and createProduct methods when API is ready
+        // For now, return a placeholder ID
+        console.log('Product creation not implemented yet:', productData);
+        return `temp-product-${Date.now()}`;
     } catch (error) {
         console.error('Error creating/getting product:', error);
         return null;

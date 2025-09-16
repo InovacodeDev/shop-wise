@@ -7,14 +7,14 @@ import { Button } from "@/components/md3/button";
 import type { Notification } from "@/lib/types";
 import { NotificationPopover } from "./notification-popover";
 import { ShoppingListPopover } from "./shopping-list-popover";
-import { useLingui } from '@lingui/react/macro';
+import { useI18n } from '@/hooks/useI18n';
 import { apiService } from "@/services/api";
 import { cn } from "@/lib/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export function Header() {
-    const { t } = useLingui();
+    const { t } = useI18n();
     const { profile } = useAuth();
     const [notifications, setNotifications] = useState<Notification[]>([]);
 

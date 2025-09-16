@@ -10,7 +10,12 @@ import { MongoService } from './mongo.service';
     providers: [
         {
             provide: MONGO_DB,
-            useFactory: (connection: Connection) => connection,
+            useFactory: (connection: Connection) => {
+                if (!connection) {
+                    throw new Error('Mongoose connection is not available');
+                }
+                return connection;
+            },
             inject: [getConnectionToken()],
         },
         MongoService,

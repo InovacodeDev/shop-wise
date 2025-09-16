@@ -1,8 +1,7 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
-import { useLingui } from '@lingui/react/macro';
-import { LoadingIndicator } from '@/components/md3/loading-indicator';
 import { Card, CardContent } from '@/components/md3/card';
+import { LoadingIndicator } from '@/components/md3/loading-indicator';
+import { useI18n } from '@/hooks/useI18n';
+import { cn } from '@/lib/utils';
 
 interface LoadingProps {
     text?: string;
@@ -21,8 +20,8 @@ export function Loading({
     layout = 'horizontal',
     variant = 'default'
 }: LoadingProps) {
-    const { t } = useLingui();
-    const defaultText = text || t`Loading...`;
+    const { t } = useI18n();
+    const defaultText = text || t('Loading') ;
 
     const sizeMap = {
         sm: 'sm' as const,

@@ -1,44 +1,39 @@
-import { useState } from 'react';
 import { ManualUrlInput } from '@/components/manual-url-input';
-import { Button } from '@/components/md3/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/md3/card';
 import { Badge } from '@/components/md3/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/md3/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/md3/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loading } from '@/components/ui/loading';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/hooks/useI18n';
+import { getCurrencyFromLocale } from '@/lib/localeCurrency';
+import { apiService } from '@/services/api';
+import type { ExtractProductDataOutput, Product } from '@/types/ai-flows';
+import type { NfceAnalysisState } from '@/types/webcrawler';
 import {
-    faStore,
-    faReceipt,
+    faArrowLeft,
     faCheck,
     faExclamationTriangle,
-    faArrowLeft,
+    faReceipt,
     faShoppingCart,
-    faBarcode,
-    faHashtag,
-    faTags,
-    faSpinner
+    faStore
 } from '@fortawesome/free-solid-svg-icons';
-import { apiService } from '@/services/api';
-import type { NfceAnalysisState, NfceData, EnhancedNfceData } from '@/types/webcrawler';
-import { useLingui } from '@lingui/react/macro';
-import { useToast } from '@/hooks/use-toast';
-import { getCurrencyFromLocale } from '@/lib/localeCurrency';
-import type { ExtractProductDataOutput, Product } from '@/types/ai-flows';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 
 interface NfceUrlComponentProps {
     onSave: (purchaseData: ExtractProductDataOutput, products: Product[]) => Promise<void>;
 }
 
-export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
-    const { t, i18n } = useLingui();
-    const { toast } = useToast();
+export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {    const { t, locale } = useI18n();
+const { toast } = useToast();
     const [analysisState, setAnalysisState] = useState<NfceAnalysisState>({
         step: 'scan'
     });
 
     const formatCurrency = (amount: number) =>
-        i18n.number(amount, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) });
+        new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(amount);
 
     const handleManualUrl = (url: string) => {
         processUrl(url);
@@ -63,7 +58,7 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
             }));
         } catch (error) {
             console.error('Error processing NFCe:', error);
-            const errorMessage = error instanceof Error ? error.message : t`Error processing NFCe`;
+            const errorMessage = error instanceof Error ? error.message : t('Error processing NFCe') ;
 
             setAnalysisState(prev => ({
                 ...prev,
@@ -73,7 +68,7 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
 
             toast({
                 variant: 'destructive',
-                title: t`Error processing NFCe`,
+                title: t('Error processing NFCe') ,
                 description: errorMessage,
             });
         }
@@ -127,9 +122,9 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
     const renderScanStep = () => (
         <div className="space-y-6">
             <div className="text-center space-y-2">
-                <h3 className="text-lg font-semibold">{t`NFCe via URL`}</h3>
+                <h3 className="text-lg font-semibold">{t('NFCe via URL') }</h3>
                 <p className="text-sm text-muted-foreground">
-                    {t`Paste the NFCe URL to automatically extract the data.`}
+                    {t('Paste the NFCe URL to automatically extract the data') }
                 </p>
             </div>
             <ManualUrlInput onSubmit={handleManualUrl} />
@@ -138,8 +133,8 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
 
     const renderLoadingStep = () => (
         <Loading
-            text={t`Analyzing NFCe...`}
-            description={t`We are extracting information from your fiscal receipt. This may take a few seconds.`}
+            text={t('Analyzing NFCe') }
+            description={t('We are extracting information from your fiscal receipt. This may take a few seconds') }
             layout="vertical"
             size="lg"
         />
@@ -148,13 +143,13 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
     const renderErrorStep = () => (
         <div className="flex flex-col items-center justify-center space-y-4 py-12">
             <FontAwesomeIcon icon={faExclamationTriangle} className="w-12 h-12 text-red-500" />
-            <h3 className="text-xl font-semibold text-red-600">{t`Error processing NFCe`}</h3>
+            <h3 className="text-xl font-semibold text-red-600">{t('Error processing NFCe') }</h3>
             <p className="text-muted-foreground text-center max-w-md">
-                {analysisState.error || t`Could not process the NFCe. Please check if the URL is correct and try again.`}
+                {analysisState.error || t('Could not process the NFCe. Please check if the URL is correct and try again') }
             </p>
             <Button onClick={resetScan} variant="outlined">
                 <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4 mr-2" />
-                {t`Try Again`}
+                {t('Try again') }
             </Button>
         </div>
     );
@@ -168,16 +163,16 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h3 className="text-lg font-semibold">{t`NFCe Analysis Result`}</h3>
-                        <p className="text-sm text-muted-foreground">{t`Data extracted from fiscal receipt`}</p>
+                        <h3 className="text-lg font-semibold">{t('NFCe analysis result') }</h3>
+                        <p className="text-sm text-muted-foreground">{t('Data extracted from fiscal receipt') }</p>
                     </div>
                     <div className="flex gap-2">
                         <Button onClick={resetScan} variant="outlined">
                             <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4 mr-2" />
-                            {t`New Analysis`}
+                            {t('New analysis') }
                         </Button>
                         <Button onClick={handleSaveData}>
-                            {t`Save Purchase`}
+                            {t('Save purchase') }
                         </Button>
                     </div>
                 </div>
@@ -186,7 +181,7 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
                     <Alert className="border-green-200 bg-green-50">
                         <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-green-600" />
                         <AlertDescription className="text-green-800">
-                            <span className="font-medium">{t`NFCe processed with AI:`}</span> {t`Data was automatically enriched.`}
+                            <span className="font-medium">{t('NFCe processed with AI') }</span> {t('Data was automatically enriched') }
                         </AlertDescription>
                     </Alert>
                 )}
@@ -197,7 +192,7 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-base">
                                 <FontAwesomeIcon icon={faStore} className="w-4 h-4 text-blue-600" />
-                                {t`Store`}
+                                {t('Store') }
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
@@ -213,17 +208,17 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-base">
                                 <FontAwesomeIcon icon={faReceipt} className="w-4 h-4 text-green-600" />
-                                {t`Purchase`}
+                                {t('Purchase') }
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div>
-                                    <p className="text-muted-foreground">{t`Date`}</p>
+                                    <p className="text-muted-foreground">{t('Date') }</p>
                                     <p className="font-medium">{data.date}</p>
                                 </div>
                                 <div>
-                                    <p className="text-muted-foreground">{t`Total`}</p>
+                                    <p className="text-muted-foreground">{t('Total') }</p>
                                     <p className="font-semibold text-green-600">
                                         {formatCurrency(data.totalAmount)}
                                     </p>
@@ -238,7 +233,7 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <FontAwesomeIcon icon={faShoppingCart} className="w-4 h-4 text-purple-600" />
-                            {t`Products`} ({data.products.length})
+                            {t('Products') } ({data.products.length})
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -246,9 +241,9 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
                             <Table>
                                 <TableHeader>
                                     <TableRow className="bg-muted/50">
-                                        <TableHead>{t`Product`}</TableHead>
-                                        <TableHead className="text-center w-20">{t`Qty`}</TableHead>
-                                        <TableHead className="text-right w-24">{t`Total`}</TableHead>
+                                        <TableHead>{t('Product') }</TableHead>
+                                        <TableHead className="text-center w-20">{t('Qty') }</TableHead>
+                                        <TableHead className="text-right w-24">{t('Total') }</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -281,7 +276,7 @@ export function NfceUrlComponent({ onSave }: NfceUrlComponentProps) {
                         {/* Summary */}
                         <div className="mt-3 p-3 bg-muted/30 rounded-lg">
                             <div className="flex justify-between items-center">
-                                <span className="font-semibold">{t`Total:`}</span>
+                                <span className="font-semibold">{t('Total') }</span>
                                 <span className="text-lg font-bold text-green-600">
                                     {formatCurrency(data.totalAmount)}
                                 </span>

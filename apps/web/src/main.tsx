@@ -1,12 +1,13 @@
+import './lib/i18n'; // Initialize i18n
 import './styles/app.css';
 
+import { RouterProvider } from "@tanstack/react-router";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider } from "@tanstack/react-router";
-import { SpeedInsights } from '@vercel/speed-insights/react';
-import { Analytics } from '@vercel/analytics/react';
-import { createRouter } from "./router";
 import Providers from "./providers";
+import { createRouter } from "./router";
 
 const router = createRouter();
 

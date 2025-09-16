@@ -1,8 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartBar } from "@fortawesome/free-regular-svg-icons";
-import { useLingui } from '@lingui/react/macro';
+import { useI18n } from '@/hooks/useI18n';
+import { createFileRoute } from "@tanstack/react-router";
 
 
 export const Route = createFileRoute("/admin/reports")({
@@ -10,20 +8,19 @@ export const Route = createFileRoute("/admin/reports")({
 });
 
 function AdminReportsPage() {
-    const { t } = useLingui();
+    const { t } = useI18n();
 
     return (
         <div className="container mx-auto py-8">
             <Card variant="outlined">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-headline flex items-center gap-2">
-                        <FontAwesomeIcon icon={faChartBar} className="w-6 h-6" />
-                        {t`Usage Reports`}
+                    <CardTitle className="text-lg font-bold">
+                        {t('Usage Reports') }
                     </CardTitle>
-                    <CardDescription>{t`Generate and view system usage reports.`}</CardDescription>
+                    <CardDescription>{t('Generate and view system usage reports.') }</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>{t`Reporting tools will be available here.`}</p>
+                    <p>{t('Reporting tools will be available here.') }</p>
                 </CardContent>
             </Card>
         </div>

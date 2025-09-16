@@ -1,9 +1,6 @@
-import { useState, useEffect, useMemo } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/md3/card";
-import { Input } from "@/components/md3/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/md3';
 import { Button } from "@/components/md3/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useLingui, Plural } from '@lingui/react/macro';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
 import {
     Dialog,
     DialogContent,
@@ -13,7 +10,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/md3/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/md3/input";
+import { MonthlyPurchaseDisplay } from "@/components/purchases/monthly-purchase-display";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -25,41 +23,42 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faHistory,
-    faSearch,
-    faStore,
-    faShoppingCart,
-    faDollarSign,
-    faBox,
-    faReceipt,
-    faHashtag,
-    faBarcode,
-    faWeightHanging,
-    faTrash,
-    faPlusCircle,
-    faSave,
-    faPencil,
-    faCheck,
-    faTags,
-    faPercent,
-    faCoins,
-} from "@fortawesome/free-solid-svg-icons";
-import { faCalendar } from "@fortawesome/free-regular-svg-icons";
-import { useAuth } from "@/hooks/use-auth";
-import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useAuth } from "@/hooks/use-auth";
 import { toast } from "@/hooks/use-toast";
-import { PurchaseItem, updatePurchaseItems } from "../../routes/family/actions";
+import { useI18n } from '@/hooks/useI18n';
+import { enqueueGetPurchaseItems } from '@/lib/api-queue';
+import { getCurrencyFromLocale } from "@/lib/localeCurrency";
+import { materialElevation, materialShapes, materialSpacing, materialTypography } from "@/lib/material-design";
 import { trackEvent } from "@/services/analytics-service";
 import { apiService } from "@/services/api";
-import { enqueueGetPurchaseItems } from '@/lib/api-queue';
-import { MonthlyPurchaseDisplay } from "@/components/purchases/monthly-purchase-display";
-import type { MonthlyPurchaseGroup, Purchase as ApiPurchase } from "@/types/api";
-import { getCurrencyFromLocale } from "@/lib/localeCurrency";
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/md3';
-import { materialSpacing, materialShapes, materialElevation, materialTypography } from "@/lib/material-design";
+import type { MonthlyPurchaseGroup } from "@/types/api";
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
+import {
+    faBox,
+    faCheck,
+    faCoins,
+    faDollarSign,
+    faHashtag,
+    faHistory,
+    faPencil,
+    faPercent,
+    faPlusCircle,
+    faReceipt,
+    faSave,
+    faSearch,
+    faShoppingCart,
+    faStore,
+    faTags,
+    faTrash,
+    faWeightHanging
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useMemo, useState } from "react";
+import { PurchaseItem, updatePurchaseItems } from "../../routes/family/actions";
 
 // Simple Levenshtein distance - used for fuzzy name matching
 function levenshtein(a: string, b: string) {
@@ -98,7 +97,7 @@ interface Purchase {
 }
 
 export function HistoryTab() {
-    const { t, i18n } = useLingui();
+    const { t, locale } = useI18n();
     const { profile } = useAuth();
     const [purchases, setPurchases] = useState<Purchase[]>([]);
     const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
@@ -203,8 +202,8 @@ export function HistoryTab() {
         if (!profile?.familyId) {
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`You need to be logged in to perform this action.`,
+                title: t('Error') ,
+                description: t('You need to be logged in to perform this action') ,
             });
             return;
         }
@@ -216,21 +215,19 @@ export function HistoryTab() {
             setPurchases((prev) => prev.filter((p) => p.id !== purchaseId));
 
             toast({
-                title: t`Success!`,
-                description: t`Purchase deleted successfully.`,
+                title: t('Success') ,
+                description: t('Purchase deleted successfully') ,
             });
             trackEvent("purchase_deleted", { purchaseId });
         } catch (error) {
             console.error("Error deleting purchase:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`An error occurred while deleting the purchase. Please try again.`,
+                title: t('Error') ,
+                description: t('An error occurred while deleting the purchase. Please try again') ,
             });
         }
-    };
-
-    const filteredPurchases = useMemo(
+    };const filteredPurchases = useMemo(
         () =>
             purchases.filter((purchase) => {
                 const lowerSearchTerm = searchTerm.toLowerCase();
@@ -299,14 +296,14 @@ export function HistoryTab() {
                                     fontSize: materialTypography.titleMedium.fontSize,
                                     fontWeight: materialTypography.titleMedium.fontWeight,
                                 }}
-                            >{t`Loading purchase...`}</div>
+                            >{t('Loading purchase') }</div>
                             <div
                                 className="text-on-surface-variant"
                                 style={{
                                     fontSize: materialTypography.bodyMedium.fontSize,
                                     fontWeight: materialTypography.bodyMedium.fontWeight,
                                 }}
-                            >{t`Your request is queued to avoid API rate limits.`}</div>
+                            >{t('Your request is queued to avoid API rate limits') }</div>
                         </div>
                     </div>
                 </div>
@@ -345,7 +342,7 @@ export function HistoryTab() {
                             setSelectedPurchase(localPurchase);
                         } catch (err) {
                             console.error('Error loading purchase items', err);
-                            toast({ title: t`Error`, description: t`Failed to load purchase items.` });
+                            toast({ title: t('Error') , description: t('Failed to load purchase items')  });
                         } finally {
                             setLoadingSelectedItems(false);
                         }
@@ -356,12 +353,12 @@ export function HistoryTab() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-2xl font-headline flex items-center gap-2">
-                            <FontAwesomeIcon icon={faHistory} className="w-6 h-6" /> {t`Purchase History`}
+                            <FontAwesomeIcon icon={faHistory} className="w-6 h-6" /> {t('Purchase History') }
                         </CardTitle>
                         <CardDescription>
                             {useMonthlyView
-                                ? t`Filtered view - clear filters to see monthly organization.`
-                                : t`View and filter all your past purchases.`
+                                ? t('Filtered view - clear filters to see monthly organization') 
+                                : t('View and filter all your past purchases') 
                             }
                         </CardDescription>
                     </CardHeader>
@@ -373,7 +370,7 @@ export function HistoryTab() {
                                     className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
                                 />
                                 <Input
-                                    placeholder={t`Search by store or product...`}
+                                    placeholder={t('Search by store or product') }
                                     className="pl-10"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -381,10 +378,10 @@ export function HistoryTab() {
                             </div>
                             <Select value={selectedStore} onValueChange={setSelectedStore}>
                                 <SelectTrigger className="w-full md:w-[200px]">
-                                    <SelectValue placeholder={t`Filter by store`} />
+                                    <SelectValue placeholder={t('Filter by store') } />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">{t`All stores`}</SelectItem>
+                                    <SelectItem value="all">{t('All stores') }</SelectItem>
                                     {availableStores.map((store) => (
                                         <SelectItem key={store} value={store}>
                                             {store}
@@ -394,14 +391,14 @@ export function HistoryTab() {
                             </Select>
                             <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
                                 <SelectTrigger className="w-full md:w-[200px]">
-                                    <SelectValue placeholder={t`Filter by period`} />
+                                    <SelectValue placeholder={t('Filter by period') } />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">{t`All periods`}</SelectItem>
-                                    <SelectItem value="last_month">{t`Last month`}</SelectItem>
-                                    <SelectItem value="last_3_months">{t`Last 3 months`}</SelectItem>
-                                    <SelectItem value="last_6_months">{t`Last 6 months`}</SelectItem>
-                                    <SelectItem value="last_year">{t`Last year`}</SelectItem>
+                                    <SelectItem value="all">{t('All periods') }</SelectItem>
+                                    <SelectItem value="last_month">{t('Last month') }</SelectItem>
+                                    <SelectItem value="last_3_months">{t('Last 3 months') }</SelectItem>
+                                    <SelectItem value="last_6_months">{t('Last 6 months') }</SelectItem>
+                                    <SelectItem value="last_year">{t('Last year') }</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -435,8 +432,8 @@ export function HistoryTab() {
                                     </div>
                                 ) : (
                                     <EmptyState
-                                        title={t`No Purchases Found`}
-                                        description={t`Try adjusting your filters or add a new purchase to get started.`}
+                                        title={t('No purchases found') }
+                                        description={t('Try adjusting your filters or add a new purchase to get started') }
                                     />
                                 )}
                             </>
@@ -467,7 +464,7 @@ export function HistoryTab() {
                                         >
                                             <FontAwesomeIcon icon={faReceipt} className="w-5 h-5" />
                                         </span>
-                                        <span className="leading-tight">{t`Purchase Details`}</span>
+                                        <span className="leading-tight">{t('Purchase Details') }</span>
                                     </DialogTitle>
                                     <DialogDescription className="text-on-surface-variant">
                                         {selectedPurchase.storeName} • {new Date(selectedPurchase.date).toLocaleString()}
@@ -480,7 +477,7 @@ export function HistoryTab() {
                                             fontSize: materialTypography.labelMedium.fontSize,
                                             fontWeight: materialTypography.labelMedium.fontWeight,
                                         }}
-                                    >{t`Total`}</div>
+                                    >{t('Total') }</div>
                                     <div
                                         className="text-on-surface font-semibold"
                                         style={{
@@ -488,9 +485,8 @@ export function HistoryTab() {
                                             fontWeight: materialTypography.headlineSmall.fontWeight,
                                         }}
                                     >
-                                        {i18n.number(
+                                        {new Intl.NumberFormat(locale).format(
                                             selectedPurchase.totalAmount || selectedPurchase.items.reduce((s, it) => s + (it.price || 0), 0),
-                                            { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) }
                                         )}
                                     </div>
                                 </div>
@@ -517,7 +513,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.titleSmall.fontWeight,
                                                 }}
                                             >
-                                                {t`Product`}
+                                                {t('Product') }
                                             </TableHead>
                                             <TableHead 
                                                 className="w-[120px] text-center font-semibold text-on-surface"
@@ -526,7 +522,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.titleSmall.fontWeight,
                                                 }}
                                             >
-                                                {t`Qty`}
+                                                {t('Qty') }
                                             </TableHead>
                                             <TableHead 
                                                 className="w-[140px] text-right font-semibold text-on-surface"
@@ -535,7 +531,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.titleSmall.fontWeight,
                                                 }}
                                             >
-                                                {t`Unit Price`}
+                                                {t('Unit price') }
                                             </TableHead>
                                             <TableHead 
                                                 className="w-[140px] text-right font-semibold text-on-surface"
@@ -545,7 +541,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.titleSmall.fontWeight,
                                                 }}
                                             >
-                                                {t`Total Price`}
+                                                {t('Total price') }
                                             </TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -609,7 +605,7 @@ export function HistoryTab() {
                                                             fontWeight: materialTypography.bodyMedium.fontWeight,
                                                         }}
                                                     >
-                                                        {i18n.number(unitPrice, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                                        {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(unitPrice)}
                                                     </TableCell>
                                                     <TableCell 
                                                         className="text-right font-semibold text-on-surface"
@@ -619,7 +615,7 @@ export function HistoryTab() {
                                                             fontWeight: '600',
                                                         }}
                                                     >
-                                                        {i18n.number(item.price || (unitPrice * item.quantity), { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                                        {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(item.price || (unitPrice * item.quantity))}
                                                     </TableCell>
                                                 </TableRow>
                                             );
@@ -642,7 +638,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.bodyMedium.fontWeight,
                                                 }}
                                             >
-                                                <Plural value={selectedPurchase.items.length} one="# item" other="# items" />
+                                                /* Plural component removed */
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-3">
@@ -653,7 +649,7 @@ export function HistoryTab() {
                                                     fontWeight: materialTypography.bodyMedium.fontWeight,
                                                 }}
                                             >
-                                                {t`Total:`}
+                                                {t('Total') }
                                             </span>
                                             <span 
                                                 className="text-primary font-bold text-xl"
@@ -662,7 +658,7 @@ export function HistoryTab() {
                                                     fontWeight: '700',
                                                 }}
                                             >
-                                                {i18n.number(selectedPurchase.totalAmount, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                                {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(selectedPurchase.totalAmount)}
                                             </span>
                                         </div>
                                     </div>
@@ -676,9 +672,10 @@ export function HistoryTab() {
     );
 }
 
-function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { purchase: Purchase; onDelete: (id: string) => void; allPurchases?: Purchase[]; globalDisabled?: boolean }) {
-    const { i18n, t } = useLingui();
+function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { purchase: Purchase; onDelete: (id: string) => void; allPurchases?: Purchase[]; globalDisabled?: boolean }) {    
+    const { t, locale } = useI18n();
     const { profile } = useAuth();
+
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [items, setItems] = useState<PurchaseItem[]>(purchase.items);
     const [isSaving, setIsSaving] = useState(false);
@@ -734,8 +731,8 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
         try {
             await updatePurchaseItems(profile.familyId, purchase.id, items);
             toast({
-                title: t`Success!`,
-                description: t`Purchase updated successfully.`,
+                title: t('Success') ,
+                description: t('Purchase updated successfully') ,
             });
             trackEvent("purchase_items_updated", {
                 purchaseId: purchase.id,
@@ -746,8 +743,8 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
             console.error("Error updating purchase:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`An error occurred while updating the purchase. Please try again.`,
+                title: t('Error') ,
+                description: t('An error occurred while updating the purchase. Please try again') ,
             });
         } finally {
             setIsSaving(false);
@@ -775,19 +772,15 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                     <CardContent className="flex justify-between items-center text-sm">
                         <div className="flex items-center gap-2 text-muted-foreground">
                             <FontAwesomeIcon icon={faShoppingCart} className="w-4 h-4" />
-                            <Plural value={purchase.items.length} one="# item" other="# items" />
+                            /* Plural component removed */
                         </div>
                         <div className="flex items-center gap-2 font-bold text-lg text-foreground">
                             <FontAwesomeIcon icon={faDollarSign} className="w-5 h-5 text-primary" />
                             <span>
-                                {i18n.number(
-                                    purchase.totalAmount,
-                                    {
-                                        style: 'currency',
+                                {new Intl.NumberFormat(locale, { style: 'currency',
                                         currencySign: 'accounting',
-                                        currency: getCurrencyFromLocale(i18n.locale),
-                                    }
-                                )}
+                                        currency: getCurrencyFromLocale(locale),
+                                     }).format(purchase.totalAmount)}
                             </span>
                         </div>
                     </CardContent>
@@ -795,7 +788,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
             </DialogTrigger>
             <DialogContent variant="basic" className="max-w-7xl w-full" showCloseButton={false}>
                 <DialogHeader>
-                    <DialogTitle>{t`Purchase Details: ${purchase.storeName}`}</DialogTitle>
+                    <DialogTitle>{t('Purchase Details: {{storeName}}', { storeName: purchase.storeName })} </DialogTitle>
                     <DialogDescription className="space-y-2">
                         <div>
                             {purchase.date.toLocaleString("pt-BR", { dateStyle: "full", timeStyle: "short" })}
@@ -804,39 +797,34 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                             <div className="flex items-center gap-2 font-bold">
                                 <FontAwesomeIcon icon={faReceipt} className="w-4 h-4 text-primary" />
                                 <span>
-                                    {`Total da Nota: ${i18n.number(
-                                        totalAmount,
-                                        {
-                                            style: 'currency',
+                                    {`Total da Nota: ${new Intl.NumberFormat(locale, { style: 'currency',
                                             currencySign: 'accounting',
-                                            currency: getCurrencyFromLocale(i18n.locale),
-                                        }
-                                    )}`}
+                                            currency: getCurrencyFromLocale(locale),
+                                         }).format(totalAmount)}`}
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <FontAwesomeIcon icon={faPercent} className="w-4 h-4 text-orange-500" />
                                 <span>
-                                    {`Desconto: ${i18n.number(
-                                        (purchase as any).discount || 0,
+                                    {`Desconto: ${new Intl.NumberFormat(locale, 
                                         {
                                             style: 'currency',
                                             currencySign: 'accounting',
-                                            currency: getCurrencyFromLocale(i18n.locale),
-                                        }
+                                            currency: getCurrencyFromLocale(locale),
+                                        }).format(
+                                        (purchase as any).discount || 0,
                                     )}`}
                                 </span>
                             </div>
                             <div className="flex items-center gap-2 font-semibold text-green-600">
                                 <FontAwesomeIcon icon={faCoins} className="w-4 h-4" />
                                 <span>
-                                    {`Total Pago: ${i18n.number(
-                                        totalAmount - ((purchase as any).discount || 0),
-                                        {
+                                    {`Total Pago: ${new Intl.NumberFormat(locale, {
                                             style: 'currency',
                                             currencySign: 'accounting',
-                                            currency: getCurrencyFromLocale(i18n.locale),
-                                        }
+                                            currency: getCurrencyFromLocale(locale),
+                                        }).format(
+                                        totalAmount - ((purchase as any).discount || 0),
                                     )}`}
                                 </span>
                             </div>
@@ -850,24 +838,24 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                 <TableRow>
                                     <TableHead className="w-[180px]">
                                         <FontAwesomeIcon icon={faBox} className="inline-block mr-1 w-4 h-4" />{" "}
-                                        {t`Product`}
+                                        {t('Product') }
                                     </TableHead>
                                     <TableHead className="w-[120px]">
                                         <FontAwesomeIcon icon={faTags} className="inline-block mr-1 w-4 h-4" />{" "}
-                                        {t`Category`}
+                                        {t('Category') }
                                     </TableHead>
                                     <TableHead className="w-[120px]">
                                         <FontAwesomeIcon icon={faWeightHanging} className="inline-block mr-1 w-4 h-4" />{" "}
-                                        {t`Volume`}
+                                        {t('Volume') }
                                     </TableHead>
                                     <TableHead className="text-center w-[100px]">
                                         <FontAwesomeIcon icon={faHashtag} className="inline-block mr-1 w-4 h-4" />{" "}
-                                        {t`Qty`}
+                                        {t('Qty') }
                                     </TableHead>
-                                    <TableHead className="text-center w-[120px]">{t`Unit Price`}</TableHead>
-                                    <TableHead className="text-right w-[120px]">{t`Total Price`}</TableHead>
-                                    <TableHead className="text-right w-[120px]">{t`Change`}</TableHead>
-                                    <TableHead className="w-[100px] text-right">{t`Actions`}</TableHead>
+                                    <TableHead className="text-center w-[120px]">{t('Unit price') }</TableHead>
+                                    <TableHead className="text-right w-[120px]">{t('Total price') }</TableHead>
+                                    <TableHead className="text-right w-[120px]">{t('Change') }</TableHead>
+                                    <TableHead className="w-[100px] text-right">{t('Actions') }</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -881,7 +869,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                                             <Input
                                                                 value={item.name}
                                                                 onChange={(e) => handleItemChange(index, "name", e.target.value)}
-                                                                placeholder={t`Item name`}
+                                                                placeholder={t('Item name') }
                                                                 className="text-sm"
                                                             />
                                                         ) : (
@@ -896,7 +884,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                                                     maxHeight: '2.4em'
                                                                 }}
                                                             >
-                                                                {item.name || t`Item name`}
+                                                                {item.name || t('Item name') }
                                                             </div>
                                                         )}
                                                     </div>
@@ -910,7 +898,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                             <Input
                                                 value={(item as any).category || ''}
                                                 onChange={(e) => handleItemChange(index, "category", e.target.value)}
-                                                placeholder={t`Category`}
+                                                placeholder={t('Category') }
                                                 disabled={editingItemId !== item.id}
                                                 className="text-sm"
                                             />
@@ -919,7 +907,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                             <Input
                                                 value={item.volume || ''}
                                                 onChange={(e) => handleItemChange(index, "volume", e.target.value)}
-                                                placeholder={t`ex: 1kg, 500ml`}
+                                                placeholder={t('e.g. 1kg, 500ml') }
                                                 disabled={editingItemId !== item.id}
                                             />
                                         </TableCell>
@@ -946,14 +934,10 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                             />
                                         </TableCell>
                                         <TableCell className="text-right font-medium">
-                                            {i18n.number(
-                                                item.price,
-                                                {
-                                                    style: 'currency',
+                                            {new Intl.NumberFormat(locale, { style: 'currency',
                                                     currencySign: 'accounting',
-                                                    currency: getCurrencyFromLocale(i18n.locale),
-                                                }
-                                            )}
+                                                    currency: getCurrencyFromLocale(locale),
+                                                 }).format(item.price)}
                                         </TableCell>
                                         <TableCell className="text-right font-medium">
                                             {(() => {
@@ -987,14 +971,14 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                                     }
                                                 }
 
-                                                if (matches.length === 0) return <span className="text-muted-foreground">{t`No history`}</span>;
+                                                if (matches.length === 0) return <span className="text-muted-foreground">{t('No history') }</span>;
 
                                                 // Sort matches descending by date
                                                 matches.sort((a, b) => b.date.getTime() - a.date.getTime());
 
                                                 // previous is the most recent before this purchase date
                                                 const prev = matches.find(m => m.date.getTime() < purchase.date.getTime()) || null;
-                                                if (!prev) return <span className="text-muted-foreground">{t`No previous`}</span>;
+                                                if (!prev) return <span className="text-muted-foreground">{t('No previous') }</span>;
 
                                                 const diff = item.price - prev.price;
                                                 const pct = prev.price > 0 ? (diff / prev.price) : 0;
@@ -1007,7 +991,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                                             <div key={i} className="flex justify-between">
                                                                 <div className="truncate">{m.name || m.store}</div>
                                                                 <div className="text-right">
-                                                                    <div>{i18n.number(m.price, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}</div>
+                                                                    <div>{new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(m.price)}</div>
                                                                     <div className="text-xs text-muted-foreground">{m.date.toLocaleDateString()}</div>
                                                                 </div>
                                                             </div>
@@ -1020,8 +1004,8 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                                                         <div className={`text-sm ${cls}`}>
                                                             <TooltipTrigger asChild>
                                                                 <div className="cursor-help">
-                                                                    <div>{i18n.number(diff, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}</div>
-                                                                    <div className="text-xs text-muted-foreground">{i18n.number(pct, { style: 'percent', maximumFractionDigits: 1 })} • {prev.date.toLocaleDateString()}</div>
+                                                                    <div>{new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(diff)}</div>
+                                                                    <div className="text-xs text-muted-foreground">{new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 1 }).format(pct)} • {prev.date.toLocaleDateString()}</div>
                                                                 </div>
                                                             </TooltipTrigger>
                                                             <TooltipContent side="top" align="center">
@@ -1068,7 +1052,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                     </div>
                     <Button variant="outlined" className="mt-4" onClick={handleAddItem} disabled={!!editingItemId}>
                         <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
-                        {t`Add Item`}
+                        {t('Add item') }
                     </Button>
                 </div>
                 <DialogFooter className="pt-4 border-t flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -1077,23 +1061,23 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                             <AlertDialogTrigger asChild>
                                 <Button variant="destructive-outlined">
                                     <FontAwesomeIcon icon={faTrash} className="mr-2 h-4 w-4" />
-                                    {t`Delete Purchase`}
+                                    {t('Delete purchase') }
                                 </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>{t`Delete Purchase?`}</AlertDialogTitle>
-                                    <AlertDialogDescription>{t`This will permanently delete the purchase and its items. This action can't be undone.`}</AlertDialogDescription>
+                                    <AlertDialogTitle>{t('Delete purchase') }</AlertDialogTitle>
+                                    <AlertDialogDescription>{t('This will permanently delete the purchase and its items. This action cannot be undone') }</AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel>{t`Cancel`}</AlertDialogCancel>
+                                    <AlertDialogCancel>{t('Cancel') }</AlertDialogCancel>
                                     <AlertDialogAction
                                         onClick={() => {
                                             onDelete(purchase.id);
                                             setIsDialogOpen(false);
                                         }}
                                     >
-                                        {t`Yes, delete`}
+                                        {t('Yes, delete') }
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
@@ -1102,7 +1086,7 @@ function PurchaseCard({ purchase, onDelete, allPurchases, globalDisabled }: { pu
                     <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:gap-4">
                         <Button onClick={handleSaveChanges} disabled={isSaving || !isDirty || !!editingItemId}>
                             <FontAwesomeIcon icon={faSave} className="mr-2 h-4 w-4" />
-                            {isSaving ? t`Saving...` : t`Save Changes`}
+                            {isSaving ? t('Saving')  : t('Save changes') }
                         </Button>
                     </div>
                 </DialogFooter>

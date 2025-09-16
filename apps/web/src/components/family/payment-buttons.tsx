@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
-import GooglePayButton from "@google-pay/button-react";
 import { useToast } from "@/hooks/use-toast";
+import GooglePayButton from "@google-pay/button-react";
+import { useEffect, useState } from "react";
 
-import type { BillingCycle } from "./plan-form";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faApple } from "@fortawesome/free-brands-svg-icons";
 import { Button } from "@/components/md3/button";
-import { useLingui } from '@lingui/react/macro';
+import { useI18n } from '@/hooks/useI18n';
 import { getPaymentConfigFromLocale } from '@/lib/localeCurrency';
+import { faApple } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { BillingCycle } from "./plan-form";
 
 interface PaymentButtonsProps {
     billingCycle: BillingCycle;
@@ -21,12 +21,11 @@ const planPrices = {
     annually: 199.9,
 };
 
-export function PaymentButtons({ billingCycle, onPaymentSuccess }: PaymentButtonsProps) {
-    const { t, i18n } = useLingui();
-    const { toast } = useToast();
+export function PaymentButtons({ billingCycle, onPaymentSuccess }: PaymentButtonsProps) {    const { t, locale } = useI18n();
+const { toast } = useToast();
     const [canMakeApplePay, setCanMakeApplePay] = useState(false);
 
-    const paymentConfig = getPaymentConfigFromLocale(i18n.locale);
+    const paymentConfig = getPaymentConfigFromLocale(locale);
 
     useEffect(() => {
         // if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
@@ -42,7 +41,7 @@ export function PaymentButtons({ billingCycle, onPaymentSuccess }: PaymentButton
         //     merchantCapabilities: ["supports3DS"],
         //     supportedNetworks: ["visa", "masterCard", "elo"],
         //     total: {
-        //         label: t`Premium`,
+        //         label: t('Premium') ,
         //         amount: price.toFixed(2),
         //     },
         // };
@@ -99,7 +98,7 @@ export function PaymentButtons({ billingCycle, onPaymentSuccess }: PaymentButton
         },
         transactionInfo: {
             totalPriceStatus: "FINAL",
-            totalPriceLabel: t`Total`,
+            totalPriceLabel: t('Total') ,
             totalPrice: planPrices[billingCycle].toFixed(2),
             currencyCode: paymentConfig.currency,
             countryCode: paymentConfig.country,
@@ -115,13 +114,13 @@ export function PaymentButtons({ billingCycle, onPaymentSuccess }: PaymentButton
                 paymentRequest={paymentRequest}
                 onLoadPaymentData={(paymentData) => {
                     console.log("Google Pay Success", paymentData.paymentMethodData);
-                    toast({ title: t`Payment Success`, description: t`Your payment has been processed successfully.` });
+                    toast({ title: t('Payment success') , description: t('Your payment has been processed successfully')  });
                     onPaymentSuccess();
                     return {};
                 }}
                 onError={(error: any) => {
                     console.error("Google Pay Error", error);
-                    toast({ variant: "destructive", title: t`Payment Error`, description: error.message });
+                    toast({ variant: "destructive", title: t('Payment error') , description: error.message });
                 }}
             />
             {canMakeApplePay && (

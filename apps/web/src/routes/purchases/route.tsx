@@ -1,22 +1,22 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
 import { NfceScannerComponent } from "@/components/purchases/nfce-scanner-component";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
+import { createFileRoute } from '@tanstack/react-router';
 
-import { useAuth } from '@/hooks/use-auth';
-import { savePurchase } from "./actions";
-import type { PurchaseData } from "@/components/purchases/manual-purchase-form";
-import type { ExtractProductDataOutput, Product } from "@/types/ai-flows";
-import { useToast } from "@/hooks/use-toast";
-import { trackEvent } from "@/services/analytics-service";
-import { useLingui } from '@lingui/react/macro';
 import { SideBarLayout } from '@/components/layout/sidebar-layout';
+import type { PurchaseData } from "@/components/purchases/manual-purchase-form";
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from "@/hooks/use-toast";
+import { useI18n } from '@/hooks/useI18n';
+import { trackEvent } from "@/services/analytics-service";
+import type { ExtractProductDataOutput, Product } from "@/types/ai-flows";
+import { savePurchase } from "./actions";
 
 export const Route = createFileRoute('/purchases')({
     component: ScanPage,
 })
 
 function ScanPage() {
-    const { t } = useLingui();
+    const { t } = useI18n();
     const { user, profile } = useAuth();
     const { toast } = useToast();
 
@@ -24,8 +24,8 @@ function ScanPage() {
         if (!user || !profile || !profile.familyId) {
             toast({
                 variant: 'destructive',
-                title: t`Error`,
-                description: t`You need to be logged in to perform this action.`,
+                title: t('Error'),
+                description: t('You need to be logged in to perform this action'),
             });
             return;
         }
@@ -35,13 +35,13 @@ function ScanPage() {
         if (result.error) {
             toast({
                 variant: 'destructive',
-                title: t`Save Error`,
+                title: t('Save Error'),
                 description: result.error,
             });
         } else {
             toast({
-                title: t`Success!`,
-                description: t`Purchase saved successfully!`,
+                title: t('Success'),
+                description: t('Purchase saved successfully'),
             });
             trackEvent('purchase_saved', {
                 method: entryMethod,
@@ -55,9 +55,9 @@ function ScanPage() {
         <SideBarLayout>
             <div className="container mx-auto pt-4">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-headline">{t`Add New Purchase`}</CardTitle>
+                    <CardTitle className="text-2xl font-headline">{t('Add New Purchase')}</CardTitle>
                     <CardDescription>
-                        {t`Import from scan NFCe QR code, enter NFCe URL, or add manually.`}
+                        {t('Import from scan NFCe QR code, enter NFCe URL, or add manually')}
                     </CardDescription>
                 </CardHeader>
                 <div className="p-6 pt-0">

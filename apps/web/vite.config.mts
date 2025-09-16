@@ -1,4 +1,3 @@
-import { lingui } from '@lingui/vite-plugin';
 // import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react';
@@ -27,12 +26,7 @@ export default defineConfig({
             target: 'react',
             autoCodeSplitting: true,
         }),
-        react({
-            babel: {
-                plugins: ['@lingui/babel-plugin-lingui-macro'],
-            },
-        }),
-        lingui(),
+        react(),
     ],
     // Increase the chunk size warning limit from the default 500KB to 1000KB
     build: {

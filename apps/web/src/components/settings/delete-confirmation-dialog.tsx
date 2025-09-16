@@ -1,3 +1,5 @@
+import { Button } from "@/components/md3/button";
+import { Input } from "@/components/md3/input";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -8,11 +10,9 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/md3/button";
-import { Input } from "@/components/md3/input";
 import { useToast } from "@/hooks/use-toast";
-import { useState, useEffect, ReactNode } from "react";
-import { useLingui } from '@lingui/react/macro';
+import { useI18n } from '@/hooks/useI18n';
+import { ReactNode, useEffect, useState } from "react";
 
 interface DeleteConfirmationDialogProps {
     triggerButton: ReactNode;
@@ -29,7 +29,7 @@ export function DeleteConfirmationDialog({
     confirmButtonText,
     onConfirm,
 }: DeleteConfirmationDialogProps) {
-    const { t } = useLingui();
+    const { t } = useI18n();
     const [isOpen, setIsOpen] = useState(false);
     const [confirmationCode, setConfirmationCode] = useState("");
     const [inputCode, setInputCode] = useState("");
@@ -50,15 +50,15 @@ export function DeleteConfirmationDialog({
         try {
             await onConfirm();
             toast({
-                title: t`Success!`,
-                description: t`Operation completed successfully.`,
+                title: t('Success') ,
+                description: t('Operation completed successfully') ,
             });
             setIsOpen(false);
         } catch (error: any) {
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: error.message || t`An unexpected error occurred. Please try again.`,
+                title: t('Error') ,
+                description: error.message || t('An unexpected error occurred. Please try again') ,
             });
         } finally {
             setIsLoading(false);
@@ -78,20 +78,20 @@ export function DeleteConfirmationDialog({
                 <div className="my-4 space-y-2">
                     <p className="text-sm text-muted-foreground">
                         <span>
-                            {t`To confirm, please enter the code <b>${confirmationCode}</b> in the box below.`}
+                            {t('To confirm, please enter the code {confirmationCode} in the box below', {confirmationCode}) }
                         </span>
                     </p>
                     <Input
                         value={inputCode}
                         onChange={(e) => setInputCode(e.target.value)}
-                        placeholder={t`Enter the confirmation code`}
+                        placeholder={t('Enter the confirmation code') }
                         autoFocus
                     />
                 </div>
                 <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isLoading}>{t`Cancel`}</AlertDialogCancel>
+                    <AlertDialogCancel disabled={isLoading}>{t('Cancel') }</AlertDialogCancel>
                     <Button variant="destructive" onClick={handleConfirm} disabled={!isCodeMatch || isLoading}>
-                        {isLoading ? t`Processing...` : confirmButtonText}
+                        {isLoading ? t('Processing')  : confirmButtonText}
                     </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>

@@ -1,6 +1,7 @@
 import { SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { useAsyncOperation } from "@/hooks/use-async-operation";
 import { useAuth } from "@/hooks/use-auth";
+import { useI18n } from '@/hooks/useI18n';
 import { cn } from "@/lib/utils";
 import { apiService } from "@/services/api";
 import { faFileLines, faMessage } from "@fortawesome/free-regular-svg-icons";
@@ -21,7 +22,6 @@ import {
     faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useLingui } from '@lingui/react/macro';
 
 import { Button, LoadingButton } from "@/components/md3/button";
 import { trackEvent } from "@/services/analytics-service";
@@ -47,7 +47,7 @@ import {
 export function MainNav() {
     const router = useRouter();
     const { profile, reloadUser } = useAuth();
-    const { t } = useLingui();
+    const { t } = useI18n();
     const isAdmin = profile?.isAdmin || false;
     const { state } = useSidebar();
 
@@ -67,45 +67,45 @@ export function MainNav() {
     ]);
     // Finance related
     const financeMenu = [
-        { href: "/investments", label: t`Investments`, icon: faChartColumn },
-        { href: "/budgets", label: t`Budgets`, icon: faFileLines },
-        { href: "/credit-cards", label: t`Credit Cards`, icon: faFileLines },
-        { href: "/bank", label: t`Bank`, icon: faFileLines },
+        { href: "/investments", label: t('Investments') , icon: faChartColumn },
+        { href: "/budgets", label: t('Budgets') , icon: faFileLines },
+        { href: "/credit-cards", label: t('Credit cards') , icon: faFileLines },
+        { href: "/bank", label: t('Bank') , icon: faFileLines },
     ];
 
     // Top menu: put Insights first so it's the primary entry point
     const topMenu = [
-        { href: "/home", label: t`Insights`, icon: faChartColumn },
-        // { href: "/goals", label: t`Goals`, icon: faFileLines },
-        // { href: "/achievements", label: t`Achievements`, icon: faUsers },
-        // { href: "/projections", label: t`Projections`, icon: faChartColumn },
+        { href: "/home", label: t('Insights') , icon: faChartColumn },
+        // { href: "/goals", label: t('Goals') , icon: faFileLines },
+        // { href: "/achievements", label: t('Achievements') , icon: faUsers },
+        // { href: "/projections", label: t('Projections') , icon: faChartColumn },
     ];
 
     // Shopping related
     const shoppingMenu = [
-        { href: "/list", label: t`Shopping List`, icon: faList },
-        { href: "/purchases", label: t`Add Purchase`, icon: faShoppingBasket },
+        { href: "/list", label: t('Shopping list') , icon: faList },
+        { href: "/purchases", label: t('Add purchase') , icon: faShoppingBasket },
     ];
 
     const educationMenu = [
-        { href: "/education", label: t`Education`, icon: faFileLines },
+        { href: "/education", label: t('Education') , icon: faFileLines },
     ];
 
     const settingsMenuItems = [
-        { href: "/family", label: t`Family`, icon: faUserGroup },
-        { href: "/settings", label: t`My Account`, icon: faUser },
+        { href: "/family", label: t('Family') , icon: faUserGroup },
+        { href: "/settings", label: t('My account') , icon: faUser },
     ];
 
     const adminMenuItems = [
-        { href: "/admin", label: t`Admin Dashboard`, icon: faShieldHalved },
-        { href: "/admin/users", label: t`Manage Users`, icon: faUsers },
-        { href: "/admin/reports", label: t`Usage Reports`, icon: faChartColumn },
-        { href: "/admin/market-insights", label: t`Market Insights`, icon: faShoppingBasket },
-        { href: "/admin/settings", label: t`Global Settings`, icon: faCog },
-        { href: "/admin/notifications", label: t`Manage Notifications`, icon: faMessage },
-        { href: "/admin/audit", label: t`Audit & Tests`, icon: faMicroscope },
-        { href: "/admin/security", label: t`Security`, icon: faShield },
-        { href: "/admin/logs", label: t`System Logs`, icon: faFileLines },
+        { href: "/admin", label: t('Admin dashboard') , icon: faShieldHalved },
+        { href: "/admin/users", label: t('Manage users') , icon: faUsers },
+        { href: "/admin/reports", label: t('Usage reports') , icon: faChartColumn },
+        { href: "/admin/market-insights", label: t('Market insights') , icon: faShoppingBasket },
+        { href: "/admin/settings", label: t('Global settings') , icon: faCog },
+        { href: "/admin/notifications", label: t('Manage notifications') , icon: faMessage },
+        { href: "/admin/audit", label: t('Audit tests') , icon: faMicroscope },
+        { href: "/admin/security", label: t('Security') , icon: faShield },
+        { href: "/admin/logs", label: t('System logs') , icon: faFileLines },
     ];
 
     const handleSignOut = async () => {
@@ -163,19 +163,19 @@ export function MainNav() {
                             <DropdownMenuItem asChild>
                                 <Link to="/purchases" className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faShoppingBasket} className="h-4 w-4" />
-                                    {t`Manual Entry`}
+                                    {t('Manual entry') }
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <Link to="/purchases" className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faPlusCircle} className="h-4 w-4" />
-                                    {t`Scan Receipt`}
+                                    {t('Scan receipt') }
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <Link to="/list" className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faList} className="h-4 w-4" />
-                                    {t`Shopping List`}
+                                    {t('Shopping list') }
                                 </Link>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -193,7 +193,7 @@ export function MainNav() {
                                 )}
                             >
                                 <FontAwesomeIcon icon={faPlus} className="h-4 w-4" />
-                                <span className="ml-2 font-medium">{t`Add Purchase`}</span>
+                                <span className="ml-2 font-medium">{t('Add purchase') }</span>
                             </Button>
                         </Link>
                         <DropdownMenu>
@@ -214,19 +214,19 @@ export function MainNav() {
                                 <DropdownMenuItem asChild>
                                     <Link to="/purchases" className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faShoppingBasket} className="h-4 w-4" />
-                                        {t`Manual Entry`}
+                                        {t('Manual entry') }
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
                                     <Link to="/purchases" className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faPlusCircle} className="h-4 w-4" />
-                                        {t`Scan Receipt`}
+                                        {t('Scan receipt') }
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
                                     <Link to="/list" className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faList} className="h-4 w-4" />
-                                        {t`Shopping List`}
+                                        {t('Shopping list') }
                                     </Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -265,7 +265,7 @@ export function MainNav() {
                         state === "collapsed" ? "opacity-0 h-auto" : "opacity-100 h-auto"
                     )}
                 >
-                    {t`Personal Finance`}
+                    {t('Personal finance') }
                 </p>
                 {financeMenu.map((item) => (
                     <SidebarMenuItem key={item.href}>
@@ -290,7 +290,7 @@ export function MainNav() {
                         state === "collapsed" ? "opacity-0 h-auto" : "opacity-100 h-auto"
                     )}
                 >
-                    {t`Purchases`}
+                    {t('Purchases') }
                 </p>
                 {shoppingMenu.map((item) => (
                     <SidebarMenuItem key={item.href}>
@@ -321,7 +321,7 @@ export function MainNav() {
                         state === "collapsed" ? "opacity-0 h-auto" : "opacity-100 h-auto"
                     )}
                 >
-                    {t`Educacional`}
+                    {t('Educational') }
                 </p>
                 {educationMenu.map((item) => (
                     <SidebarMenuItem key={item.href}>
@@ -348,7 +348,7 @@ export function MainNav() {
                         state === "collapsed" ? "opacity-0 h-auto" : "opacity-100 h-auto"
                     )}
                 >
-                    {t`Settings`}
+                    {t('Settings') }
                 </p>
                 {settingsMenuItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
@@ -377,7 +377,7 @@ export function MainNav() {
                     <AlertDialogTrigger asChild>
                         <SidebarMenuItem>
                             <SidebarMenuButton
-                                tooltip={t`Sair`}
+                                tooltip={t('Sign out') }
                                 asChild={false}
                             >
                                 <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
@@ -388,7 +388,7 @@ export function MainNav() {
                                             "opacity-100"
                                         )}
                                     >
-                                        {t`Sign out`}
+                                        {t('Sign out') }
                                     </span>
                                 )}
                             </SidebarMenuButton>
@@ -396,18 +396,18 @@ export function MainNav() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>{t`Are you sure you want to sign out?`}</AlertDialogTitle>
-                            <AlertDialogDescription>{t`You will be redirected to the home page.`}</AlertDialogDescription>
+                            <AlertDialogTitle>{t('Are you sure you want to sign out') }</AlertDialogTitle>
+                            <AlertDialogDescription>{t('You will be redirected to the home page') }</AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>{t`Cancel`}</AlertDialogCancel>
+                            <AlertDialogCancel>{t('Cancel') }</AlertDialogCancel>
                             <AlertDialogAction asChild>
                                 <LoadingButton 
                                     onClick={handleSignOut} 
                                     loading={logoutOperation.isLoading}
                                     disabled={logoutOperation.isLoading}
                                 >
-                                    {t`Yes, sign out`}
+                                    {t('Yes, sign out') }
                                 </LoadingButton>
                             </AlertDialogAction>
                         </AlertDialogFooter>
@@ -422,7 +422,7 @@ export function MainNav() {
                                 state === "collapsed" ? "opacity-0 h-0" : "opacity-100 h-auto"
                             )}
                         >
-                            {t`Administration`}
+                            {t('Administration') }
                         </p>
                         {adminMenuItems.map((item) => (
                             <SidebarMenuItem key={item.href}>

@@ -1,18 +1,17 @@
-import React, { useMemo, useState } from "react";
+import { Button } from "@/components/md3/button";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
 } from "@/components/md3/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
-import { Button } from "@/components/md3/button";
-import { useLingui } from '@lingui/react/macro';
+import { useI18n } from '@/hooks/useI18n';
 import { getCurrencyFromLocale } from "@/lib/localeCurrency";
-import { format, subMonths } from "date-fns";
-import { ptBR, enUS } from "date-fns/locale";
 import type { Locale } from 'date-fns';
+import { format, subMonths } from "date-fns";
+import { enUS, ptBR } from "date-fns/locale";
+import { useMemo, useState } from "react";
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 const dateLocales: Record<string, Locale> = {
     "pt": ptBR,
@@ -38,13 +37,12 @@ interface Props {
     onOpenChange: (open: boolean) => void;
     item: PurchaseItem | null;
     allItems: PurchaseItem[];
-    locale?: string;
 }
 
-export function PriceComparisonModal({ open, onOpenChange, item, allItems, locale }: Props) {
-    const { i18n, t } = useLingui();
+export function PriceComparisonModal({ open, onOpenChange, item, allItems }: Props) {
+    const { t, locale, i18n } = useI18n();
     const [mode, setMode] = useState<'price' | 'quantity'>('price');
-    const dateLocale = dateLocales[locale || i18n.locale] || ptBR;
+    const dateLocale = dateLocales[locale] || ptBR;
 
     const months = useMemo(() => {
         const now = new Date();
@@ -75,7 +73,7 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems, local
             const avgPrice = totalQty > 0 ? (totalSpent / totalQty) : (monthItems.length > 0 ? (monthItems.reduce((s, x) => s + (x.price || 0), 0) / monthItems.length) : 0);
 
             return {
-                monthLabel: m.label + (m.isCurrent ? ` (${t`Current`})` : ""),
+                monthLabel: m.label + (m.isCurrent ? ` (${t('Current') })` : ""),
                 monthYear: m.monthYear,
                 isCurrent: m.isCurrent,
                 avgPrice,
@@ -110,42 +108,42 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems, local
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                    <DialogTitle>{item ? item.name || item.barcode || t`Product Comparison` : t`Product Comparison`}</DialogTitle>
+                    <DialogTitle>{item ? item.name || item.barcode || t('Product comparison')  : t('Product comparison') }</DialogTitle>
                 </DialogHeader>
 
                 <div className="pt-2 pb-4 px-6">
-                    <p className="text-sm text-muted-foreground mb-4">{t`Comparing unit price and quantity for the selected product across the last 6 months.`}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{t('Comparing unit price and quantity for the selected product across the last 6 months') }</p>
 
                     {currentData && (
                         <div className="mb-4 p-3 border rounded-md">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-sm text-muted-foreground">{t`Current Month`}</div>
+                                    <div className="text-sm text-muted-foreground">{t('Current month') }</div>
                                     <div className="text-lg font-medium">{currentData.monthLabel}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-sm text-muted-foreground">{t`Avg Unit Price`}</div>
-                                    <div className="text-lg font-bold">{currentData.avgPrice > 0 ? i18n.number(currentData.avgPrice, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) }) : "--"}</div>
+                                    <div className="text-sm text-muted-foreground">{t('Avg unit price') }</div>
+                                    <div className="text-lg font-bold">{currentData.avgPrice > 0 ? new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(currentData.avgPrice) : "--"}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-sm text-muted-foreground">{t`Total Quantity`}</div>
-                                    <div className="text-lg font-bold">{currentData.totalQty > 0 ? i18n.number(currentData.totalQty, { maximumFractionDigits: 2 }) : "--"}</div>
+                                    <div className="text-sm text-muted-foreground">{t('Total quantity') }</div>
+                                    <div className="text-lg font-bold">{currentData.totalQty > 0 ? new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(currentData.totalQty) : "--"}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-sm text-muted-foreground">{t`Change vs last purchase month`}</div>
+                                    <div className="text-sm text-muted-foreground">{t('Change vs last purchase month') }</div>
                                     <div className="text-lg font-bold">
                                         {baseline ? (
                                             baseline.avgPrice > 0 ? (
                                                 <span className={currentData.avgPrice - baseline.avgPrice > 0 ? "text-destructive" : "text-green-600"}>
                                                     {currentData.avgPrice > 0 ? (currentData.avgPrice - baseline.avgPrice) >= 0 ?
-                                                        `${i18n.number((currentData.avgPrice - baseline.avgPrice), { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })} ` :
-                                                        `${i18n.number((currentData.avgPrice - baseline.avgPrice), { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })} ` : "--"}
+                                                        `${new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format((currentData.avgPrice - baseline.avgPrice))} ` :
+                                                        `${new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format((currentData.avgPrice - baseline.avgPrice))} ` : "--"}
                                                     {currentData.avgPrice > 0 && baseline.avgPrice > 0 ? (
-                                                        <span className="ml-2 text-sm">{((currentData.avgPrice - baseline.avgPrice) / (baseline.avgPrice || 1)) > 0 ? '+' : ''}{i18n.number(((currentData.avgPrice - baseline.avgPrice) / (baseline.avgPrice || 1)), { style: 'percent', maximumFractionDigits: 1 })}</span>
+                                                        <span className="ml-2 text-sm">{((currentData.avgPrice - baseline.avgPrice) / (baseline.avgPrice || 1)) > 0 ? '+' : ''}{new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 1 }).format(((currentData.avgPrice - baseline.avgPrice) / (baseline.avgPrice || 1)))}</span>
                                                     ) : null}
                                                 </span>
                                             ) : "--"
-                                        ) : t`No previous purchase`}
+                                        ) : t('No previous purchase') }
                                     </div>
                                 </div>
                             </div>
@@ -154,15 +152,15 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems, local
 
                     {/* Line chart: 24 months (2 years) of average unit price */}
                     <div className="flex items-center justify-between mb-3">
-                        <div className="text-sm text-muted-foreground">{t`Price history (24 months)`}</div>
+                        <div className="text-sm text-muted-foreground">{t('Price history 24 months') }</div>
                         <div className="flex items-center gap-2">
-                            <Button size="sm" variant={"ghost"} onClick={() => setMode('price')} className={mode === 'price' ? 'font-semibold' : ''}>{t`Price`}</Button>
-                            <Button size="sm" variant={"ghost"} onClick={() => setMode('quantity')} className={mode === 'quantity' ? 'font-semibold' : ''}>{t`Quantity`}</Button>
+                            <Button size="sm" variant={"ghost"} onClick={() => setMode('price')} className={mode === 'price' ? 'font-semibold' : ''}>{t('Price') }</Button>
+                            <Button size="sm" variant={"ghost"} onClick={() => setMode('quantity')} className={mode === 'quantity' ? 'font-semibold' : ''}>{t('Quantity') }</Button>
                         </div>
                     </div>
 
                     {(() => {
-                        if (!item) return <div className="text-sm text-muted-foreground">{t`No product selected.`}</div>;
+                        if (!item) return <div className="text-sm text-muted-foreground">{t('No product selected') }</div>;
 
                         const now = new Date();
 
@@ -239,7 +237,7 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems, local
                             interpQty: interpQty[idx],
                         }));
 
-                        const currency = getCurrencyFromLocale(i18n.locale);
+                        const currency = getCurrencyFromLocale(locale);
 
                         const CustomTooltip = ({ active, payload, label }: any) => {
                             if (!active || !payload || !payload.length) return null;
@@ -252,10 +250,10 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems, local
                                 <div className="rounded-lg border bg-background p-3 shadow-lg">
                                     <div className="font-medium">{label}</div>
                                     <div className="text-lg font-bold mt-1">
-                                        {has ? (mode === 'price' ? (value != null ? i18n.number(value as number, { style: 'currency', currency }) : "--") : i18n.number(value as number, { maximumFractionDigits: 2 })) : (
+                                        {has ? (mode === 'price' ? (value != null ? new Intl.NumberFormat(locale, { style: 'currency', currency }).format(value as number) : "--") : new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value as number)) : (
                                             interp != null ? (
-                                                <span>{mode === 'price' ? i18n.number(interp as number, { style: 'currency', currency }) : i18n.number(interp as number, { maximumFractionDigits: 2 })} <span className="text-xs text-muted-foreground">({t`estimate`})</span></span>
-                                            ) : t`No data`
+                                                <span>{mode === 'price' ? new Intl.NumberFormat(locale, { style: 'currency', currency }).format(interp as number) : new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(interp as number)} <span className="text-xs text-muted-foreground">({t('Estimate') })</span></span>
+                                            ) : t('No data') 
                                         )}
                                     </div>
                                 </div>
@@ -268,7 +266,7 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems, local
                                     <LineChart data={chartData}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                                        <YAxis tickFormatter={(val) => i18n.number(val as number, { style: 'currency', currency })} />
+                                        <YAxis tickFormatter={(val) => new Intl.NumberFormat(locale, { style: 'currency', currency }).format(val as number)} />
                                         <Tooltip content={<CustomTooltip />} />
                                         {/* dashed interpolated line behind to show trend for missing months */}
                                         <Line type="monotone" dataKey={mode === 'price' ? 'interpAvgPrice' : 'interpQty'} stroke="#9aaed8" strokeWidth={2} dot={false} strokeDasharray="6 6" connectNulls={true} opacity={0.8} />

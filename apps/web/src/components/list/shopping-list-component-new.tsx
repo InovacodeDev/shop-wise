@@ -7,13 +7,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { useI18n } from '@/hooks/useI18n';
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/services/analytics-service";
 import { apiService } from "@/services/api";
 import type { ShoppingList as ApiShoppingList } from "@/types/api";
 import { faArchive, faArrowLeft, faCheck, faEdit, faPlus, faTrash, faUndo, faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useLingui } from '@lingui/react/macro';
 import { useCallback, useEffect, useState } from "react";
 import { suggestMissingItems } from "../../routes/list/actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../md3/tabs";
@@ -35,7 +35,7 @@ interface ListCardProps {
 }
 
 function ListCard({ list, onSelectList, onUpdateListStatus, onDeleteList }: ListCardProps) {
-    const { t } = useLingui();
+    const { t } = useI18n();
 
     const itemCount = list.items?.length || 0;
     const completedCount = list.items?.filter(item => item.checked || item.isCompleted)?.length || 0;
@@ -74,7 +74,7 @@ function ListCard({ list, onSelectList, onUpdateListStatus, onDeleteList }: List
                                         onUpdateListStatus(list, 'completed');
                                     }}
                                     className="text-green-600 hover:bg-green-100"
-                                    title={t`Mark as completed`}
+                                    title={t('Mark as completed') }
                                 >
                                     <FontAwesomeIcon icon={faCheck} className="h-4 w-4" />
                                 </Button>
@@ -89,7 +89,7 @@ function ListCard({ list, onSelectList, onUpdateListStatus, onDeleteList }: List
                                         onUpdateListStatus(list, 'archived');
                                     }}
                                     className="text-gray-600 hover:bg-gray-100"
-                                    title={t`Archive list`}
+                                    title={t('Archive list') }
                                 >
                                     <FontAwesomeIcon icon={faArchive} className="h-4 w-4" />
                                 </Button>
@@ -104,7 +104,7 @@ function ListCard({ list, onSelectList, onUpdateListStatus, onDeleteList }: List
                                         onUpdateListStatus(list, 'active');
                                     }}
                                     className="text-blue-600 hover:bg-blue-100"
-                                    title={t`Reactivate list`}
+                                    title={t('Reactivate list') }
                                 >
                                     <FontAwesomeIcon icon={faUndo} className="h-4 w-4" />
                                 </Button>
@@ -118,7 +118,7 @@ function ListCard({ list, onSelectList, onUpdateListStatus, onDeleteList }: List
                                     onDeleteList(list);
                                 }}
                                 className="text-red-600 hover:bg-red-100"
-                                title={t`Delete list`}
+                                title={t('Delete list') }
                             >
                                 <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
                             </Button>
@@ -128,11 +128,11 @@ function ListCard({ list, onSelectList, onUpdateListStatus, onDeleteList }: List
             </CardHeader>
             <CardContent>
                 <div className="text-sm text-muted-foreground">
-                    <p>{t`Created`}: {list.createdAt ? new Date(list.createdAt).toLocaleDateString() : t`Unknown`}</p>
+                    <p>{t('Created') }: {list.createdAt ? new Date(list.createdAt).toLocaleDateString() : t('Unknown') }</p>
                     {itemCount > 0 ? (
-                        <p className="mt-1">{itemCount} {t`items`}</p>
+                        <p className="mt-1">{itemCount} {t('items') }</p>
                     ) : (
-                        <p className="mt-1">{t`No items yet`}</p>
+                        <p className="mt-1">{t('No items yet') }</p>
                     )}
                 </div>
             </CardContent>
@@ -141,8 +141,10 @@ function ListCard({ list, onSelectList, onUpdateListStatus, onDeleteList }: List
 }
 
 export function ShoppingListComponent() {
-    const { t } = useLingui();
+    const { t } = useI18n();
     const { profile } = useAuth();
+    const { toast } = useToast();
+
     const [shoppingLists, setShoppingLists] = useState<ApiShoppingList[]>([]);
     const [selectedList, setSelectedList] = useState<ApiShoppingList | null>(null);
     const [viewMode, setViewMode] = useState<'lists' | 'items'>('lists');
@@ -167,7 +169,6 @@ export function ShoppingListComponent() {
     const [suggestedItems, setSuggestedItems] = useState<string[]>([]);
     const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
     const [isCreatingWithAI, setIsCreatingWithAI] = useState(false);
-    const { toast } = useToast();
 
     const loadShoppingLists = useCallback(
         async (familyId: string) => {
@@ -179,8 +180,8 @@ export function ShoppingListComponent() {
                 console.error('Error loading shopping lists:', error);
                 toast({
                     variant: "destructive",
-                    title: t`Error`,
-                    description: t`Could not load shopping lists`,
+                    title: t('Error') ,
+                    description: t('Could not load shopping lists') ,
                 });
                 return [];
             }
@@ -211,8 +212,8 @@ export function ShoppingListComponent() {
             console.error('Error loading shopping list items:', error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not load shopping list items`,
+                title: t('Error') ,
+                description: t('Could not load shopping list items') ,
             });
         } finally {
             setLoading(false);
@@ -221,8 +222,8 @@ export function ShoppingListComponent() {
 
     const loadBrands = useCallback(async () => {
         try {
-            const products = await apiService.getProducts();
-            const brands = [...new Set(products.filter(p => p.brand).map(p => p.brand!))].sort();
+            // TODO: Implement getProducts when API is ready
+            const brands: string[] = [];
             setAvailableBrands(brands);
         } catch (error) {
             console.error('Error loading brands:', error);
@@ -231,8 +232,8 @@ export function ShoppingListComponent() {
 
     const loadCategories = useCallback(async () => {
         try {
-            const products = await apiService.getProducts();
-            const categories = [...new Set(products.filter(p => p.category).map(p => p.category!))].sort();
+            // TODO: Implement getProducts when API is ready
+            const categories: string[] = [];
             setAvailableCategories(categories);
         } catch (error) {
             console.error('Error loading categories:', error);
@@ -249,9 +250,10 @@ export function ShoppingListComponent() {
             const uniqueNames = [...new Set(allItems.map(item => item.name).filter(Boolean))].sort();
             
             // Also get product names from the products endpoint
-            const products = await apiService.getProducts();
+            // TODO: Implement getProducts when API is ready
+            const products: any[] = [];
             setAvailableProducts(products);
-            const productNames = products.map(p => p.name).filter(Boolean);
+            const productNames: string[] = [];
             
             // Combine and deduplicate
             const combinedNames = [...new Set([...uniqueNames, ...productNames])].sort();
@@ -299,7 +301,7 @@ export function ShoppingListComponent() {
             const familySize = (profile.family?.adults || 1) + (profile.family?.children || 0);
 
             const newList = await apiService.createShoppingList(profile.familyId, {
-                listName: t`AI Generated Shopping List`,
+                listName: t('AI Generated Shopping List') ,
                 familySize,
                 preferences: purchaseHistory,
             });
@@ -316,8 +318,8 @@ export function ShoppingListComponent() {
             console.error("Error creating list with AI:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not create shopping list with AI`,
+                title: t('Error') ,
+                description: t('Could not create shopping list with AI') ,
             });
         } finally {
             setIsCreatingWithAI(false);
@@ -338,7 +340,7 @@ export function ShoppingListComponent() {
         if (!listId) return;
 
         const confirmed = window.confirm(
-            `${t`Are you sure you want to delete the list`} "${list.name}"? ${t`This action cannot be undone.`}`
+            `${t('Are you sure you want to delete the list') } "${list.name}"? ${t('This action cannot be undone') }`
         );
 
         if (!confirmed) return;
@@ -350,8 +352,8 @@ export function ShoppingListComponent() {
             await loadShoppingLists(profile.familyId);
             
             toast({
-                title: t`List deleted`,
-                description: t`Shopping list has been deleted successfully.`,
+                title: t('List deleted') ,
+                description: t('Shopping list has been deleted successfully') ,
             });
 
             // If we're viewing the deleted list, go back to lists view
@@ -363,8 +365,8 @@ export function ShoppingListComponent() {
             console.error("Error deleting shopping list:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not delete shopping list`,
+                title: t('Error') ,
+                description: t('Could not delete shopping list') ,
             });
         }
     }, [profile?.familyId, selectedList, loadShoppingLists, backToLists, t, toast]);
@@ -384,16 +386,16 @@ export function ShoppingListComponent() {
             await loadShoppingLists(profile.familyId);
             
             toast({
-                title: t`List updated`,
-                description: t`Shopping list status has been updated.`,
+                title: t('List updated') ,
+                description: t('Shopping list status has been updated') ,
             });
 
         } catch (error) {
             console.error("Error updating shopping list status:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not update shopping list status`,
+                title: t('Error') ,
+                description: t('Could not update shopping list status') ,
             });
         }
     }, [profile?.familyId, loadShoppingLists, t, toast]);
@@ -514,14 +516,9 @@ export function ShoppingListComponent() {
                 
                 // If no existing product selected, create a new one
                 if (!selectedProduct && newItemCategory.trim()) {
-                    const newProduct = await apiService.createProduct({
-                        name: newItemName.trim(),
-                        brand: newItemBrand !== "NO_BRAND" ? newItemBrand : undefined,
-                        category: newItemCategory.trim(),
-                        description: newItemDescription.trim() || undefined,
-                        unit: newItemUnit,
-                    });
-                    productId = newProduct.id || newProduct._id;
+                    // TODO: Implement createProduct when API is ready
+                    console.log('Product creation not implemented yet');
+                    productId = `temp-product-${Date.now()}`;
                 }
 
                 await apiService.createShoppingListItem(profile.familyId, listId, {
@@ -549,8 +546,8 @@ export function ShoppingListComponent() {
                 console.error("Error adding item:", error);
                 toast({
                     variant: "destructive",
-                    title: t`Error`,
-                    description: t`Could not add item to shopping list`,
+                    title: t('Error') ,
+                    description: t('Could not add item to shopping list') ,
                 });
             }
         }
@@ -573,8 +570,8 @@ export function ShoppingListComponent() {
             console.error("Error toggling item:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not update item`,
+                title: t('Error') ,
+                description: t('Could not update item') ,
             });
         }
     };
@@ -594,8 +591,8 @@ export function ShoppingListComponent() {
             console.error("Error deleting item:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not delete item`,
+                title: t('Error') ,
+                description: t('Could not delete item') ,
             });
         }
     };
@@ -647,15 +644,15 @@ export function ShoppingListComponent() {
             handleCancelEdit();
             
             toast({
-                title: t`Item updated`,
-                description: t`Shopping list item has been updated.`,
+                title: t('Item updated') ,
+                description: t('Shopping list item has been updated') ,
             });
         } catch (error) {
             console.error("Error updating item:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not update item`,
+                title: t('Error') ,
+                description: t('Could not update item') ,
             });
         }
     };
@@ -709,7 +706,7 @@ export function ShoppingListComponent() {
             if (result.error) {
                 toast({
                     variant: "destructive",
-                    title: t`Error getting suggestions`,
+                    title: t('Error getting suggestions') ,
                     description: result.error,
                 });
             } else {
@@ -719,8 +716,8 @@ export function ShoppingListComponent() {
             console.error("Error getting suggestions:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not get AI suggestions`,
+                title: t('Error') ,
+                description: t('Could not get AI suggestions') ,
             });
         } finally {
             setIsLoadingSuggestions(false);
@@ -750,8 +747,8 @@ export function ShoppingListComponent() {
         } catch (error) {
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`Could not add suggested item`,
+                title: t('Error') ,
+                description: t('Could not add suggested item') ,
             });
         }
     };
@@ -767,7 +764,7 @@ export function ShoppingListComponent() {
                         <LoadingIndicator
                             size="lg"
                             showLabel={true}
-                            label={viewMode === 'lists' ? t`Loading shopping lists...` : t`Loading shopping list...`}
+                            label={viewMode === 'lists' ? t('Loading shopping lists')  : t('Loading shopping list') }
                             labelPosition="bottom"
                         />
                     </div>
@@ -781,7 +778,7 @@ export function ShoppingListComponent() {
         return (
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold">{t`Shopping Lists`}</h2>
+                    <h2 className="text-2xl font-bold">{t('Shopping Lists') }</h2>
                     {shoppingLists.length === 0 && (
                         <Button
                             onClick={createListWithAI}
@@ -794,7 +791,7 @@ export function ShoppingListComponent() {
                             ) : (
                                 <FontAwesomeIcon icon={faWandMagicSparkles} className="h-4 w-4" />
                             )}
-                            {isCreatingWithAI ? t`Creating list...` : t`Create List with AI`}
+                            {isCreatingWithAI ? t('Creating list')  : t('Create list with AI') }
                         </Button>
                     )}
                 </div>
@@ -804,9 +801,9 @@ export function ShoppingListComponent() {
                         <CardContent className="p-8 text-center">
                             <div className="max-w-md mx-auto">
                                 <FontAwesomeIcon icon={faWandMagicSparkles} className="h-12 w-12 text-primary mb-4" />
-                                <h3 className="text-lg font-semibold mb-2">{t`No shopping lists yet`}</h3>
+                                <h3 className="text-lg font-semibold mb-2">{t('No shopping lists yet') }</h3>
                                 <p className="text-muted-foreground mb-6">
-                                    {t`Create your first shopping list with AI suggestions based on your purchase history.`}
+                                    {t('Create your first shopping list with AI suggestions based on your purchase history') }
                                 </p>
                                 <Button
                                     onClick={createListWithAI}
@@ -820,7 +817,7 @@ export function ShoppingListComponent() {
                                     ) : (
                                         <FontAwesomeIcon icon={faWandMagicSparkles} className="h-4 w-4" />
                                     )}
-                                    {isCreatingWithAI ? t`Creating list...` : t`Create List with AI`}
+                                    {isCreatingWithAI ? t('Creating list')  : t('Create list with AI') }
                                 </Button>
                             </div>
                         </CardContent>
@@ -835,16 +832,16 @@ export function ShoppingListComponent() {
                                 alignment="fill"
                             >
                                 <TabsTrigger value="active" className="text-green-700">
-                                    {t`Active`} ({shoppingLists.filter(list => list.status === 'active').length})
+                                    {t('Active') } ({shoppingLists.filter(list => list.status === 'active').length})
                                 </TabsTrigger>
                                 <TabsTrigger value="created" className="text-blue-700">
-                                    {t`Created`} ({shoppingLists.filter(list => list.status === 'created').length})
+                                    {t('Created') } ({shoppingLists.filter(list => list.status === 'created').length})
                                 </TabsTrigger>
                                 <TabsTrigger value="completed" className="text-gray-600">
-                                    {t`Completed`} ({shoppingLists.filter(list => list.status === 'completed').length})
+                                    {t('Completed') } ({shoppingLists.filter(list => list.status === 'completed').length})
                                 </TabsTrigger>
                                 <TabsTrigger value="archived" className="text-gray-500">
-                                    {t`Archived`} ({shoppingLists.filter(list => list.status === 'archived').length})
+                                    {t('Archived') } ({shoppingLists.filter(list => list.status === 'archived').length})
                                 </TabsTrigger>
                             </TabsList>
 
@@ -861,7 +858,7 @@ export function ShoppingListComponent() {
                                             />
                                         ))
                                     ) : (
-                                        <p className="text-center text-muted-foreground py-8">{t`No active lists yet`}</p>
+                                        <p className="text-center text-muted-foreground py-8">{t('No active lists yet') }</p>
                                     )}
                                 </div>
                             </TabsContent>
@@ -879,7 +876,7 @@ export function ShoppingListComponent() {
                                             />
                                         ))
                                     ) : (
-                                        <p className="text-center text-muted-foreground py-8">{t`No created lists yet`}</p>
+                                        <p className="text-center text-muted-foreground py-8">{t('No created lists yet') }</p>
                                     )}
                                 </div>
                             </TabsContent>
@@ -897,7 +894,7 @@ export function ShoppingListComponent() {
                                             />
                                         ))
                                     ) : (
-                                        <p className="text-center text-muted-foreground py-8">{t`No completed lists yet`}</p>
+                                        <p className="text-center text-muted-foreground py-8">{t('No completed lists yet') }</p>
                                     )}
                                 </div>
                             </TabsContent>
@@ -915,7 +912,7 @@ export function ShoppingListComponent() {
                                             />
                                         ))
                                     ) : (
-                                        <p className="text-center text-muted-foreground py-8">{t`No archived lists yet`}</p>
+                                        <p className="text-center text-muted-foreground py-8">{t('No archived lists yet') }</p>
                                     )}
                                 </div>
                             </TabsContent>
@@ -938,7 +935,7 @@ export function ShoppingListComponent() {
                         className="gap-2"
                     >
                         <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
-                        {t`Back to Lists`}
+                        {t('Back to lists') }
                     </Button>
                     <div className="flex-1">
                         <h2 className="text-2xl font-bold">{selectedList?.name}</h2>
@@ -955,7 +952,7 @@ export function ShoppingListComponent() {
                         ) : (
                             <FontAwesomeIcon icon={faWandMagicSparkles} className="h-4 w-4" />
                         )}
-                        {isLoadingSuggestions ? t`Getting suggestions...` : t`AI Suggestions`}
+                        {isLoadingSuggestions ? t('Getting suggestions')  : t('AI suggestions') }
                     </Button>
                 </div>
 
@@ -964,7 +961,7 @@ export function ShoppingListComponent() {
                         <CardHeader className="pb-3">
                             <CardTitle className="flex items-center gap-2 text-on-primary-container">
                                 <FontAwesomeIcon icon={faWandMagicSparkles} className="h-4 w-4 text-primary" />
-                                {t`AI Suggestions`}
+                                {t('AI suggestions') }
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -989,7 +986,7 @@ export function ShoppingListComponent() {
                     {/* Item Name - Full width with autocomplete */}
                     <div className="relative">
                         <Input
-                            placeholder={t`Item name`}
+                            placeholder={t('Item name') }
                             value={newItemName}
                             onChange={(e) => handleProductNameChange(e.target.value)}
                             onKeyDown={handleKeyDown}
@@ -1021,10 +1018,10 @@ export function ShoppingListComponent() {
                         <div className="col-span-3">
                             <Select value={newItemBrand} onValueChange={setNewItemBrand}>
                                 <SelectTrigger borderRadius="0.75rem" height="50px">
-                                    <SelectValue placeholder={t`Brand (optional)`} />
+                                    <SelectValue placeholder={t('Brand (optional)') } />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="NO_BRAND">{t`No brand`}</SelectItem>
+                                    <SelectItem value="NO_BRAND">{t('No brand') }</SelectItem>
                                     {availableBrands.map((brand) => (
                                         <SelectItem key={brand} value={brand}>
                                             {brand}
@@ -1037,7 +1034,7 @@ export function ShoppingListComponent() {
                             <div className="col-span-3">
                                 <Select value={newItemCategory} onValueChange={setNewItemCategory}>
                                     <SelectTrigger borderRadius="0.75rem" height="50px">
-                                        <SelectValue placeholder={t`Category`} />
+                                        <SelectValue placeholder={t('Category') } />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {availableCategories.map((category) => (
@@ -1055,16 +1052,16 @@ export function ShoppingListComponent() {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="UN">{t`Unit`}</SelectItem>
-                                    <SelectItem value="KG">{t`Kg`}</SelectItem>
-                                    <SelectItem value="L">{t`L`}</SelectItem>
+                                    <SelectItem value="UN">{t('Unit') }</SelectItem>
+                                    <SelectItem value="KG">{t('Kg') }</SelectItem>
+                                    <SelectItem value="L">{t('L') }</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="col-span-2">
                             <Input
                                 type="number"
-                                placeholder={t`Qty`}
+                                placeholder={t('Qty') }
                                 value={newItemQty}
                                 onChange={(e) => setNewItemQty(e.target.value)}
                                 min="1"
@@ -1098,7 +1095,7 @@ export function ShoppingListComponent() {
                     {!selectedProduct && newItemCategory && (
                         <div>
                             <Input
-                                placeholder={t`Description (optional)`}
+                                placeholder={t('Description (optional)') }
                                 value={newItemDescription}
                                 onChange={(e) => setNewItemDescription(e.target.value)}
                                 className="rounded-xl"
@@ -1113,7 +1110,7 @@ export function ShoppingListComponent() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center justify-between">
-                                <span>{t`To Buy`}</span>
+                                <span>{t('To buy') }</span>
                                 <Chip variant="assist" size="small" className="bg-primary text-on-primary">
                                     {pendingItems.length}
                                 </Chip>
@@ -1172,7 +1169,7 @@ export function ShoppingListComponent() {
                     <>
                         <Separator />
                         <div>
-                            <h3 className="text-lg font-semibold mb-3">{t`Completed`} ({completedItems.length})</h3>
+                            <h3 className="text-lg font-semibold mb-3">{t('Completed') } ({completedItems.length})</h3>
                             <div className="space-y-2">
                                 {completedItems.map((item) => (
                                     <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg opacity-60">
@@ -1202,9 +1199,9 @@ export function ShoppingListComponent() {
 
                 {items.length === 0 && (
                     <div className="text-center py-8">
-                        <p className="text-muted-foreground">{t`No items in your shopping list yet.`}</p>
+                        <p className="text-muted-foreground">{t('No items in your shopping list yet') }</p>
                         <p className="text-sm text-muted-foreground mt-1">
-                            {t`Add items above or use AI suggestions to get started.`}
+                            {t('Add items above or use AI suggestions to get started') }
                         </p>
                     </div>
                 )}

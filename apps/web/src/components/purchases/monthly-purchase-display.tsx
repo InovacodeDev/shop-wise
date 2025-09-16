@@ -1,28 +1,26 @@
-import React, { useState, useEffect, useMemo, useCallback, memo } from "react";
+import { Button } from "@/components/md3/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Skeleton } from "@/components/ui/skeleton";
-import { EmptyState } from "@/components/ui/empty-state";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/md3/button";
-import { useLingui, Plural } from '@lingui/react/macro';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "@/hooks/use-toast";
+import { getCurrencyFromLocale } from "@/lib/localeCurrency";
+import { materialSpacing } from "@/lib/material-design";
+import { getPurchasesByMonth } from "@/services/purchaseApiService";
+import type { MonthlyPurchaseGroup, Purchase } from "@/types/api";
 import {
     faCalendar,
-    faStore,
-    faShoppingCart,
     faDollarSign,
     faExclamationTriangle,
     faRefresh,
-    faChevronDown,
-    faChevronUp,
+    faShoppingCart,
+    faStore
 } from "@fortawesome/free-solid-svg-icons";
-import { useAuth } from "@/hooks/use-auth";
-import { toast } from "@/hooks/use-toast";
-import { getPurchasesByMonth } from "@/services/purchaseApiService";
-import type { MonthlyPurchaseGroup, Purchase } from "@/types/api";
-import { getCurrencyFromLocale } from "@/lib/localeCurrency";
-import { materialSpacing } from "@/lib/material-design";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { memo, useEffect, useMemo, useState } from "react";
+import { useI18n } from "../../hooks/useI18n";
 
 interface MonthlyPurchaseDisplayProps {
     /** Optional family ID override - if not provided, uses current user's family */
@@ -41,7 +39,7 @@ export function MonthlyPurchaseDisplay({
     onDataLoaded,
     onError,
 }: MonthlyPurchaseDisplayProps) {
-    const { i18n, t } = useLingui();
+    const { i18n, locale, t } = useI18n();
     const { profile } = useAuth();
     const [monthlyGroups, setMonthlyGroups] = useState<MonthlyPurchaseGroup[]>([]);
     const [loading, setLoading] = useState(true);
@@ -61,7 +59,7 @@ export function MonthlyPurchaseDisplay({
 
     const fetchMonthlyPurchases = async (showLoadingState = true, isRetryAttempt = false) => {
         if (!familyId) {
-            setError(t`Family ID is required to load purchases.`);
+            setError(t('Family ID is required to load purchases.'));
             setLoading(false);
             return;
         }
@@ -86,15 +84,15 @@ export function MonthlyPurchaseDisplay({
             }
         } catch (err) {
             const error = err as any;
-            let errorMessage = error.message || t`Failed to load purchase history.`;
+            let errorMessage = error.message || t('Failed to load purchase history.');
 
             // Handle specific error cases
             if (error.status === 401 || error.status === 403) {
-                errorMessage = t`Please log in again to access your purchase history.`;
+                errorMessage = t('Please log in again to access your purchase history.');
             } else if (error.status === 404) {
-                errorMessage = t`Family not found. Please check your account settings.`;
+                errorMessage = t('Family not found. Please check your account settings.');
             } else if (error.message?.includes('Network connection failed')) {
-                errorMessage = t`No internet connection. Please check your network and try again.`;
+                errorMessage = t('No internet connection. Please check your network and try again.');
             }
 
             setError(errorMessage);
@@ -110,7 +108,7 @@ export function MonthlyPurchaseDisplay({
                     if (flatPurchases.length > 0) {
                         const fallbackGroup: MonthlyPurchaseGroup = {
                             monthYear: 'fallback',
-                            displayName: t`All Purchases (Fallback Mode)`,
+                            displayName: t('All Purchases (Fallback Mode)'),
                             totalAmount: flatPurchases.reduce((sum, p) => sum + (p.totalAmount || 0), 0),
                             purchaseCount: flatPurchases.length,
                             purchases: flatPurchases.sort((a, b) =>
@@ -123,8 +121,8 @@ export function MonthlyPurchaseDisplay({
                         setError(null);
 
                         toast({
-                            title: t`Fallback Mode Active`,
-                            description: t`Monthly grouping is temporarily unavailable. Showing all purchases in a single list.`,
+                            title: t('Fallback Mode Active'),
+                            description: t('Monthly grouping is temporarily unavailable. Showing all purchases in a single list.'),
                             variant: "default",
                         });
 
@@ -209,18 +207,18 @@ export function MonthlyPurchaseDisplay({
                                         icon={faRefresh}
                                         className={`h-4 w-4 mr-2 ${isRetrying ? 'animate-spin' : ''}`}
                                     />
-                                    {isRetrying ? t`Retrying...` : t`Retry`}
+                                    {isRetrying ? t('Retrying...') : t('Retry')}
                                 </Button>
                             </div>
                             {retryCount > 0 && (
                                 <div className="text-sm text-muted-foreground">
-                                    {t`Retry attempt: ${retryCount}`}
+                                    {t('Retry attempt: {{retryCount}}', { retryCount })}
                                 </div>
                             )}
                             {fallbackMode && (
                                 <div className="text-sm text-blue-600">
                                     <FontAwesomeIcon icon={faExclamationTriangle} className="h-3 w-3 mr-1" />
-                                    {t`Running in fallback mode - some features may be limited`}
+                                    {t('Running in fallback mode. Some features may be limited.')}
                                 </div>
                             )}
                         </AlertDescription>
@@ -236,8 +234,8 @@ export function MonthlyPurchaseDisplay({
                 <CardContent className="pt-6">
                     <EmptyState
                         icon={faShoppingCart}
-                        title={t`No Purchases Found`}
-                        description={t`Start adding purchases to see your monthly spending history here.`}
+                        title={t('No Purchases Found')}
+                        description={t('Start adding purchases to see your monthly spending history here.')}
                     />
                 </CardContent>
             </Card>
@@ -256,7 +254,7 @@ export function MonthlyPurchaseDisplay({
                         <Alert>
                             <FontAwesomeIcon icon={faExclamationTriangle} className="h-4 w-4" />
                             <AlertDescription>
-                                {t`Monthly grouping is temporarily unavailable. Showing all purchases in a single list.`}
+                                {t('Monthly grouping is temporarily unavailable. Showing all purchases in a single list.')}
                             </AlertDescription>
                         </Alert>
                     </CardContent>
@@ -268,29 +266,24 @@ export function MonthlyPurchaseDisplay({
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2">
                         <FontAwesomeIcon icon={faCalendar} className="w-5 h-5 text-primary" />
-                        {t`Purchase History Summary`}
+                        {t('Purchase History Summary')}
                     </CardTitle>
                     <CardDescription>
                         <div className="flex flex-col sm:flex-row gap-4 mt-2">
                             <div className="flex items-center gap-2">
                                 <FontAwesomeIcon icon={faShoppingCart} className="w-4 h-4 text-muted-foreground" />
-                                <Plural
-                                    value={totalStats.totalPurchases}
-                                    one="# purchase"
-                                    other="# purchases"
-                                />
+                                <span>{t('#{{count}} purchases', { count: totalStats.totalPurchases })}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <FontAwesomeIcon icon={faDollarSign} className="w-4 h-4 text-muted-foreground" />
                                 <span>
-                                    {t`Total: ${i18n.number(
-                                        totalStats.totalAmount,
-                                        {
+                                    {t('Total: {{amount}}', {
+                                        amount: Intl.NumberFormat(locale, {
                                             style: 'currency',
                                             currencySign: 'accounting',
-                                            currency: getCurrencyFromLocale(i18n.locale),
-                                        }
-                                    )}`}
+                                            currency: getCurrencyFromLocale(locale),
+                                        }).format(totalStats.totalAmount),
+                                    })}
                                 </span>
                             </div>
                         </div>
@@ -320,24 +313,17 @@ export function MonthlyPurchaseDisplay({
                                                     {group.displayName}
                                                 </div>
                                                 <div className="text-sm text-muted-foreground">
-                                                    <Plural
-                                                        value={group.purchaseCount}
-                                                        one="# purchase"
-                                                        other="# purchases"
-                                                    />
+                                                    <span>{t('#{{count}} purchases', { count: group.purchaseCount })}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 font-bold text-lg">
                                             <span>
-                                                {i18n.number(
-                                                    group.totalAmount,
-                                                    {
+                                                {Intl.NumberFormat(locale, {
                                                         style: 'currency',
                                                         currencySign: 'accounting',
-                                                        currency: getCurrencyFromLocale(i18n.locale),
-                                                    }
-                                                )}
+                                                        currency: getCurrencyFromLocale(locale),
+                                                    }).format(group.totalAmount)}
                                             </span>
                                         </div>
                                     </div>
@@ -375,7 +361,7 @@ interface PurchaseCardProps {
 }
 
 const PurchaseCard = memo(function PurchaseCard({ purchase, onClick }: PurchaseCardProps) {
-    const { i18n, t } = useLingui();
+    const { i18n, t, locale } = useI18n();
 
     const purchaseDate = useMemo(() => new Date(purchase.date), [purchase.date]);
     const itemCount = useMemo(() => purchase.items?.length || 0, [purchase.items?.length]);
@@ -415,19 +401,16 @@ const PurchaseCard = memo(function PurchaseCard({ purchase, onClick }: PurchaseC
                         {itemCount > 0 && (
                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                 <FontAwesomeIcon icon={faShoppingCart} className="w-3 h-3" />
-                                <Plural value={itemCount} one="# item" other="# items" />
+                                <span>{t('{{count}} items', { count: itemCount })}</span>
                             </div>
                         )}
                         <div className="flex items-center gap-1 font-semibold">
                             <span>
-                                {i18n.number(
-                                    purchase.totalAmount,
-                                    {
+                                {Intl.NumberFormat(locale, {
                                         style: 'currency',
                                         currencySign: 'accounting',
-                                        currency: getCurrencyFromLocale(i18n.locale),
-                                    }
-                                )}
+                                        currency: getCurrencyFromLocale(locale),
+                                    }).format(purchase.totalAmount)}
                             </span>
                         </div>
                     </div>
@@ -438,8 +421,6 @@ const PurchaseCard = memo(function PurchaseCard({ purchase, onClick }: PurchaseC
 });
 
 function MonthlyPurchaseDisplaySkeleton() {
-    const { t } = useLingui();
-
     return (
         <div
             className="flex flex-col"

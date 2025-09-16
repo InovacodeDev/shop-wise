@@ -1,35 +1,34 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "globalDependencies": [
-        ".env"
-    ],
+    "globalDependencies": [".env", "locales/**/*.json"],
     "tasks": {
         "build": {
-            "dependsOn": [
-                "^build"
-            ],
-            "outputs": [
-                "dist/**",
-                "build/**"
-            ]
+            "dependsOn": ["^build"],
+            "outputs": ["dist/**", "build/**"],
+            "inputs": ["src/**", "locales/**/*.json", "public/**"]
         },
         "dev": {
             "cache": false,
             "persistent": true
         },
         "start": {
-            "dependsOn": [
-                "build"
-            ]
+            "dependsOn": ["build"]
         },
         "lint": {},
         "test": {
-            "dependsOn": [
-                "^build"
-            ]
+            "dependsOn": ["^build"]
         },
         "clean": {
             "cache": false
+        },
+        "i18n:validate": {
+            "cache": false,
+            "inputs": ["locales/**/*.json", "src/**/*.{ts,tsx}"]
+        },
+        "i18n:extract": {
+            "cache": false,
+            "outputs": ["locales/**/*.json"],
+            "inputs": ["src/**/*.{ts,tsx}"]
         }
     }
 }

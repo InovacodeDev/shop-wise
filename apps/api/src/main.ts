@@ -4,10 +4,12 @@ import fastifyHelmet from '@fastify/helmet';
 import fastifyRateLimit from '@fastify/rate-limit';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 import fastify from 'fastify';
+import { I18nService } from 'nestjs-i18n';
 
 import { AppModule } from './app.module';
+import { I18nResponseInterceptor } from './common/i18n-response.interceptor';
 import { RequestLoggerInterceptor } from './common/interceptors/request-logger.interceptor';
 
 async function bootstrap() {
@@ -45,7 +47,8 @@ async function bootstrap() {
     // Create Nest app using Fastify adapter
     // Cast the fastify instance to any to avoid a TypeScript-level server/generic mismatch
     const adapter = new FastifyAdapter(fastifyInstance as unknown as any);
-    const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter);
+
+    const app = await NestFactory.create(AppModule, adapter as any);
 
     // Body parsing and URL-encoded handling are built-in to Fastify/Nest
     // Enable CORS (restrictive by default). Configure allowed origins via CORS_ORIGINS env var.
@@ -110,6 +113,10 @@ async function bootstrap() {
 
     // Register request logger interceptor globally to log controller.handler, method, path, body and headers
     app.useGlobalInterceptors(new RequestLoggerInterceptor());
+
+    // Register i18n response interceptor for API internationalization
+    const i18nService = app.get(I18nService);
+    app.useGlobalInterceptors(new I18nResponseInterceptor(i18nService));
 
     // Register Helmet for a safe set of security headers.
     // Enable a conservative Content Security Policy (CSP) by default. This CSP is intentionally

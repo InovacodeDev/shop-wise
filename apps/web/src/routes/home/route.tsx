@@ -1,13 +1,30 @@
-import { useState, useEffect, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/md3/card";
-import { useLingui } from '@lingui/react/macro';
-import { getCurrencyFromLocale } from '@/lib/localeCurrency';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
+import { Chip } from "@/components/md3/chip";
 import {
     ChartContainer,
-    ChartTooltip,
     ChartLegend,
     ChartLegendContent,
+    ChartTooltip,
 } from "@/components/ui/chart";
+import { useAuth } from "@/hooks/use-auth";
+import { useI18n } from '@/hooks/useI18n';
+import { getCurrencyFromLocale } from '@/lib/localeCurrency';
+import { cn } from "@/lib/utils";
+import {
+    faArrowDown,
+    faArrowTrendUp,
+    faArrowUp,
+    faBarcode,
+    faChartSimple,
+    faCopyright,
+    faDollarSign,
+    faHashtag,
+    faScaleBalanced,
+    faShoppingBag,
+    faTag,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useMemo, useState } from "react";
 import {
     Bar,
     BarChart as RechartsBarChart,
@@ -15,36 +32,19 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import { Chip } from "@/components/md3/chip";
-import { cn } from "@/lib/utils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faChartSimple,
-    faDollarSign,
-    faShoppingBag,
-    faArrowTrendUp,
-    faTag,
-    faScaleBalanced,
-    faHashtag,
-    faBarcode,
-    faArrowDown,
-    faArrowUp,
-    faCopyright,
-} from "@fortawesome/free-solid-svg-icons";
-import { useAuth } from "@/hooks/use-auth";
 
-import { EmptyState } from "@/components/ui/empty-state";
 import { InsightModal } from "@/components/dashboard/insight-modal";
 import PriceComparisonModal from "@/components/dashboard/price-comparison-modal";
-import { analyzeConsumptionData } from "./actions";
-import { Skeleton } from "@/components/ui/skeleton";
-import { apiService } from "@/services/api";
-import { subMonths, startOfMonth, endOfMonth, format, Locale } from "date-fns";
-import { ptBR, enUS } from "date-fns/locale";
-import { createFileRoute } from "@tanstack/react-router";
 import { SideBarLayout } from '@/components/layout/sidebar-layout';
+import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { trackEvent } from "@/services/analytics-service";
+import { apiService } from "@/services/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { endOfMonth, format, Locale, startOfMonth, subMonths } from "date-fns";
+import { enUS, ptBR } from "date-fns/locale";
+import { analyzeConsumptionData } from "./actions";
 
 // currency util centralized in src/lib/localeCurrency.ts
 
@@ -95,7 +95,8 @@ const getCategoryKey = (categoryName: string | undefined) => {
 };
 
 const ComparisonBadge = ({ value }: { value: number | null }) => {
-    const { i18n, t } = useLingui();
+    const { t, locale } = useI18n();
+
     if (value === null) {
         return <div className="h-4 w-16 bg-muted rounded-md animate-pulse" />;
     }
@@ -108,7 +109,7 @@ const ComparisonBadge = ({ value }: { value: number | null }) => {
             <FontAwesomeIcon icon={icon} className="h-3 w-3" />
             <span>
                 {isPositive ? "+" : ""}
-                {i18n.number(value, { maximumFractionDigits: 1, style: 'percent' })} {t`vs last month`}
+                {new Intl.NumberFormat(locale, { maximumFractionDigits: 1, style: "percent" }).format(value)} {t('vs last month') }
             </span>
         </p>
     );
@@ -118,8 +119,8 @@ export const Route = createFileRoute("/home")({
     component: DashboardPage,
 });
 
-function DashboardPage() {
-    const { i18n, t } = useLingui();
+function DashboardPage() {    
+    const { t, locale } = useI18n();
     const { profile } = useAuth();
     const { toast } = useToast();
     const [loading, setLoading] = useState(true);
@@ -158,50 +159,50 @@ function DashboardPage() {
 
     const chartConfig = useMemo<any>(
         () => ({
-            total: { label: t`Total` },
+            total: { label: t('Total')  },
             produce_and_eggs: {
-                label: t`Produce and Eggs`,
+                label: t('Produce and Eggs') ,
                 color: "hsl(var(--color-category-produce-and-eggs))",
             },
             meat_and_seafood: {
-                label: t`Meat and Seafood`,
+                label: t('Meat and Seafood') ,
                 color: "hsl(var(--color-category-meat-and-seafood))",
             },
             bakery_and_deli: {
-                label: t`Bakery and Deli`,
+                label: t('Bakery and Deli') ,
                 color: "hsl(var(--color-category-bakery-and-deli))",
             },
             dairy_and_chilled: {
-                label: t`Dairy and Chilled`,
+                label: t('Dairy and Chilled') ,
                 color: "hsl(var(--color-category-dairy-and-chilled))",
             },
             pantry_and_dry_goods: {
-                label: t`Pnatry and Dry goods`,
+                label: t('Pantry and Dry Goods') ,
                 color: "hsl(var(--color-category-pantry-and-dry-goods))",
             },
             breakfast_and_snacks: {
-                label: t`Breakfast and Snacks`,
+                label: t('Breakfast and Snacks') ,
                 color: "hsl(var(--color-category-breakfast-and-snacks))",
             },
-            frozen_foods: { label: t`Frozen foods`, color: "hsl(var(--color-category-frozen-foods))" },
-            beverages: { label: t`Beverages`, color: "hsl(var(--color-category-beverages))" },
+            frozen_foods: { label: t('Frozen Foods') , color: "hsl(var(--color-category-frozen-foods))" },
+            beverages: { label: t('Beverages') , color: "hsl(var(--color-category-beverages))" },
             cleaning_and_household: {
-                label: t`Cleaning and household`,
+                label: t('Cleaning and Household') ,
                 color: "hsl(var(--color-category-cleaning-and-household))",
             },
-            personal_care: { label: t`Personal care`, color: "hsl(var(--color-category-personal-care))" },
+            personal_care: { label: t('Personal Care') , color: "hsl(var(--color-category-personal-care))" },
             baby_and_child_care: {
-                label: t`Baby and Child care`,
+                label: t('Baby and Child Care') ,
                 color: "hsl(var(--color-category-baby-and-child-care))",
             },
-            pet_supplies: { label: t`Pet supplies`, color: "hsl(var(--color-category-pet-supplies))" },
+            pet_supplies: { label: t('Pet Supplies') , color: "hsl(var(--color-category-pet-supplies))" },
             home_and_general: {
-                label: t`Home and General`,
+                label: t('Home and General') ,
                 color: "hsl(var(--color-category-home-and-general))",
             },
-            pharmacy: { label: t`Pharmacy`, color: "hsl(var(--color-category-pharmacy))" },
-            others: { label: t`Others`, color: "hsl(var(--muted))" },
-            value: { label: t`Spending` },
+            pharmacy: { label: t('Pharmacy') , color: "hsl(var(--color-category-pharmacy))" },
+            others: { label: t('Others') , color: "hsl(var(--muted))" },
+            value: { label: t('Spending')  },
         }),
         [t]
     );
@@ -216,10 +217,10 @@ function DashboardPage() {
             setLoading(true);
 
             const now = new Date();
-            const locale = dateLocales[i18n.locale] || ptBR;
+            const dateLocale = dateLocales[locale] || ptBR;
 
             // Set current month name for display
-            setCurrentMonthName(format(now, "MMMM yyyy", { locale }));
+            setCurrentMonthName(format(now, "MMMM yyyy", { locale: dateLocale }));
 
             // 1. Fetch all family purchase items data using the optimized endpoint
             let allFamilyPurchaseItems: any = {};
@@ -354,13 +355,13 @@ function DashboardPage() {
 
             // -- Process Bar Chart data: Current month + Last 5 months (6 months total) --
             const monthlyData: { [key: string]: any } = {};
-            const currentMonthKey = format(now, "MMM/yy", { locale });
+            const currentMonthKey = format(now, "MMM/yy", { locale: dateLocale });
 
             // Generate 6 months: current month + last 5 months
             const targetMonths: Array<{ date: Date; monthKey: string; monthYear: string; isCurrentMonth: boolean }> = [];
             for (let i = 5; i >= 0; i--) {
                 const date = subMonths(now, i);
-                const monthKey = format(date, "MMM/yy", { locale });
+                const monthKey = format(date, "MMM/yy", { locale: dateLocale });
                 const monthYear = format(date, "yyyy-MM");
                 const isCurrentMonth = i === 0;
                 targetMonths.push({ date, monthKey, monthYear, isCurrentMonth });
@@ -377,7 +378,7 @@ function DashboardPage() {
                     totalAmount: groupData?.totalAmount || 0,
                     purchaseCount: groupData?.purchaseCount || 0,
                     isCurrentMonth: isCurrentMonth,
-                    displayName: isCurrentMonth ? `${monthKey} (${t`Current`})` : monthKey,
+                    displayName: isCurrentMonth ? `${monthKey} (${t('Current') })` : monthKey,
                     ...Object.fromEntries(
                         Object.keys(chartConfig)
                             .filter((k) => !["total", "value"].includes(k))
@@ -389,7 +390,7 @@ function DashboardPage() {
             // Populate category spending data for each month using items
             // but keep the total amount from monthlyGroups to avoid discrepancies
             allItems.forEach((item) => {
-                const monthKey = format(item.purchaseDate, "MMM/yy", { locale });
+                const monthKey = format(item.purchaseDate, "MMM/yy", { locale: dateLocale });
                 if (monthlyData[monthKey]) {
                     const categoryKey = getCategoryKey(item.category);
                     monthlyData[monthKey][categoryKey] = (monthlyData[monthKey][categoryKey] || 0) + item.totalPrice;
@@ -568,7 +569,7 @@ function DashboardPage() {
             setLoading(false);
         }
         fetchData();
-    }, [profile, i18n.locale, chartConfig]);
+    }, [profile, locale, chartConfig]);
 
     useEffect(() => {
         const translatedData = spendingByCategory.map((item) => ({
@@ -576,7 +577,7 @@ function DashboardPage() {
             name: chartConfig[item.name as keyof typeof chartConfig]?.label || item.name,
         }));
         setTranslatedSpendingByCategory(translatedData);
-    }, [spendingByCategory, chartConfig, i18n.locale]);
+    }, [spendingByCategory, chartConfig, locale]);
 
     const handleConsumptionAnalysis = async () => {
         if (consumptionAnalysis || profile?.plan !== "premium" || barChartData.length === 0) return;
@@ -621,7 +622,7 @@ function DashboardPage() {
 
             const result = await analyzeConsumptionData({
                 consumptionData: JSON.stringify(analysisPayload),
-                language: i18n.locale,
+                language: locale,
             });
 
             if (result.error) {
@@ -633,8 +634,8 @@ function DashboardPage() {
             console.error("Error fetching consumption analysis:", error);
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: error.message || t`Error fetching consumption analysis.`,
+                title: t('Error') ,
+                description: error.message || t('Error fetching consumption analysis') ,
             });
         } finally {
             setIsAnalysisLoading(false);
@@ -642,7 +643,7 @@ function DashboardPage() {
     };
 
     const topCategory = useMemo(() => {
-        if (translatedSpendingByCategory.length === 0) return { name: t`Others`, value: 0 };
+        if (translatedSpendingByCategory.length === 0) return { name: t('Others') , value: 0 };
         return translatedSpendingByCategory.reduce((prev, current) => (prev.value > current.value ? prev : current));
     }, [translatedSpendingByCategory, t]);
 
@@ -706,8 +707,8 @@ function DashboardPage() {
                 <div className="space-y-6">
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                         <InsightModal
-                            title={t`Monthly Spending by Store - ${currentMonthName}`}
-                            description={t`A breakdown of your total spending for ${currentMonthName} by store.`}
+                            title={t('Monthly Spending by Store ({{currentMonthName}})', { currentMonthName: currentMonthName }) }
+                            description={t('A breakdown of your total spending for {{currentMonthName}} by store.', { currentMonthName: currentMonthName }) }
                             data={monthlySpendingByStore}
                             type="spendingByStore"
                         >
@@ -717,33 +718,28 @@ function DashboardPage() {
                             >
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
-                                        {t`Total Spending`}
+                                        {t('Total Spending') }
                                     </CardTitle>
                                     <FontAwesomeIcon icon={faDollarSign} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">
-                                        {i18n.number(
-                                            totalSpentMonth ?? 0,
-                                            {
-                                                style: 'currency',
+                                        {new Intl.NumberFormat(locale, { style: 'currency',
                                                 currencySign: 'accounting',
-                                                currency: getCurrencyFromLocale(i18n.locale),
-                                            }
-                                        )}
+                                                currency: getCurrencyFromLocale(locale),
+                                             }).format(totalSpentMonth ?? 0)}
                                     </div>
                                     <div className="text-xs text-muted-foreground mb-1">{currentMonthName}</div>
                                     <ComparisonBadge value={totalSpentChange} />
                                     {historicalInsights && (
                                         <p className="text-xs text-muted-foreground mt-1">
-                                            {t`Avg: ${i18n.number(
-                                                historicalInsights.avgMonthlySpending,
-                                                {
-                                                    style: 'currency',
-                                                    currencySign: 'accounting',
-                                                    currency: getCurrencyFromLocale(i18n.locale),
-                                                }
-                                            )}/month`}
+                                            {t('Avg: {{amount}}/month', {
+                                                amount: new Intl.NumberFormat(locale, {
+                                                        style: 'currency',
+                                                        currencySign: 'accounting',
+                                                        currency: getCurrencyFromLocale(locale),
+                                                    }).format(historicalInsights?.avgMonthlySpending || 0)
+                                            }) }
                                         </p>
                                     )}
                                 </CardContent>
@@ -751,8 +747,8 @@ function DashboardPage() {
                         </InsightModal>
 
                         <InsightModal
-                            title={t`Recently Purchased Items - ${currentMonthName}`}
-                            description={t`A list of the most recent items you purchased in ${currentMonthName}.`}
+                            title={t('Recently Purchased Items ({{currentMonthName}})', { currentMonthName: currentMonthName }) }
+                            description={t('A list of the most recent items you purchased in {{currentMonthName}}.', { currentMonthName: currentMonthName }) }
                             data={recentItems}
                             type="recentItems"
                         >
@@ -761,21 +757,18 @@ function DashboardPage() {
                                 className="transition-all duration-300 ease-in-out"
                             >
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">{t`Items Purchased`}</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t('Items Purchased')}</CardTitle>
                                     <FontAwesomeIcon icon={faShoppingBag} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">
-                                        {i18n.number(totalItemsBought ?? 0, { maximumFractionDigits: 0 })}
+                                        {new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(totalItemsBought ?? 0)}
                                     </div>
                                     <div className="text-xs text-muted-foreground mb-1">{currentMonthName}</div>
                                     <ComparisonBadge value={totalItemsChange} />
                                     {historicalInsights && (
                                         <p className="text-xs text-muted-foreground mt-1">
-                                            {t`Avg: ${i18n.number(
-                                                historicalInsights.avgMonthlyItems,
-                                                { maximumFractionDigits: 0 },
-                                            )} items/month`}
+                                            {t('Avg {{avgItems}} items/month', { avgItems: new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(historicalInsights.avgMonthlyItems) })}
                                         </p>
                                     )}
                                 </CardContent>
@@ -783,8 +776,8 @@ function DashboardPage() {
                         </InsightModal>
 
                         <InsightModal
-                            title={t`Spending by Category - ${currentMonthName}`}
-                            description={t`A detailed view of how your spending is distributed across product categories in ${currentMonthName}.`}
+                            title={t('Spending by Category ({{currentMonthName}})', { currentMonthName: currentMonthName })}
+                            description={t('A detailed view of how your spending is distributed across product categories in {{currentMonthName}}.', { currentMonthName: currentMonthName })}
                             data={translatedSpendingByCategory}
                             chartData={pieChartData}
                             chartConfig={chartConfig}
@@ -792,24 +785,18 @@ function DashboardPage() {
                         >
                             <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">{t`Top Category`}</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t('Top Category')}</CardTitle>
                                     <FontAwesomeIcon icon={faChartSimple} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">{topCategory.name}</div>
                                     <div className="text-xs text-muted-foreground mb-1">{currentMonthName}</div>
                                     <p className="text-xs text-muted-foreground">
-                                        {t`${i18n.number(
-                                            topCategoryPercent,
-                                            {
-                                                style: 'percent',
-                                                maximumFractionDigits: 1,
-                                            }
-                                        )} of total spending`}
+                                        {new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(topCategoryPercent)} {t('of total spending')}
                                     </p>
                                     {historicalInsights && (
                                         <p className="text-xs text-muted-foreground mt-1">
-                                            {t`Historical top: ${historicalInsights.topCategoryTrend}`}
+                                            {t('Historical top: {{topCategoryTrend}}', { topCategoryTrend: historicalInsights.topCategoryTrend })}
                                         </p>
                                     )}
                                 </CardContent>
@@ -817,53 +804,53 @@ function DashboardPage() {
                         </InsightModal>
 
                         <InsightModal
-                            title={t`Spending Trend - ${currentMonthName}`}
-                            description={t`Analysis of your spending patterns and trends based on historical data.`}
+                            title={t('Spending Trend ({{currentMonthName}})', { currentMonthName: currentMonthName })}
+                            description={t('Analysis of your spending patterns and trends based on historical data')}
                             data={[]}
                             type="savingsOpportunities"
                         >
                             <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
-                                        {t`Spending Trend`}
+                                        {t('Spending Trend')}
                                     </CardTitle>
                                     <FontAwesomeIcon icon={faArrowTrendUp} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">
                                         {historicalInsights?.spendingTrend === 'increasing' && (
-                                            <span className="text-orange-600">↗ {t`Increasing`}</span>
+                                            <span className="text-orange-600">↗ {t('Increasing')}</span>
                                         )}
                                         {historicalInsights?.spendingTrend === 'decreasing' && (
-                                            <span className="text-green-600">↘ {t`Decreasing`}</span>
+                                            <span className="text-green-600">↘ {t('Decreasing')}</span>
                                         )}
                                         {historicalInsights?.spendingTrend === 'stable' && (
-                                            <span className="text-blue-600">→ {t`Stable`}</span>
+                                            <span className="text-blue-600">→ {t('Stable')}</span>
                                         )}
-                                        {!historicalInsights && <span className="text-muted-foreground">{t`--`}</span>}
+                                        {!historicalInsights && <span className="text-muted-foreground">{t('--')}</span>}
                                     </div>
-                                    <div className="text-xs text-muted-foreground mb-1">{t`Last 3 months`}</div>
+                                    <div className="text-xs text-muted-foreground mb-1">{t('Last 3 months')}</div>
                                     <p className="text-xs text-muted-foreground">
-                                        {historicalInsights ? t`Based on spending pattern analysis` : t`Need more data for analysis`}
+                                        {historicalInsights ? t('Based on spending pattern analysis') : t('Need more data for analysis')}
                                     </p>
                                 </CardContent>
                             </Card>
                         </InsightModal>
 
                         {/* <InsightModal
-                            title={t`Goals Summary`}
-                            description={t`Overview of your active goals and their progress.`}
+                            title={t('Goals summary') }
+                            description={t('Overview of your active goals and their progress') }
                             data={goals}
                             type="goalsSummary"
                         >
                             <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">{t`Goals`}</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t('Goals') }</CardTitle>
                                     <FontAwesomeIcon icon={faChartColumn} className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
                                     {goals.length === 0 ? (
-                                        <div className="text-sm text-muted-foreground">{t`No active goals`}</div>
+                                        <div className="text-sm text-muted-foreground">{t('No active goals') }</div>
                                     ) : (
                                         <div className="space-y-2">
                                             {goals.slice(0, 3).map((g) => {
@@ -872,11 +859,11 @@ function DashboardPage() {
                                                     <div key={g._id} className="rounded border p-2">
                                                         <div className="font-medium">{g.name}</div>
                                                         <div className="text-xs text-muted-foreground">
-                                                            {t`Target`}: {i18n.number(g.targetAmount, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
-                                                            &nbsp;•&nbsp;{t`Current`}: {i18n.number(g.currentAmount, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                                            {t('Target') }: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(g.targetAmount)}
+                                                            &nbsp;•&nbsp;{t('Current') }: {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(g.currentAmount)}
                                                         </div>
                                                         {pr && (
-                                                            <div className="text-xs text-muted-foreground">{t`Progress`}: {pr.progressPercentage.toFixed(1)}%</div>
+                                                            <div className="text-xs text-muted-foreground">{t('Progress') }: {pr.progressPercentage.toFixed(1)}%</div>
                                                         )}
                                                     </div>
                                                 );
@@ -890,8 +877,8 @@ function DashboardPage() {
 
                     <div className="grid gap-6">
                         <InsightModal
-                            title={t`Consumption Overview - Through ${currentMonthName}`}
-                            description={t`Your spending behavior over time, with current focus on ${currentMonthName}.`}
+                            title={t('Consumption Overview ({{currentMonthName}})', { currentMonthName: currentMonthName })}
+                            description={t('Your spending behavior over time with current focus on {{currentMonthName}}.', { currentMonthName: currentMonthName })}
                             type="consumptionAnalysis"
                             analysis={consumptionAnalysis}
                             isLoading={isAnalysisLoading}
@@ -902,12 +889,12 @@ function DashboardPage() {
                             <Card className="transition-transform duration-300 ease-in-out hover:scale-102 hover:shadow-xl col-span-1 lg:col-span-2">
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
-                                        {t`Consumption Overview`}
+                                        {t('Consumption Overview')}
                                         <span className="text-sm font-normal text-muted-foreground">
-                                            ({t`Current: ${currentMonthName}`})
+                                            ({t('Current: {{currentMonthName}}', { currentMonthName: currentMonthName })})
                                         </span>
                                     </CardTitle>
-                                    <CardDescription>{t`Your spending behavior through ${currentMonthName}. Current month is highlighted.`}</CardDescription>
+                                    <CardDescription>{t('Your spending behavior through {{currentMonthName}}. Current month is highlighted.', { currentMonthName: currentMonthName })}</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     {barChartData.length > 0 ? (
@@ -930,7 +917,7 @@ function DashboardPage() {
                                                         fontSize={12}
                                                         tickLine={false}
                                                         axisLine={false}
-                                                        tickFormatter={(value) => i18n.number(value as number, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                                        tickFormatter={(value) => new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(value as number)}
                                                     />
                                                     <ChartTooltip
                                                         cursor={{ fill: 'rgba(0, 0, 0, 0.1)', stroke: 'rgba(0, 0, 0, 0.2)', strokeWidth: 1 }}
@@ -959,23 +946,23 @@ function DashboardPage() {
                                                                     <div className="mb-3">
                                                                         <p className="font-medium text-foreground">
                                                                             {typeof label === 'string' && label.includes('(Current)')
-                                                                                ? `${label} - ${t`This Month`}`
+                                                                                ? `${label} - ${t('This month')}`
                                                                                 : label}
                                                                         </p>
                                                                         <p className="text-xl font-bold text-primary">
-                                                                            {i18n.number(displayTotal, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                                                            {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(displayTotal)}
                                                                         </p>
                                                                         <div className="flex items-center gap-4 mt-1">
                                                                             {purchaseCount > 0 && (
                                                                                 <p className="text-sm text-muted-foreground">
-                                                                                    {t`${purchaseCount} purchases`}
+                                                                                    {t('{purchaseCount} purchases', { purchaseCount })}
                                                                                 </p>
                                                                             )}
                                                                             {avgSpending > 0 && displayTotal > 0 && (
                                                                                 <p className="text-sm text-muted-foreground">
                                                                                     {displayTotal > avgSpending
-                                                                                        ? `+${((displayTotal - avgSpending) / avgSpending * 100).toFixed(0)}% ${t`vs avg`}`
-                                                                                        : `${((displayTotal - avgSpending) / avgSpending * 100).toFixed(0)}% ${t`vs avg`}`
+                                                                                        ? `+${((displayTotal - avgSpending) / avgSpending * 100).toFixed(0)}% ${t('vs avg')}`
+                                                                                        : `${((displayTotal - avgSpending) / avgSpending * 100).toFixed(0)}% ${t('vs avg')}`
                                                                                     }
                                                                                 </p>
                                                                             )}
@@ -983,7 +970,7 @@ function DashboardPage() {
                                                                     </div>
                                                                     {payload.some((entry) => entry.value && (entry.value as number) > 0) && (
                                                                         <div className="space-y-1 border-t pt-2">
-                                                                            <p className="text-xs font-medium text-muted-foreground mb-2">{t`Category Breakdown:`}</p>
+                                                                            <p className="text-xs font-medium text-muted-foreground mb-2">{t('Category breakdown')}</p>
                                                                             {payload
                                                                                 .filter(entry => entry.value && (entry.value as number) > 0)
                                                                                 .sort((a, b) => (b.value as number) - (a.value as number))
@@ -1001,10 +988,10 @@ function DashboardPage() {
                                                                                             </div>
                                                                                             <div className="text-right">
                                                                                                 <span className="text-sm font-medium">
-                                                                                                    {i18n.number(entryValue, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                                                                                    {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(entryValue)}
                                                                                                 </span>
                                                                                                 <span className="text-xs text-muted-foreground ml-1">
-                                                                                                    {i18n.number(percentage, { style: 'percent', maximumFractionDigits: 1 })}
+                                                                                                    {new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 1 }).format(percentage)}
                                                                                                 </span>
                                                                                             </div>
                                                                                         </div>
@@ -1012,9 +999,9 @@ function DashboardPage() {
                                                                                 })}
                                                                             <div className="border-t pt-1 mt-2">
                                                                                 <div className="flex items-center justify-between gap-3">
-                                                                                    <span className="text-sm font-medium">{t`Total:`}</span>
+                                                                                    <span className="text-sm font-medium">{t('Total')}</span>
                                                                                     <span className="text-sm font-bold">
-                                                                                        {i18n.number(displayTotal, { style: 'currency', currency: getCurrencyFromLocale(i18n.locale) })}
+                                                                                        {new Intl.NumberFormat(locale, { style: "currency", currency: getCurrencyFromLocale(locale) }).format(displayTotal)}
                                                                                     </span>
                                                                                 </div>
                                                                             </div>
@@ -1041,8 +1028,8 @@ function DashboardPage() {
                                         </ChartContainer>
                                     ) : (
                                         <EmptyState
-                                            title={t`Insufficient Data`}
-                                            description={t`Start adding purchases to see your spending analysis.`}
+                                            title={t('Insufficient data')}
+                                            description={t('Start adding purchases to see your spending analysis')}
                                             className="h-[350px]"
                                         />
                                     )}
@@ -1055,9 +1042,9 @@ function DashboardPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <FontAwesomeIcon icon={faChartSimple} className="h-5 w-5 text-primary" />
-                                {t`Top Expenses - ${currentMonthName}`}
+                                {t('Top Expenses ({{currentMonthName}})', { currentMonthName: currentMonthName })}
                             </CardTitle>
-                            <CardDescription>{t`Products that had the biggest impact on your budget in ${currentMonthName}.`}</CardDescription>
+                            <CardDescription>{t('Products that had the biggest impact on your budget in {{currentMonthName}}.', { currentMonthName: currentMonthName })}</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {topExpensesData.length > 0 ? (
@@ -1066,28 +1053,28 @@ function DashboardPage() {
                                         <div className="grid grid-cols-7 gap-4 text-sm font-medium text-on-surface-variant">
                                             <div className="flex items-center gap-2">
                                                 <FontAwesomeIcon icon={faBarcode} className="h-3 w-3" />
-                                                {t`Barcode`}
+                                                {t('Barcode')}
                                             </div>
-                                            <div>{t`Product`}</div>
+                                            <div>{t('Product')}</div>
                                             <div className="flex items-center gap-2">
                                                 <FontAwesomeIcon icon={faCopyright} className="h-3 w-3" />
-                                                {t`Brand`}
+                                                {t('Brand')}
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <FontAwesomeIcon icon={faTag} className="h-3 w-3" />
-                                                {t`Category`}
+                                                {t('Category')}
                                             </div>
                                             <div className="text-center">
                                                 <FontAwesomeIcon icon={faHashtag} className="h-3 w-3 mr-1" />
-                                                {t`Qty`}
+                                                {t('Qty')}
                                             </div>
                                             <div className="text-right">
                                                 <FontAwesomeIcon icon={faScaleBalanced} className="h-3 w-3 mr-1" />
-                                                {t`Unit Price`}
+                                                {t('Unit Price')}
                                             </div>
                                             <div className="text-right">
                                                 <FontAwesomeIcon icon={faDollarSign} className="h-3 w-3 mr-1" />
-                                                {t`Total Price`}
+                                                {t('Total Price')}
                                             </div>
                                         </div>
                                     </div>
@@ -1121,27 +1108,19 @@ function DashboardPage() {
                                                     </Chip>
                                                 </div>
                                                 <div className="text-center font-medium text-on-surface">
-                                                    {i18n.number(item.quantity, { maximumFractionDigits: 2 })}
+                                                    {new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(item.quantity)}
                                                 </div>
                                                 <div className="text-right font-medium text-on-surface">
-                                                    {i18n.number(
-                                                        item.price,
-                                                        {
-                                                            style: 'currency',
+                                                    {new Intl.NumberFormat(locale, { style: 'currency',
                                                             currencySign: 'accounting',
-                                                            currency: getCurrencyFromLocale(i18n.locale),
-                                                        }
-                                                    )}
+                                                            currency: getCurrencyFromLocale(locale),
+                                                         }).format(item.price)}
                                                 </div>
                                                 <div className="text-right font-bold text-primary">
-                                                    {i18n.number(
-                                                        item.totalPrice,
-                                                        {
-                                                            style: 'currency',
+                                                    {new Intl.NumberFormat(locale, { style: 'currency',
                                                             currencySign: 'accounting',
-                                                            currency: getCurrencyFromLocale(i18n.locale),
-                                                        }
-                                                    )}
+                                                            currency: getCurrencyFromLocale(locale),
+                                                         }).format(item.totalPrice)}
                                                 </div>
                                             </div>
                                         ))}
@@ -1149,8 +1128,8 @@ function DashboardPage() {
                                 </div>
                             ) : (
                                 <EmptyState
-                                    title={t`No Expenses This Month`}
-                                    description={t`Add a new purchase to see your top expenses here.`}
+                                    title={t('No expenses this month')}
+                                    description={t('Add a new purchase to see your top expenses here')}
                                 />
                             )}
                         </CardContent>
@@ -1162,7 +1141,6 @@ function DashboardPage() {
                     onOpenChange={(open) => { if (!open) setSelectedItem(null); setIsComparisonOpen(open); }}
                     item={selectedItem}
                     allItems={allItemsState}
-                    locale={i18n.locale}
                 />
             </div>
         </SideBarLayout>

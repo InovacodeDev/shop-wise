@@ -142,6 +142,12 @@ export class ApiService {
                         config.headers = config.headers || {};
                         config.headers.Authorization = `Bearer ${token}`;
                     }
+
+                    // Add language headers for i18n
+                    const locale = localStorage.getItem('i18nextLng') || 'en';
+                    config.headers = config.headers || {};
+                    config.headers['Accept-Language'] = locale;
+                    config.params = { ...config.params, lang: locale };
                 } catch (e) {
                     console.warn('Error retrieving auth token for request:', e);
                 }
@@ -400,7 +406,7 @@ export class ApiService {
     }
 
     async deleteUserAccountAndData(id: string): Promise<{ message: string; transferredFamilyTo?: string }> {
-        return this.makeRequest<{ message: string; transferredFamilyTo?: string }>(`/auth/account`, {
+        return this.makeRequest<{ message: string; transferredFamilyTo?: string }>('/auth/account', {
             method: 'DELETE',
         });
     }

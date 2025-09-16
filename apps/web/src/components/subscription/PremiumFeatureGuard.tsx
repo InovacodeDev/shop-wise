@@ -1,9 +1,9 @@
-import React from 'react';
-import { t } from '@lingui/core/macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useI18n } from '@/hooks/useI18n';
 import { faCrown, faLock } from '@fortawesome/free-solid-svg-icons';
-import { FeatureCode } from '../../types/api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 import { usePremiumFeature } from '../../hooks/useSubscription';
+import { FeatureCode } from '../../types/api';
 
 interface PremiumFeatureGuardProps {
     feature: FeatureCode;
@@ -34,6 +34,7 @@ const PremiumFeatureGuard: React.FC<PremiumFeatureGuardProps> = ({
     onUpgradePress,
 }) => {
     const { hasAccess, canUpgrade, plans } = usePremiumFeature(feature);
+    const { t } = useI18n();
 
     if (hasAccess) {
         return <>{children}</>;
@@ -50,11 +51,11 @@ const PremiumFeatureGuard: React.FC<PremiumFeatureGuardProps> = ({
             </div>
 
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {t`Premium Feature`}
+                {t('Premium feature') }
             </h3>
 
             <p className="text-gray-600 text-center mb-6 max-w-md">
-                {t`${FEATURE_NAMES[feature]} is available to premium users only.`}
+                {t('This feature is available to premium users only') }
             </p>
 
             {showUpgrade && canUpgrade && (
@@ -68,13 +69,13 @@ const PremiumFeatureGuard: React.FC<PremiumFeatureGuardProps> = ({
                     </button>
 
                     <p className="text-sm text-gray-500 mt-2">
-                        {t`Plans starting at`} R$ {Math.min(...plans.map(p => p.price)).toFixed(2)}/{t`month`}
+                        {t('Plans starting at') } R$ {Math.min(...plans.map(p => p.price)).toFixed(2)}/{t('month') }
                     </p>
                 </div>
             )}
 
             <p className="text-sm text-gray-400 text-center mt-4 max-w-sm">
-                {t`Upgrade to access this and many other advanced features.`}
+                {t('Upgrade to access this and many other advanced features') }
             </p>
         </div>
     );

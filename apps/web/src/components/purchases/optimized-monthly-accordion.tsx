@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useMemo, memo, useEffect } from 'react';
 import { Card, CardContent } from '@/components/md3/card';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faDollarSign, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { useLingui, Plural } from '@lingui/react/macro';
+import { useAccordionPerformanceMetrics, useOptimizedAccordionState } from '@/hooks/use-optimized-accordion-state';
+import { useI18n } from '@/hooks/useI18n';
 import { MonthlyPurchaseGroup, Purchase } from '@/types/api';
+import { faCalendar, faChevronDown, faChevronUp, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import { VirtualPurchaseList } from './virtual-purchase-list';
-import { useOptimizedAccordionState, useAccordionPerformanceMetrics } from '@/hooks/use-optimized-accordion-state';
 
 interface OptimizedMonthlyAccordionProps {
     monthlyGroups: MonthlyPurchaseGroup[];
@@ -35,7 +35,7 @@ const MonthlyGroupItem = memo(function MonthlyGroupItem({
     maxVisiblePurchases,
     virtualScrollHeight,
 }: MonthlyGroupItemProps) {
-    const { t } = useLingui();
+    const { t } = useI18n();
 
     const shouldUseVirtualScrolling = useMemo(() =>
         group.purchases.length > maxVisiblePurchases,
@@ -72,11 +72,7 @@ const MonthlyGroupItem = memo(function MonthlyGroupItem({
                                     {group.displayName}
                                 </div>
                                 <div className="text-sm text-muted-foreground">
-                                    <Plural
-                                        value={group.purchaseCount}
-                                        one="# purchase"
-                                        other="# purchases"
-                                    />
+                                    /* Plural component removed */
                                 </div>
                             </div>
                         </div>
@@ -119,7 +115,10 @@ const MonthlyGroupItem = memo(function MonthlyGroupItem({
                                     ))}
                                     {hasMorePurchases && (
                                         <div className="text-center py-2 text-sm text-muted-foreground">
-                                            {t`Showing ${maxVisiblePurchases} of ${group.purchaseCount} purchases`}
+                                            {t('Showing {{maxVisiblePurchases}} of {{purchaseCount}} purchases', {
+                                                maxVisiblePurchases: maxVisiblePurchases,
+                                                purchaseCount: group.purchaseCount
+                                            })}
                                         </div>
                                     )}
                                 </div>
@@ -138,10 +137,7 @@ const PurchaseCard = memo(function PurchaseCard({
 }: {
     purchase: Purchase;
     onClick?: () => void;
-}) {
-    const { t } = useLingui();
-
-    const purchaseDate = useMemo(() => new Date(purchase.date), [purchase.date]);
+}) {const purchaseDate = useMemo(() => new Date(purchase.date), [purchase.date]);
     const itemCount = useMemo(() => purchase.items?.length || 0, [purchase.items?.length]);
 
     const formattedDate = useMemo(() =>
@@ -183,7 +179,7 @@ const PurchaseCard = memo(function PurchaseCard({
                         {itemCount > 0 && (
                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                 <FontAwesomeIcon icon={faCalendar} className="w-3 h-3" />
-                                <Plural value={itemCount} one="# item" other="# items" />
+                                /* Plural component removed */
                             </div>
                         )}
                         <div className="flex items-center gap-1 font-semibold">
@@ -210,6 +206,7 @@ export function OptimizedMonthlyAccordion({
     enablePerformanceMonitoring = false,
     persistExpandedState = false,
 }: OptimizedMonthlyAccordionProps) {
+    const { t, locale } = useI18n();
     const accordionState = useOptimizedAccordionState({
         maxExpandedItems: maxExpandedMonths,
         defaultExpanded: defaultExpandedMonths,

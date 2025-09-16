@@ -1,21 +1,21 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/md3/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
+import { Chip } from "@/components/md3/chip";
 import {
     Form,
     FormInput,
     FormSubmitButton
 } from "@/components/ui/md3-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/md3/card";
-import { Chip } from "@/components/md3/chip";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle, faStore, faTrash, faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import { useI18n } from '@/hooks/useI18n';
 import { cn } from "@/lib/utils";
-import { useLingui } from '@lingui/react/macro';
+import { faPlusCircle, faStore, faThumbsDown, faThumbsUp, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const marketSchema = z.object({
     name: z.string().min(2, "market_form_error_name_min"),
@@ -47,9 +47,10 @@ const allStores: (MarketData & { id: string })[] = [
 ];
 
 export function MarketsForm() {
+    const { t, locale } = useI18n();
     const { profile } = useAuth();
     const { toast } = useToast();
-    const { t } = useLingui();
+    
 
     // In a real app, these would be populated from the family document in Firestore
     const [favoriteStores, setFavoriteStores] = useState([allStores[0], allStores[1]]);
@@ -60,14 +61,14 @@ export function MarketsForm() {
     const marketTypes = ["supermercado", "atacado", "feira", "acougue", "padaria", "marketplace", "farmacia", "outro"];
 
     const marketTypeLabels: Record<string, string> = {
-        supermercado: t`Supermarket`,
-        atacado: t`Wholesale`,
-        feira: t`Market`,
-        acougue: t`Butcher`,
-        padaria: t`Bakery`,
-        marketplace: t`Marketplace`,
-        farmacia: t`Pharmacy`,
-        outro: t`Other`,
+        supermercado: t('Supermarket'),
+        atacado: t('Wholesale'),
+        feira: t('Market'),
+        acougue: t('Butcher'),
+        padaria: t('Bakery'),
+        marketplace: t('Marketplace'),
+        farmacia: t('Pharmacy'),
+        outro: t('Other'),
     };
 
     const form = useForm<MarketData>({
@@ -92,8 +93,8 @@ export function MarketsForm() {
         form.reset();
         setSelectedType("supermercado");
         toast({
-            title: t`Market Added`,
-            description: t`${values.name} was added to your favorites.`,
+            title: t('Market added'),
+            description: t('{0} was added to your favorites.', { 0: marketData.name }),
         });
     };
 
@@ -101,8 +102,8 @@ export function MarketsForm() {
         setFavoriteStores(favoriteStores.filter((s) => s.id !== store.id));
         setIgnoredStores([...ignoredStores, store]);
         toast({
-            title: t`Moved to Ignored`,
-            description: t`${store.name} will now be ignored in price comparisons.`,
+            title: t('Moved to Ignored'),
+            description: t('{0} will now be ignored in price comparisons.', { 0: store.name }),
         });
     };
 
@@ -110,8 +111,8 @@ export function MarketsForm() {
         setIgnoredStores(ignoredStores.filter((s) => s.id !== store.id));
         setFavoriteStores([...favoriteStores, store]);
         toast({
-            title: t`Moved to Favorites`,
-            description: t`${store.name} is now a favorite store.`,
+            title: t('Moved to Favorites'),
+            description: t('{0} is now a favorite store.', { 0: store.name }),
         });
     };
 
@@ -121,15 +122,15 @@ export function MarketsForm() {
         } else {
             setIgnoredStores(ignoredStores.filter((s) => s.id !== storeId));
         }
-        toast({ title: t`Store Removed`, description: t`The store was removed from your lists.` });
+        toast({ title: t('Store removed'), description: t('The store was removed from your lists.') });
     };
 
     return (
         <div className="space-y-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>{t`Add New Store`}</CardTitle>
-                    <CardDescription>{t`Add a new supermarket, wholesale or market to your preferred locations.`}</CardDescription>
+                    <CardTitle>{t('Add New Store')}</CardTitle>
+                    <CardDescription>{t('Add a new supermarket, wholesale or market to your preferred locations.')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -137,26 +138,26 @@ export function MarketsForm() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormInput
                                     name="name"
-                                    label={t`Store Name`}
-                                    placeholder={t`e.g., Neighborhood Supermarket`}
+                                    label={t('Store Name')}
+                                    placeholder={t('e.g. Neighborhood Supermarket')}
                                     required
                                 />
                                 <FormInput
                                     name="cnpj"
-                                    label={t`CNPJ (Optional)`}
+                                    label={t('CNPJ (Optional)')}
                                     placeholder="00.000.000/0001-00"
                                 />
                             </div>
 
                             <FormInput
                                 name="address"
-                                label={t`Address (Optional)`}
-                                placeholder={t`e.g., 123 Flower St, City`}
+                                label={t('Address (Optional)')}
+                                placeholder={t('e.g. 123 Flower St, City')}
                             />
 
                             <div className="space-y-3">
                                 <label className="text-body-small font-medium text-on-surface-variant block">
-                                    {t`Store Type`}
+                                    {t('Store Type')}
                                 </label>
                                 <div className="flex flex-wrap gap-2">
                                     {marketTypes.map((type) => (
@@ -177,7 +178,7 @@ export function MarketsForm() {
 
                             <FormSubmitButton>
                                 <FontAwesomeIcon icon={faPlusCircle} className="mr-2 h-4 w-4" />
-                                {t`Add to Favorites`}
+                                {t('Add to Favorites')}
                             </FormSubmitButton>
                         </form>
                     </Form>
@@ -185,26 +186,26 @@ export function MarketsForm() {
             </Card>
 
             <MarketList
-                title={t`Favorite Stores`}
-                description={t`These are the stores you shop at most often. We'll use them to generate personalized insights.`}
+                title={t('Favorite Stores')}
+                description={t('These are the stores you shop at most often. We\'ll use them to generate personalized insights.')}
                 icon={faThumbsUp}
                 stores={favoriteStores}
                 onAction={moveToIgnored}
                 onRemove={removeFromFamily}
                 actionIcon={faThumbsDown}
-                actionTooltip={t`Move to ignored`}
+                actionTooltip={t('Move to Ignored')}
                 listType="favorite"
             />
 
             <MarketList
-                title={t`Ignored Stores`}
-                description={t`We will not use data from these stores for price comparison insights.`}
+                title={t('Ignored Stores')}
+                description={t('We will not use data from these stores for price comparison insights.')}
                 icon={faThumbsDown}
                 stores={ignoredStores}
                 onAction={moveToFavorites}
                 onRemove={removeFromFamily}
                 actionIcon={faThumbsUp}
-                actionTooltip={t`Move to favorites`}
+                actionTooltip={t('Move to Favorites')}
                 listType="ignored"
             />
         </div>
@@ -234,17 +235,17 @@ function MarketList({
     actionTooltip,
     listType,
 }: MarketListProps) {
-    const { t } = useLingui();
-
+    const { t } = useI18n();
+    
     const marketTypeLabels: Record<string, string> = {
-        supermercado: t`Supermarket`,
-        atacado: t`Wholesale`,
-        feira: t`Market`,
-        acougue: t`Butcher`,
-        padaria: t`Bakery`,
-        marketplace: t`Marketplace`,
-        farmacia: t`Pharmacy`,
-        outro: t`Other`,
+        supermercado: t('Supermarket'),
+        atacado: t('Wholesale'),
+        feira: t('Market'),
+        acougue: t('Butcher'),
+        padaria: t('Bakery'),
+        marketplace: t('Marketplace'),
+        farmacia: t('Pharmacy'),
+        outro: t('Other'),
     };
 
     return (
@@ -259,7 +260,7 @@ function MarketList({
             <CardContent>
                 {stores.length === 0 ? (
                     <div className="text-center py-8 text-on-surface-variant">
-                        {t`This list is empty.`}
+                        {t('This list is empty')}
                     </div>
                 ) : (
                     <div className="rounded-lg border border-outline-variant bg-surface">
@@ -267,11 +268,11 @@ function MarketList({
                             <div className="grid grid-cols-4 gap-4 text-sm font-medium text-on-surface-variant">
                                 <div className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faStore} className="h-3 w-3" />
-                                    {t`Name`}
+                                    {t('Name')}
                                 </div>
-                                <div>{t`Type`}</div>
-                                <div>{t`Address`}</div>
-                                <div className="text-right">{t`Actions`}</div>
+                                <div>{t('Type')}</div>
+                                <div>{t('Address')}</div>
+                                <div className="text-right">{t('Actions')}</div>
                             </div>
                         </div>
                         <div className="divide-y divide-outline-variant">
@@ -301,7 +302,7 @@ function MarketList({
                                         <Button
                                             variant="text"
                                             size="sm"
-                                            title={t`Remove from my lists`}
+                                            title={t('Remove from my lists')}
                                             onClick={() => onRemove(store.id, listType)}
                                             className="text-error hover:bg-error-container/50"
                                         >

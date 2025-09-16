@@ -3,8 +3,6 @@
  * This file demonstrates how to use the available types
  * for developing financial features
  */
-import { t } from '@lingui/core/macro';
-
 import type {
     Account,
     Achievement,
@@ -166,32 +164,32 @@ export const examplePlan: Plan = {
     interval: 'monthly',
     features: [
         {
-            name: t`Basic finance control`,
-            description: t`Track expenses, accounts and categories`,
+            name: 'Static text',
+            description: 'Static text',
             code: 'basic_finances',
             isEnabled: true,
         },
         {
-            name: t`Advanced budgets`,
-            description: t`Full featured budget system`,
+            name: 'Static text',
+            description: 'Static text',
             code: 'advanced_finances',
             isEnabled: true,
         },
         {
-            name: t`Investment portfolio`,
-            description: t`Complete investment tracking`,
+            name: 'Static text',
+            description: 'Static text',
             code: 'investments',
             isEnabled: true,
         },
         {
-            name: t`Bank integration`,
-            description: t`Automatic synchronization with banks`,
+            name: 'Static text',
+            description: 'Static text',
             code: 'bank_integration',
             isEnabled: true,
         },
         {
-            name: t`Advanced reports`,
-            description: t`Detailed analytics and projections`,
+            name: 'Static text',
+            description: 'Static text',
             code: 'advanced_reports',
             isEnabled: true,
         },
@@ -340,43 +338,43 @@ export const exampleEducationalContent: EducationalContent = {
 // ================================
 
 export const PAYMENT_METHODS = [
-    { value: 'cash', label: t`Cash` },
-    { value: 'credit_card', label: t`Credit Card` },
-    { value: 'debit_card', label: t`Debit Card` },
-    { value: 'bank_transfer', label: t`Bank Transfer` },
-    { value: 'pix', label: t`PIX` },
-    { value: 'other', label: t`Other` },
+    { value: 'cash', label: 'Static text' },
+    { value: 'credit_card', label: 'Static text' },
+    { value: 'debit_card', label: 'Static text' },
+    { value: 'bank_transfer', label: 'Static text' },
+    { value: 'pix', label: 'Static text' },
+    { value: 'other', label: 'Static text' },
 ] as const;
 
 export const INVESTMENT_TYPES = [
-    { value: 'stocks', label: t`Stocks` },
-    { value: 'bonds', label: t`Bonds` },
-    { value: 'funds', label: t`Funds` },
-    { value: 'crypto', label: t`Cryptocurrencies` },
-    { value: 'real_estate', label: t`Real Estate` },
-    { value: 'other', label: t`Other` },
+    { value: 'stocks', label: 'Static text' },
+    { value: 'bonds', label: 'Static text' },
+    { value: 'funds', label: 'Static text' },
+    { value: 'crypto', label: 'Static text' },
+    { value: 'real_estate', label: 'Static text' },
+    { value: 'other', label: 'Static text' },
 ] as const;
 
 export const BUDGET_PERIODS = [
-    { value: 'daily', label: t`Daily` },
-    { value: 'weekly', label: t`Weekly` },
-    { value: 'monthly', label: t`Monthly` },
-    { value: 'quarterly', label: t`Quarterly` },
-    { value: 'yearly', label: t`Yearly` },
+    { value: 'daily', label: 'Static text' },
+    { value: 'weekly', label: 'Static text' },
+    { value: 'monthly', label: 'Static text' },
+    { value: 'quarterly', label: 'Static text' },
+    { value: 'yearly', label: 'Static text' },
 ] as const;
 
 export const GOAL_PRIORITIES = [
-    { value: 'low', label: t`Low` },
-    { value: 'medium', label: t`Medium` },
-    { value: 'high', label: t`High` },
+    { value: 'low', label: 'Static text' },
+    { value: 'medium', label: 'Static text' },
+    { value: 'high', label: 'Static text' },
 ] as const;
 
 export const SUBSCRIPTION_STATUSES = [
-    { value: 'trial', label: t`Trial` },
-    { value: 'active', label: t`Active` },
-    { value: 'canceled', label: t`Canceled` },
-    { value: 'expired', label: t`Expired` },
-    { value: 'past_due', label: t`Past due` },
+    { value: 'trial', label: 'Static text' },
+    { value: 'active', label: 'Static text' },
+    { value: 'canceled', label: 'Static text' },
+    { value: 'expired', label: 'Static text' },
+    { value: 'past_due', label: 'Static text' },
 ] as const;
 
 // ================================

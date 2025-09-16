@@ -2,12 +2,13 @@ import { FamiliesService } from '@/families/families.service';
 import { FamilySchema } from '@/families/schemas/family.schema';
 import { UserSchema } from '@/users/schemas/user.schema';
 import { Module, NestModule, OnModuleInit, Provider } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, getConnectionToken } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
+import { Connection } from 'mongoose';
 
 // RateLimitMiddleware removed - Fastify-level rate limiting is used instead
 import { EmailModule } from '../common/email.module';
-import { MongoService } from '../mongo/mongo.service';
+import { MONGO_DB } from '../mongo/mongo.constants';
 import { UsersService } from '../users/users.service';
 import { TokenMetricsService } from './';
 import { AuthController } from './auth.controller';
@@ -33,9 +34,18 @@ if (process.env.GOOGLE_CLIENT_ID) {
         EmailModule,
     ],
     providers: [
+        {
+            provide: MONGO_DB,
+            useFactory: (connection: Connection) => {
+                if (!connection) {
+                    throw new Error('Mongoose connection is not available');
+                }
+                return connection;
+            },
+            inject: [getConnectionToken()],
+        },
         AuthService,
         TokenMetricsService,
-        MongoService,
         UsersService,
         JwtStrategy,
         FamiliesService,

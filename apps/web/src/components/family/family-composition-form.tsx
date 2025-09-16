@@ -1,15 +1,15 @@
+import { Button } from "@/components/md3/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/md3/card";
+import { Input } from "@/components/md3/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
+import { useI18n } from '@/hooks/useI18n';
+import { apiService } from "@/services/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/md3/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/md3/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/md3/card";
-import { useAuth } from "@/hooks/use-auth";
-import { useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { useLingui } from '@lingui/react/macro';
-import { apiService } from "@/services/api";
 
 
 const familyCompositionSchema = z.object({
@@ -23,7 +23,7 @@ type FamilyCompositionData = z.infer<typeof familyCompositionSchema>;
 export function FamilyCompositionForm() {
     const { profile, reloadUser } = useAuth();
     const { toast } = useToast();
-    const { t } = useLingui();
+    const { t } = useI18n();
 
     const form = useForm<FamilyCompositionData>({
         resolver: zodResolver(familyCompositionSchema),
@@ -49,8 +49,8 @@ export function FamilyCompositionForm() {
         if (!profile?.familyId) {
             toast({
                 variant: "destructive",
-                title: t`Error`,
-                description: t`You need to be logged in to save preferences.`,
+                title: t('Error') ,
+                description: t('You need to be logged in to save preferences') ,
             });
             return;
         }
@@ -60,14 +60,14 @@ export function FamilyCompositionForm() {
             await reloadUser();
             form.reset(values);
             toast({
-                title: t`Success!`,
-                description: t`Your preferences have been saved.`,
+                title: t('Success') ,
+                description: t('Your preferences have been saved') ,
             });
         } catch (error: any) {
             toast({
                 variant: "destructive",
-                title: t`Save Error`,
-                description: t`An unexpected error occurred while saving your preferences. Please try again later.`,
+                title: t('Save Error') ,
+                description: t('An unexpected error occurred while saving your preferences. Please try again later') ,
             });
         }
     }
@@ -77,8 +77,8 @@ export function FamilyCompositionForm() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>{t`Family Composition`}</CardTitle>
-                <CardDescription>{t`Help our AI provide better suggestions by telling us about your family.`}</CardDescription>
+                <CardTitle>{t('Family Composition') }</CardTitle>
+                <CardDescription>{t('Help our AI provide better suggestions by telling us about your family') }</CardDescription>
             </CardHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -89,7 +89,7 @@ export function FamilyCompositionForm() {
                                 name="adults"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t`Adults`}</FormLabel>
+                                        <FormLabel>{t('Adults') }</FormLabel>
                                         <FormControl>
                                             <Input type="number" min="1" {...field} />
                                         </FormControl>
@@ -102,7 +102,7 @@ export function FamilyCompositionForm() {
                                 name="children"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t`Children`}</FormLabel>
+                                        <FormLabel>{t('Children') }</FormLabel>
                                         <FormControl>
                                             <Input type="number" min="0" {...field} />
                                         </FormControl>
@@ -115,7 +115,7 @@ export function FamilyCompositionForm() {
                                 name="pets"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t`Pets`}</FormLabel>
+                                        <FormLabel>{t('Pets') }</FormLabel>
                                         <FormControl>
                                             <Input type="number" min="0" {...field} />
                                         </FormControl>
@@ -127,7 +127,7 @@ export function FamilyCompositionForm() {
                     </CardContent>
                     <CardFooter>
                         <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>
-                            {isSubmitting ? t`Saving...` : t`Save Preferences`}
+                            {isSubmitting ? t('Saving')  : t('Save Preferences') }
                         </Button>
                     </CardFooter>
                 </form>

@@ -1,9 +1,9 @@
-import React from 'react';
-import { t } from '@lingui/core/macro';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { format, parseISO } from 'date-fns';
+import { ChartContainer, ChartTooltip } from '@/components/ui/chart';
+import { useI18n } from '@/hooks/useI18n';
+import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import React from 'react';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 interface MonthlyExpenseChartProps {
     monthlyData: Array<{
@@ -17,6 +17,8 @@ const MonthlyExpenseChart: React.FC<MonthlyExpenseChartProps> = ({
     monthlyData,
     title = "Monthly Expense Trend",
 }) => {
+    const { t } = useI18n();
+    
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
@@ -46,7 +48,7 @@ const MonthlyExpenseChart: React.FC<MonthlyExpenseChartProps> = ({
 
     const chartConfig = {
         amount: {
-            label: t`Amount`,
+            label: t('Amount') ,
             color: "hsl(var(--chart-1))",
         },
     };
@@ -85,7 +87,7 @@ const MonthlyExpenseChart: React.FC<MonthlyExpenseChartProps> = ({
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div className="flex flex-col">
                                                     <span className="text-[0.70rem] uppercase text-muted-foreground">
-                                                        {t`Month`}
+                                                        {t('Month') }
                                                     </span>
                                                     <span className="font-bold text-muted-foreground">
                                                         {label}
@@ -93,7 +95,7 @@ const MonthlyExpenseChart: React.FC<MonthlyExpenseChartProps> = ({
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[0.70rem] uppercase text-muted-foreground">
-                                                        {t`Amount`}
+                                                        {t('Amount') }
                                                     </span>
                                                     <span className="font-bold">
                                                         {formatCurrency(data.amount)}
