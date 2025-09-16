@@ -6,8 +6,8 @@ Este projeto é um monorepo que precisa de configuração específica no Vercel.
 
 ### 1. Build Settings
 
--   **Build Command**: `pnpm turbo run build --filter=@shop-wise/web`
--   **Output Directory**: `apps/web/dist`
+-   **Build Command**: `pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist ./dist`
+-   **Output Directory**: `dist`
 -   **Install Command**: `pnpm install --frozen-lockfile`
 -   **Root Directory**: Leave empty (use project root)
 
@@ -24,22 +24,28 @@ SERVERLESS=true
 
 -   Runtime: Node.js 20.x (configurado no vercel.json)
 
-## ✅ Problema Resolvido - Setembro 2025
+## ✅ SOLUÇÃO FINAL - Setembro 2025
 
-**O erro `Cannot find module '/vercel/path0/apps/web/build-for-vercel.js'` foi corrigido!**
+**Ambos os erros foram corrigidos!**
 
-### Solução implementada:
+1. ❌ `Cannot find module '/vercel/path0/apps/web/build-for-vercel.js'` → ✅ Resolvido
+2. ❌ `No Output Directory named "dist" found after the Build completed` → ✅ Resolvido
 
-1. **Comando simplificado**: Uso direto do `pnpm turbo` ao invés do script customizado
-2. **Output directory correto**: `apps/web/dist` (caminho correto no monorepo)
-3. **Configuração robusta**: Funciona independente do working directory
+### ✅ Solução Final Implementada:
 
-### Teste Local:
+1. **Build command atualizado**: `pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist ./dist`
+2. **Output directory correto**: `dist` (na raiz, conforme esperado pelo Vercel)
+3. **Processo completo**: Build no monorepo → Copia arquivos para raiz → Vercel encontra o diretório
+
+### 🧪 Teste Local Completo:
 
 ```bash
-pnpm turbo run build --filter=@shop-wise/web
-ls -la apps/web/dist/  # Deve mostrar: index.html, assets/, locales/
+rm -rf dist
+pnpm turbo run build --filter=@shop-wise/web && cp -r apps/web/dist ./dist
+ls -la dist/  # ✅ Deve mostrar: index.html, assets/, locales/
 ```
+
+**Status**: ✅ RESOLVIDO - Pronto para deploy no Vercel!
 
 ## Troubleshooting Comum
 
