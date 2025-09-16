@@ -26,12 +26,12 @@ try {
 
     // 4. Build the web app with turbo
     console.log("Building web app with Turbo...");
-    execSync("pnpm turbo run build --filter=@shop-wise/web", { 
+    execSync("pnpm turbo run build --filter=@shop-wise/web", {
         stdio: "inherit",
-        env: { 
-            ...process.env, 
-            NODE_ENV: "production" 
-        }
+        env: {
+            ...process.env,
+            NODE_ENV: "production",
+        },
     });
 
     // 5. Verify the dist folder exists and has content
@@ -57,20 +57,19 @@ try {
     console.log("✅ Vercel build completed successfully!");
     console.log(`📁 Output directory: ${distPath}`);
     console.log(`📄 Files generated: ${distFiles.length}`);
-    
 } catch (error) {
     console.error("❌ Build failed:", error.message);
-    
+
     // Additional debugging information
     console.log("\n🔍 Debug information:");
     console.log("Current working directory:", process.cwd());
-    
+
     try {
         console.log("Files in root:", fs.readdirSync("."));
         console.log("Files in apps/web:", fs.readdirSync("apps/web"));
     } catch (e) {
         console.log("Could not list files:", e.message);
     }
-    
+
     process.exit(1);
 }

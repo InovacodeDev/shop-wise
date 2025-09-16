@@ -5,25 +5,31 @@ Este projeto é um monorepo que precisa de configuração específica no Vercel.
 ## Configuração Atualizada no Vercel (2025)
 
 ### 1. Build Settings
-- **Build Command**: `node build-for-vercel.js`
-- **Output Directory**: `apps/web/dist`
-- **Install Command**: `pnpm install --frozen-lockfile`
-- **Root Directory**: Leave empty (use project root)
+
+-   **Build Command**: `node build-for-vercel.js`
+-   **Output Directory**: `apps/web/dist`
+-   **Install Command**: `pnpm install --frozen-lockfile`
+-   **Root Directory**: Leave empty (use project root)
 
 ### 2. Environment Variables
+
 Configure essas variáveis no dashboard do Vercel:
+
 ```
 NODE_ENV=production
 SERVERLESS=true
 ```
 
 ### 3. Node.js Version
-- Runtime: Node.js 20.x (configurado no vercel.json)
+
+-   Runtime: Node.js 20.x (configurado no vercel.json)
 
 ## Troubleshooting Comum
 
 ### Erro de Lockfile
+
 Se aparecer erro sobre lockfile desatualizado:
+
 ```bash
 # Localmente, execute:
 rm pnpm-lock.yaml
@@ -32,20 +38,23 @@ pnpm install
 ```
 
 ### Build Fails
+
 1. Teste localmente: `pnpm run build:vercel`
 2. Verifique se `apps/web/dist/index.html` existe
 3. Confirme que todas as dependências estão no package.json
 
 ### Memory Issues
+
 Se o build falhar por memória, adicione no vercel.json:
+
 ```json
 {
-  "functions": {
-    "apps/api/api/index.js": {
-      "runtime": "nodejs20.x",
-      "memory": 1024
+    "functions": {
+        "apps/api/api/index.js": {
+            "runtime": "nodejs20.x",
+            "memory": 1024
+        }
     }
-  }
 }
 ```
 
