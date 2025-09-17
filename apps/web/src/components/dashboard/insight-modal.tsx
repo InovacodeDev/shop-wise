@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/chart";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useI18n } from '@/hooks/useI18n';
+import { asDate } from '@/lib/asDate';
 import { getCurrencyFromLocale } from "@/lib/localeCurrency";
 import { cn } from "@/lib/utils";
 import {
@@ -167,10 +168,14 @@ export function InsightModal({
                                         {item.name}
                                     </div>
                                     <div className="text-right font-medium text-primary truncate">
-                                        {new Intl.NumberFormat(locale, { style: 'currency',
+                    {new Intl.NumberFormat(locale, { style: 'currency',
                                                 currencySign: 'accounting',
                                                 currency: getCurrencyFromLocale(locale),
                                              }).format(item.value)}
+                    {new Intl.NumberFormat(locale, { style: 'currency',
+                        currencySign: 'accounting',
+                        currency: getCurrencyFromLocale(locale),
+                         }).format(item.price ?? 0)}
                                     </div>
                                     <div className="text-right text-on-surface-variant truncate">
                                         {new Intl.NumberFormat(locale, { style: 'currency',
@@ -214,7 +219,10 @@ export function InsightModal({
                                         {item.name}
                                     </div>
                                     <div className="text-on-surface-variant truncate">
-                                        {item.purchaseDate.toLocaleDateString(locale)}
+                                        {(() => {
+                                            const d = asDate(item.purchaseDate);
+                                            return d ? d.toLocaleDateString(locale) : '';
+                                        })()}
                                     </div>
                                     <div className="text-right font-medium text-primary truncate">
                                         {new Intl.NumberFormat(locale, { style: 'currency',

@@ -1,16 +1,10 @@
 import { apiService } from '@/services/api';
+import type { ApiPurchaseItem } from '@/types/api';
 
-export interface PurchaseItem {
-    id: string;
-    productId: string;
-    barcode?: string;
-    name?: string;
-    volume?: string;
-    quantity: number;
-    price: number;
-    unitPrice?: number;
-    category?: string;
-}
+// Web-compatible PurchaseItem extends the canonical API item with a few optional UI fields
+// Use ApiPurchaseItem directly; web may extend it where needed in local components
+export type WebPurchaseItem = ApiPurchaseItem &
+    Partial<{ id: string; barcode?: string; volume?: string; unitPrice?: number; productRef?: any }>;
 
 const getOrCreateProduct = async (productData: any) => {
     // A new item without barcode won't be saved as a global product
@@ -30,7 +24,7 @@ const getOrCreateProduct = async (productData: any) => {
     }
 };
 
-export async function updatePurchaseItems(familyId: string, purchaseId: string, items: PurchaseItem[]) {
+export async function updatePurchaseItems(familyId: string, purchaseId: string, items: WebPurchaseItem[]) {
     try {
         // 1. Get all existing items to find which ones to delete
         const existingItems = await apiService.getPurchaseItems(familyId, purchaseId);
@@ -52,6 +46,9 @@ export async function updatePurchaseItems(familyId: string, purchaseId: string, 
                     });
                 }
 
+                const q = item.quantity ?? 1;
+                const p = item.price ?? 0;
+
                 const itemData = {
                     productId: productId,
                     name: item.name,
@@ -59,9 +56,9 @@ export async function updatePurchaseItems(familyId: string, purchaseId: string, 
                     volume: item.volume,
                     quantity: item.quantity,
                     price: item.price,
-                    unitPrice: item.unitPrice || item.price / item.quantity,
+                    unitPrice: item.unitPrice ?? p / q,
                     // total is required by CreatePurchaseItemRequest
-                    total: (item.unitPrice || item.price / item.quantity) * item.quantity,
+                    total: (item.unitPrice ?? p / q) * q,
                     category: item.category,
                 };
 

@@ -17,7 +17,8 @@
         "clean": "turbo run clean",
         "install:all": "pnpm install",
         "i18n:validate": "node scripts/validate-translations.mjs",
-        "i18n:extract": "node scripts/extract-translations.mjs"
+        "i18n:extract": "node scripts/extract-translations.mjs",
+        "sync:api-types": "node ./scripts/sync-api-types.mjs"
     },
     "keywords": [],
     "author": "",

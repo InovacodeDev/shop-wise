@@ -46,7 +46,7 @@ function ScanPage() {
             trackEvent('purchase_saved', {
                 method: entryMethod,
                 itemCount: products.length,
-                totalAmount: products.reduce((acc, item) => acc + item.price, 0)
+                totalAmount: products.reduce((acc, item) => acc + (item.price ?? 0), 0)
             });
         }
     };

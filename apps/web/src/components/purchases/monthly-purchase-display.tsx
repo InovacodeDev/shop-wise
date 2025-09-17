@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "@/hooks/use-toast";
+import { asDate } from '@/lib/asDate';
 import { getCurrencyFromLocale } from "@/lib/localeCurrency";
 import { materialSpacing } from "@/lib/material-design";
 import { getPurchasesByMonth } from "@/services/purchaseApiService";
@@ -363,17 +364,18 @@ interface PurchaseCardProps {
 const PurchaseCard = memo(function PurchaseCard({ purchase, onClick }: PurchaseCardProps) {
     const { i18n, t, locale } = useI18n();
 
-    const purchaseDate = useMemo(() => new Date(purchase.date), [purchase.date]);
+    const purchaseDate = useMemo(() => asDate(purchase.date), [purchase.date]);
     const itemCount = useMemo(() => purchase.items?.length || 0, [purchase.items?.length]);
 
-    const formattedDate = useMemo(() =>
-        purchaseDate.toLocaleDateString(undefined, {
+    const formattedDate = useMemo(() => {
+        if (!purchaseDate) return '';
+        return purchaseDate.toLocaleDateString(undefined, {
             day: '2-digit',
             month: 'short',
             hour: '2-digit',
             minute: '2-digit'
-        }), [purchaseDate]
-    );
+        });
+    }, [purchaseDate]);
 
     return (
         <Card
@@ -410,7 +412,7 @@ const PurchaseCard = memo(function PurchaseCard({ purchase, onClick }: PurchaseC
                                         style: 'currency',
                                         currencySign: 'accounting',
                                         currency: getCurrencyFromLocale(locale),
-                                    }).format(purchase.totalAmount)}
+                                    }).format(purchase.totalAmount ?? 0)}
                             </span>
                         </div>
                     </div>

@@ -1,12 +1,12 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
-import React from 'react';
-import axios from 'axios';
 import { MonthlyPurchaseDisplay } from '@/components/purchases/monthly-purchase-display';
 import { useAuth } from '@/hooks/use-auth';
-import type { MonthlyPurchaseGroup, Purchase } from '@/types/api';
+import type { MonthlyPurchaseGroup } from '@/types/api';
+import '@testing-library/jest-dom';
+import { act, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import axios from 'axios';
+import React from 'react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock dependencies
 vi.mock('@/hooks/use-auth');
@@ -183,7 +183,7 @@ describe('Monthly Purchases E2E Integration', () => {
         vi.restoreAllMocks();
     });
 
-    const createMockPurchase = (id: string, date: string, amount: number, storeName: string): Purchase => ({
+    const createMockPurchase = (id: string, date: string, amount: number, storeName: string): any => ({
         _id: id,
         familyId: mockFamilyId,
         storeId: `store-${id}`,
@@ -193,10 +193,9 @@ describe('Monthly Purchases E2E Integration', () => {
         totalAmount: amount,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        items: [
+            items: [
             {
                 _id: `item-${id}-1`,
-                purchaseId: '',
                 name: 'Test Item',
                 quantity: 1,
                 price: amount,
@@ -207,11 +206,11 @@ describe('Monthly Purchases E2E Integration', () => {
     const createMockMonthlyGroup = (
         monthYear: string,
         displayName: string,
-        purchases: Purchase[]
+        purchases: any[]
     ): MonthlyPurchaseGroup => ({
         monthYear,
         displayName,
-        totalAmount: purchases.reduce((sum, p) => sum + p.totalAmount, 0),
+        totalAmount: purchases.reduce((sum, p) => sum + (p.totalAmount ?? 0), 0),
         purchaseCount: purchases.length,
         purchases,
     });

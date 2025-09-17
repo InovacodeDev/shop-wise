@@ -7,6 +7,7 @@ import {
 } from "@/components/md3/dialog";
 import { useI18n } from '@/hooks/useI18n';
 import { getCurrencyFromLocale } from "@/lib/localeCurrency";
+import type { PurchaseItem } from '@/types/api';
 import type { Locale } from 'date-fns';
 import { format, subMonths } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
@@ -20,17 +21,6 @@ const dateLocales: Record<string, Locale> = {
     en: enUS,
 };
 
-interface PurchaseItem {
-    id: string;
-    productRef: any;
-    name?: string;
-    barcode?: string;
-    quantity: number;
-    price: number;
-    totalPrice: number;
-    purchaseDate: Date;
-    storeName: string;
-}
 
 interface Props {
     open: boolean;
@@ -61,8 +51,8 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems }: Pro
 
         // For each month compute avg price and total quantity for the matched product
         const monthMatches = months.map((m) => {
-            const monthItems = allItems.filter((it) => {
-                const itemMonth = format(it.purchaseDate, "yyyy-MM");
+                const monthItems = allItems.filter((it) => {
+                const itemMonth = it.purchaseDate ? format(it.purchaseDate as any, "yyyy-MM") : '';
                 if (itemMonth !== m.monthYear) return false;
                 if (useBarcode && item.barcode) return it.barcode === item.barcode;
                 return (it.name && item.name) ? it.name.trim().toLowerCase() === item.name.trim().toLowerCase() : false;
@@ -171,7 +161,7 @@ export function PriceComparisonModal({ open, onOpenChange, item, allItems }: Pro
                             const label = format(d, 'MMM/yy', { locale: dateLocale });
 
                             const monthItems = allItems.filter((it) => {
-                                const itemMonth = format(it.purchaseDate, 'yyyy-MM');
+                                const itemMonth = it.purchaseDate ? format(it.purchaseDate as any, 'yyyy-MM') : '';
                                 if (itemMonth !== monthKey) return false;
                                 if (item.barcode) return it.barcode === item.barcode;
                                 return (it.name && item.name) ? it.name.trim().toLowerCase() === item.name.trim().toLowerCase() : false;

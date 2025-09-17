@@ -32,7 +32,7 @@ export function ShoppingListPopover() {
 
             if (activeList) {
                 setActiveListId(activeList.id || activeList._id);
-                setListName(activeList.name);
+                if (activeList.name) setListName(activeList.name);
                 return activeList.id;
             }
             return null;

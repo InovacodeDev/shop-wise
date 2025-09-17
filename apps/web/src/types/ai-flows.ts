@@ -1,165 +1,30 @@
-/**
- * TypeScript types for AI flows based on Zod schemas from backend
- * These types mirror the schemas defined in backend/src/ai/flows/
- */
+// Re-export AI flow types from canonical API types
+export type {
+    AnalyzeConsumptionDataInput,
+    AnalyzeConsumptionDataOutput,
+    ExtractDataFromPageInput,
+    ExtractDataFromPageOutput,
+    ExtractDataFromPdfInput,
+    ExtractDataFromPdfOutput,
+    ExtractFromReceiptPhotoInput,
+    ExtractFromReceiptPhotoOutput,
+    ExtractProductDataInput,
+    ExtractProductDataOutput,
+    Product,
+    SuggestMissingItemsInput,
+    SuggestMissingItemsOutput,
+} from '@/types/api';
 
-// ===============================
-// Extract Product Data Flow Types
-// ===============================
-
-export interface ExtractProductDataInput {
-    receiptImage: string; // Data URI with MIME type and Base64 encoding
-}
-
-export interface Product {
-    barcode: string;
-    name: string;
-    quantity: number;
-    volume: string; // Unit of measurement (UN, KG, L, etc.)
-    unitPrice: number;
-    price: number; // Total price
-    brand?: string;
-    category: string;
-    subcategory?: string;
-}
-
-export interface ExtractProductDataOutput {
-    products: Product[];
-    storeName: string;
-    date: string; // Format: dd/mm/yyyy
-    cnpj: string;
-    address: string;
-    accessKey: string;
-    latitude?: number;
-    longitude?: number;
-    discount?: number;
-}
-
-// ===============================
-// Extract Data From PDF Flow Types
-// ===============================
-
-export interface ExtractDataFromPdfInput {
-    pdfDataUri: string; // Data URI for PDF with Base64 encoding
-}
-
-export interface ExtractDataFromPdfOutput {
-    products: Product[];
-    storeName: string;
-    date: string; // Format: dd/mm/yyyy
-    cnpj: string;
-    address: string;
-    accessKey: string;
-    latitude?: number;
-    longitude?: number;
-    discount?: number;
-}
-
-// ===============================
-// Extract Data From Page Flow Types
-// ===============================
-
-export interface ExtractDataFromPageInput {
-    pageDataUri: string; // Data URI for single PDF page with Base64 encoding
-}
-
-export interface ExtractDataFromPageOutput {
-    products: Product[];
-}
-
-// ===============================
-// Analyze Consumption Data Flow Types
-// ===============================
-
-export interface AnalyzeConsumptionDataInput {
-    consumptionData: string; // JSON string of monthly consumption data
-    language?: string; // Language code (e.g., 'en', 'pt-BR')
-}
-
-export interface AnalyzeConsumptionDataOutput {
-    analysis: string; // Detailed textual analysis in Markdown format
-}
-
-// ===============================
-// Suggest Missing Items Flow Types
-// ===============================
-
-export interface SuggestMissingItemsInput {
-    purchaseHistory: string; // String containing purchase history
-    familySize: number; // Number of family members (adults + children)
-}
-
-export interface SuggestMissingItemsOutput {
-    suggestedItems: string[]; // Array of suggested item names
-}
-
-// ===============================
-// Union Types for API Responses
-// ===============================
-
-export type AIFlowInput =
-    | ExtractProductDataInput
-    | ExtractDataFromPdfInput
-    | ExtractDataFromPageInput
-    | AnalyzeConsumptionDataInput
-    | SuggestMissingItemsInput;
-
-export type AIFlowOutput =
-    | ExtractProductDataOutput
-    | ExtractDataFromPdfOutput
-    | ExtractDataFromPageOutput
-    | AnalyzeConsumptionDataOutput
-    | SuggestMissingItemsOutput;
-
-// ===============================
-// Helper Types
-// ===============================
-
-// ===============================
-// Extract From Receipt Photo Flow Types
-// ===============================
-
-export interface ExtractFromReceiptPhotoInput {
-    receiptImage: string; // Data URI with MIME type and Base64 encoding for photo
-}
-
-export interface ExtractFromReceiptPhotoOutput {
-    products: Product[];
-    storeName: string;
-    date: string; // Format: YYYY-MM-DD
-    cnpj: string;
-    address: string;
-    accessKey: string;
-    nfceNumber: string;
-    series: string;
-    emissionDateTime: string;
-    authorizationProtocol: string;
-    totalAmount: number;
-    paymentMethod?: string;
-    amountPaid?: number;
-    latitude?: number;
-    longitude?: number;
-    discount?: number;
-    purchaseType?: 'iFood' | '99' | 'store' | 'marketplace' | 'online_store';
-    type: string;
-    warnings?: string[]; // Validation warnings for photo quality/completeness
-}
-
-// ===============================
-// API Response Wrapper Types
-// ===============================
-// API Response Wrapper Types
-// ===============================
-
+// API Response wrapper for convenience
 interface APIResponse<T> {
     data?: T;
     error?: string;
     message?: string;
 }
 
-export type ExtractProductAPIResponse = APIResponse<ExtractProductDataOutput>;
-export type ExtractFromReceiptPhotoAPIResponse = APIResponse<ExtractFromReceiptPhotoOutput>;
-export type ExtractPdfAPIResponse = APIResponse<ExtractDataFromPdfOutput>;
-export type ExtractPageAPIResponse = APIResponse<ExtractDataFromPageOutput>;
-export type AnalyzeConsumptionAPIResponse = APIResponse<AnalyzeConsumptionDataOutput>;
-export type SuggestItemsAPIResponse = APIResponse<SuggestMissingItemsOutput>;
+export type ExtractProductAPIResponse = APIResponse<import('@/types/api').ExtractProductDataOutput>;
+export type ExtractFromReceiptPhotoAPIResponse = APIResponse<import('@/types/api').ExtractFromReceiptPhotoOutput>;
+export type ExtractPdfAPIResponse = APIResponse<import('@/types/api').ExtractDataFromPdfOutput>;
+export type ExtractPageAPIResponse = APIResponse<import('@/types/api').ExtractDataFromPageOutput>;
+export type AnalyzeConsumptionAPIResponse = APIResponse<import('@/types/api').AnalyzeConsumptionDataOutput>;
+export type SuggestItemsAPIResponse = APIResponse<import('@/types/api').SuggestMissingItemsOutput>;

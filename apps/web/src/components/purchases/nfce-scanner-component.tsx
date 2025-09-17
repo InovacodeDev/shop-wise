@@ -244,26 +244,29 @@ const { toast } = useToast();
     const handleSavePhotoData = async () => {
         if (!photoAnalysisResult) return;
 
-        const products: Product[] = photoAnalysisResult.products.map(product => ({
+        const products: Product[] = photoAnalysisResult.products.map((product: any) => ({
+            _id: product._id || `photo-${Math.random().toString(36).slice(2,9)}`,
             name: product.name,
-            quantity: product.quantity,
-            price: product.price,
+            quantity: product.quantity ?? 1,
+            price: product.price ?? 0,
             barcode: product.barcode,
-            volume: product.volume,
-            unitPrice: product.unitPrice,
+            unit: product.unit ?? 'un',
+            unitPrice: product.unitPrice ?? product.price ?? 0,
             brand: product.brand,
-            category: product.category,
-            subcategory: product.subcategory,
-        }));
+            category: product.category ?? 'uncategorized',
+            subCategory: product.subcategory,
+            createdAt: product.createdAt ?? new Date().toISOString(),
+            updatedAt: product.updatedAt ?? new Date().toISOString(),
+        } as Product));
 
         await onSave(photoAnalysisResult, products, 'import');
         resetPhotoScan();
 
         // Track photo save event
-        analyticsConfig.trackPurchase('import', {
+            analyticsConfig.trackPurchase('import', {
             store_name: photoAnalysisResult.storeName,
             product_count: photoAnalysisResult.products.length,
-            total_amount: photoAnalysisResult.totalAmount || photoAnalysisResult.products.reduce((sum, p) => sum + p.price, 0),
+            total_amount: photoAnalysisResult.totalAmount || photoAnalysisResult.products.reduce((sum: number, p: any) => sum + (p.price ?? 0), 0),
             method: 'photo_upload'
         });
     };
@@ -299,7 +302,7 @@ const { toast } = useToast();
             accessKey: data.accessKey || '',
             address: data.address,
             cnpj: data.cnpj,
-            products: data.products.map(product => ({
+            products: data.products.map((product: any) => ({
                 name: product.name,
                 quantity: product.quantity,
                 price: product.price,
@@ -312,26 +315,30 @@ const { toast } = useToast();
             }))
         };
 
-        const products: Product[] = data.products.map(product => ({
+        const products: Product[] = data.products.map((product: any) => ({
+            // Provide minimal defaults for required Product fields so the array satisfies Product type
+            _id: product._id || `ocr-${Math.random().toString(36).slice(2, 9)}`,
             name: product.name,
-            quantity: product.quantity,
-            price: product.price,
+            quantity: product.quantity ?? 1,
+            price: product.price ?? 0,
             barcode: product.barcode,
-            volume: product.volume,
-            unitPrice: product.unitPrice,
+            unit: product.unit ?? 'un',
+            unitPrice: product.unitPrice ?? product.price ?? 0,
             brand: product.brand,
-            category: product.category,
-            subcategory: product.subcategory,
-        }));
+            category: product.category ?? 'uncategorized',
+            subCategory: product.subcategory,
+            createdAt: product.createdAt ?? new Date().toISOString(),
+            updatedAt: product.updatedAt ?? new Date().toISOString(),
+        } as Product));
 
         await onSave(purchaseData, products, 'nfce');
         resetScan();
 
         // Track NFCe save event
-        analyticsConfig.trackPurchase('nfce', {
+            analyticsConfig.trackPurchase('nfce', {
             store_name: data.storeName,
             product_count: data.products.length,
-            total_amount: data.products.reduce((sum, p) => sum + p.price, 0),
+            total_amount: data.products.reduce((sum: number, p: any) => sum + (p.price ?? 0), 0),
             method: 'scanner'
         });
     };
@@ -423,7 +430,7 @@ const { toast } = useToast();
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {data.products.map((product, index) => (
+                            {data.products.map((product: any, index: number) => (
                                 <TableRow key={index} className="hover:bg-gray-50">
                                     <TableCell className="py-3">
                                         <div className="font-medium">{product.name}</div>
@@ -449,10 +456,10 @@ const { toast } = useToast();
                                         <span className="font-medium">{product.quantity}</span>
                                     </TableCell>
                                     <TableCell className="text-center font-medium">
-                                        {(product.unitPrice || product.price / product.quantity).toFixed(2)}
+                                        {((product.unitPrice ?? (product.price ?? 0) / (product.quantity ?? 1))).toFixed(2)}
                                     </TableCell>
                                     <TableCell className="text-center font-medium">
-                                        {product.price.toFixed(2)}
+                                        {(product.price ?? 0).toFixed(2)}
                                     </TableCell>
                                     <TableCell className="text-center">
                                         <div className="flex justify-center gap-2">
@@ -594,7 +601,7 @@ const { toast } = useToast();
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {data.products.map((product, index) => (
+                            {data.products.map((product: any, index: number) => (
                                 <TableRow key={index} className="hover:bg-gray-50">
                                     <TableCell className="py-3">
                                         <div className="font-medium">{product.name}</div>
@@ -657,7 +664,7 @@ const { toast } = useToast();
                                         currency: Intl.NumberFormat(locale, {
                                             style: "currency",
                                             currency: getCurrencyFromLocale(locale)
-                                        }).format(data.totalAmount || data.products.reduce((sum, p) => sum + p.price, 0)),
+                                        }).format(data.totalAmount || data.products.reduce((sum: number, p: any) => sum + (p.price ?? 0), 0)),
                                     })}
                                 </span>
                             </div>

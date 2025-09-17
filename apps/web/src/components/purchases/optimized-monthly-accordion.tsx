@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/components/md3/card';
 import { useAccordionPerformanceMetrics, useOptimizedAccordionState } from '@/hooks/use-optimized-accordion-state';
 import { useI18n } from '@/hooks/useI18n';
+import { asDate } from '@/lib/asDate';
 import { MonthlyPurchaseGroup, Purchase } from '@/types/api';
 import { faCalendar, faChevronDown, faChevronUp, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -137,21 +138,22 @@ const PurchaseCard = memo(function PurchaseCard({
 }: {
     purchase: Purchase;
     onClick?: () => void;
-}) {const purchaseDate = useMemo(() => new Date(purchase.date), [purchase.date]);
+}) {
     const itemCount = useMemo(() => purchase.items?.length || 0, [purchase.items?.length]);
 
-    const formattedDate = useMemo(() =>
-        purchaseDate.toLocaleDateString(undefined, {
+    const purchaseDate = useMemo(() => asDate(purchase.date), [purchase.date]);
+
+    const formattedDate = useMemo(() => {
+        if (!purchaseDate) return '';
+        return purchaseDate.toLocaleDateString(undefined, {
             day: '2-digit',
             month: 'short',
             hour: '2-digit',
             minute: '2-digit'
-        }), [purchaseDate]
-    );
+        });
+    }, [purchaseDate]);
 
-    const formattedAmount = useMemo(() =>
-        purchase.totalAmount.toFixed(2), [purchase.totalAmount]
-    );
+    const formattedAmount = useMemo(() => ((purchase.totalAmount ?? 0).toFixed(2)), [purchase.totalAmount]);
 
     return (
         <Card

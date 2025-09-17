@@ -267,7 +267,8 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
         setIsEditDialogOpen(true);
     };
 
-    const handleDeleteClick = (barcode: string) => {
+    const handleDeleteClick = (barcode?: string) => {
+        if (!barcode) return;
         setProducts(products.filter((p) => p.barcode !== barcode));
     };
 
@@ -284,14 +285,13 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
         const newItem: Product = {
             barcode: randomUUID(),
             name: "New Item",
-            volume: "UN",
             quantity: 1,
             unitPrice: 0.0,
             price: 0.0,
             category: "Grocery",
             subcategory: "Others",
             brand: "",
-        };
+        } as Product;
         setProducts([...products, newItem]);
         handleEditClick(newItem);
     };
@@ -309,7 +309,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
     };
 
     const triggerFileSelect = () => fileInputRef.current?.click();
-    const totalAmount = products.reduce((sum, item) => sum + item.price, 0);
+    const totalAmount = products.reduce((sum, item) => sum + (item.price ?? 0), 0);
 
     return (
         <>
@@ -435,11 +435,11 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                                                         )}
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="text-center">{product.quantity}</TableCell>
+                                                <TableCell className="text-center">{product.quantity ?? 0}</TableCell>
                                                 <TableCell className="text-right">
-                                                    {product.unitPrice.toFixed(2)}
+                                                    {(product.unitPrice ?? 0).toFixed(2)}
                                                 </TableCell>
-                                                <TableCell className="text-right">{product.price.toFixed(2)}</TableCell>
+                                                <TableCell className="text-right">{(product.price ?? 0).toFixed(2)}</TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex justify-end gap-1">
                                                         <Button
@@ -635,7 +635,7 @@ const [extractionResult, setExtractionResult] = useState<ExtractProductDataOutpu
                                         setEditingProduct({
                                             ...editingProduct,
                                             unitPrice: newUnitPrice,
-                                            price: newUnitPrice * editingProduct.quantity,
+                                            price: newUnitPrice * (editingProduct.quantity ?? 1),
                                         });
                                     }}
                                     className="sm:col-span-3"

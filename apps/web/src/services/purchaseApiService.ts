@@ -68,7 +68,7 @@ export async function savePurchase(
                 address: purchaseData.address || '',
                 type: 'farmacia',
             };
-            const store = await apiService.createStore(storeData);
+            const store = await apiService.createStore(storeData as any);
             storeId = store._id;
         } catch (error) {
             console.warn('Could not create store, using unknown:', error);
@@ -87,7 +87,7 @@ export async function savePurchase(
     };
 
     try {
-        const purchase = await apiService.createPurchase(familyId, purchaseDataForApi);
+        const purchase = await apiService.createPurchase(familyId, purchaseDataForApi as any);
 
         if (products && products.length && purchase?._id) {
             const items: CreatePurchaseItemRequest[] = products.map<CreatePurchaseItemRequest>((product) => ({

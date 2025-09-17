@@ -298,13 +298,11 @@ export function ShoppingListComponent() {
                 ).join('\n');
             }
 
-            const familySize = (profile.family?.adults || 1) + (profile.family?.children || 0);
-
+            // Create shopping list using API create type - do not pass familySize (not part of CreateShoppingList)
             const newList = await apiService.createShoppingList(profile.familyId, {
-                listName: t('aiGeneratedShoppingList'),
-                familySize,
+                name: t('aiGeneratedShoppingList'),
                 preferences: purchaseHistory,
-            });
+            } as any);
 
             // Refresh the shopping lists
             const updatedLists = await loadShoppingLists(profile.familyId);

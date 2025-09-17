@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { clearUserIdentity, identifyUser } from "@/services/analytics-service";
 import { apiService } from "@/services/api";
-import { identifyUser, clearUserIdentity } from "@/services/analytics-service";
 import { useRouter } from "@tanstack/react-router";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 interface Profile {
     _id: string;
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const profileData: Profile = {
                 _id: user._id,
                 displayName: userData.displayName || '',
-                email: userData.email,
+                email: userData.email || '',
                 familyId: familyIdString,
                 settings: userData.settings as Profile['settings'],
                 isAdmin: userData.isAdmin,

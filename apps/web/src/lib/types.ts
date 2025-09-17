@@ -4,5 +4,5 @@ export interface Notification {
     description: string;
     createdAt: Date | string;
     read: boolean;
-    type: "suggestion" | "alert" | "info";
+    type: 'suggestion' | 'alert' | 'info';
 }

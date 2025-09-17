@@ -90,7 +90,7 @@ const { toast } = useToast();
             accessKey: data.accessKey || '',
             address: data.address,
             cnpj: data.cnpj,
-            products: data.products.map(product => ({
+            products: data.products.map((product: any) => ({
                 name: product.name,
                 quantity: product.quantity,
                 price: product.price,
@@ -103,17 +103,20 @@ const { toast } = useToast();
             }))
         };
 
-        const products: Product[] = data.products.map(product => ({
+        const products: Product[] = data.products.map((product: any) => ({
+            _id: product._id || `url-${Math.random().toString(36).slice(2,9)}`,
             name: product.name,
-            quantity: product.quantity,
-            price: product.price,
+            quantity: product.quantity ?? 1,
+            price: product.price ?? 0,
             barcode: product.barcode,
-            volume: product.volume,
-            unitPrice: product.unitPrice,
+            unit: product.unit ?? 'un',
+            unitPrice: product.unitPrice ?? product.price ?? 0,
             brand: product.brand,
-            category: product.category,
-            subcategory: product.subcategory,
-        }));
+            category: product.category ?? 'uncategorized',
+            subCategory: product.subcategory,
+            createdAt: product.createdAt ?? new Date().toISOString(),
+            updatedAt: product.updatedAt ?? new Date().toISOString(),
+        } as Product));
 
         await onSave(purchaseData, products);
         resetScan();

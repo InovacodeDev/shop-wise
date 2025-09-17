@@ -39,6 +39,7 @@ import { SideBarLayout } from '@/components/layout/sidebar-layout';
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
+import { asDate } from '@/lib/asDate';
 import { trackEvent } from "@/services/analytics-service";
 import { apiService } from "@/services/api";
 import { createFileRoute } from "@tanstack/react-router";
@@ -48,21 +49,20 @@ import { analyzeConsumptionData } from "./actions";
 
 // currency util centralized in src/lib/localeCurrency.ts
 
-interface PurchaseItem {
-    id: string;
-    productRef: any;
-    name?: string;
-    barcode?: string;
-    volume?: string;
-    brand?: string;
-    category?: string;
-    subcategory?: string;
-    quantity: number;
-    price: number;
-    totalPrice: number;
-    purchaseDate: Date;
-    storeName: string;
-}
+import type { PurchaseItem } from '@/types/api';
+
+// Local augmented type for historical items returned by optimized endpoints.
+// The server PurchaseItem does not include the purchase date or productRef in the
+// canonical generated types, but the optimized endpoint returns items together
+// with purchase-level metadata. Create a local type that extends the canonical
+// PurchaseItem so we can keep strong typing while carrying the extra fields we
+// need for aggregation and display.
+type HistoricalItem = PurchaseItem & {
+    purchaseDate?: string | Date;
+    productRef?: { id: string };
+    storeName?: string;
+    totalPrice?: number; // convenience alias for total values coming from API
+};
 
 const dateLocales: Record<string, Locale> = {
     "pt": ptBR,
@@ -128,10 +128,10 @@ function DashboardPage() {
     // States for data
     const [barChartData, setBarChartData] = useState<any[]>([]);
     const [pieChartData, setPieChartData] = useState<any[]>([]);
-    const [topExpensesData, setTopExpensesData] = useState<PurchaseItem[]>([]);
-    const [allItemsState, setAllItemsState] = useState<PurchaseItem[]>([]);
+    const [topExpensesData, setTopExpensesData] = useState<any[]>([]);
+    const [allItemsState, setAllItemsState] = useState<any[]>([]);
     const [monthlySpendingByStore, setMonthlySpendingByStore] = useState<any[]>([]);
-    const [recentItems, setRecentItems] = useState<PurchaseItem[]>([]);
+    const [recentItems, setRecentItems] = useState<any[]>([]);
     const [spendingByCategory, setSpendingByCategory] = useState<any[]>([]);
     const [translatedSpendingByCategory, setTranslatedSpendingByCategory] = useState<any[]>([]);
     const [totalSpentMonth, setTotalSpentMonth] = useState<number | null>(null);
@@ -234,7 +234,7 @@ function DashboardPage() {
                 return;
             }
 
-            let allItems: PurchaseItem[] = [];
+            let allItems: HistoricalItem[] = [];
 
             // 2. Process allFamilyPurchaseItems data structure to create PurchaseItem array
             Object.entries(allFamilyPurchaseItems).forEach(([monthYear, monthData]: [string, any]) => {
@@ -242,20 +242,28 @@ function DashboardPage() {
                     const { purchaseInfo, items } = purchaseData;
 
                     items.forEach((item: any) => {
-                        const purchaseItem: PurchaseItem = {
-                            id: item.productId, // Using productId as unique identifier
+                        const qty = item.quantity ?? 1;
+                        const unitPrice = item.price ?? 0;
+                        const computedTotal = item.total ?? unitPrice * qty;
+
+                        const purchaseItem: HistoricalItem = {
+                            // canonical PurchaseItem fields
+                            productId: item.productId,
+                            name: item.name || "",
+                            category: item.category || "others",
+                            subCategory: item.subCategory,
+                            unit: (item.unit as any) ?? 'un',
+                            quantity: qty,
+                            price: unitPrice,
+                            total: computedTotal,
+
+                            // augmented fields used by the dashboard logic
+                            totalPrice: computedTotal,
+                            purchaseDate: purchaseInfo.date,
                             productRef: { id: item.productId },
-                            quantity: item.quantity,
-                            price: item.price,
-                            totalPrice: item.total,
-                            purchaseDate: new Date(purchaseInfo.date),
                             storeName: purchaseInfo.storeName || 'Unknown Store',
-                            name: item.name,
                             barcode: item.barcode,
-                            volume: item.unit, // Using 'unit' field as volume
                             brand: item.brand,
-                            category: item.category,
-                            subcategory: item.subCategory,
                         };
 
                         allItems.push(purchaseItem);
@@ -270,23 +278,26 @@ function DashboardPage() {
             const consolidatedItemsMap = new Map<string, PurchaseItem>();
             allItems.forEach((item) => {
                 const key = item.productRef.id;
-                if (consolidatedItemsMap.has(key)) {
+                    if (consolidatedItemsMap.has(key)) {
                     const existingItem = consolidatedItemsMap.get(key)!;
-                    existingItem.quantity += item.quantity;
-                    existingItem.totalPrice += item.totalPrice;
-                    // Keep the latest purchase date for recency
-                    if (item.purchaseDate > existingItem.purchaseDate) {
+                    existingItem.quantity = (existingItem.quantity ?? 0) + (item.quantity ?? 0);
+                    existingItem.totalPrice = (existingItem.totalPrice ?? 0) + (item.totalPrice ?? 0);
+                    // Keep the latest purchase date for recency (compare safely)
+                    const itemDate = asDate(item.purchaseDate);
+                    const existingDate = asDate(existingItem.purchaseDate);
+                    if (itemDate && (!existingDate || itemDate > existingDate)) {
                         existingItem.purchaseDate = item.purchaseDate;
                     }
                 } else {
-                    consolidatedItemsMap.set(key, { ...item });
+                    // ensure defaults for required fields when inserting fresh
+                    consolidatedItemsMap.set(key, { ...item, totalPrice: item.totalPrice ?? item.total ?? 0, quantity: item.quantity ?? 0 });
                 }
             });
 
             // Recalculate average price for consolidated items
             consolidatedItemsMap.forEach((item) => {
-                if (item.quantity > 0) {
-                    item.price = item.totalPrice / item.quantity;
+                if ((item.quantity ?? 0) > 0) {
+                    item.price = (item.totalPrice ?? 0) / (item.quantity ?? 1);
                 }
             });
 
@@ -298,18 +309,20 @@ function DashboardPage() {
             const endOfLastMonth = endOfMonth(subMonths(now, 1));
 
             // -- Process current month data --
-            const thisMonthItems = allItems.filter(
-                (item) => item.purchaseDate >= startOfThisMonth && item.purchaseDate <= endOfThisMonth
-            );
-            const thisMonthTotalSpent = thisMonthItems.reduce((acc, item) => acc + item.totalPrice, 0);
-            const thisMonthTotalItems = thisMonthItems.reduce((acc, item) => acc + item.quantity, 0);
+            const thisMonthItems = allItems.filter((item) => {
+                const d = asDate(item.purchaseDate);
+                return !!d && d >= startOfThisMonth && d <= endOfThisMonth;
+            });
+            const thisMonthTotalSpent = thisMonthItems.reduce((acc, item) => acc + (item.totalPrice ?? 0), 0);
+            const thisMonthTotalItems = thisMonthItems.reduce((acc, item) => acc + (item.quantity ?? 0), 0);
 
             // -- Process last month data for comparison --
-            const lastMonthItems = allItems.filter(
-                (item) => item.purchaseDate >= startOfLastMonth && item.purchaseDate <= endOfLastMonth
-            );
-            const lastMonthTotalSpent = lastMonthItems.reduce((acc, item) => acc + item.totalPrice, 0);
-            const lastMonthTotalItems = lastMonthItems.reduce((acc, item) => acc + item.quantity, 0);
+            const lastMonthItems = allItems.filter((item) => {
+                const d = asDate(item.purchaseDate);
+                return !!d && d >= startOfLastMonth && d <= endOfLastMonth;
+            });
+            const lastMonthTotalSpent = lastMonthItems.reduce((acc, item) => acc + (item.totalPrice ?? 0), 0);
+            const lastMonthTotalItems = lastMonthItems.reduce((acc, item) => acc + (item.quantity ?? 0), 0);
 
             // -- Enhanced comparison using monthly groups data if available --
             let finalTotalSpentChange = 0;
@@ -390,10 +403,10 @@ function DashboardPage() {
             // Populate category spending data for each month using items
             // but keep the total amount from monthlyGroups to avoid discrepancies
             allItems.forEach((item) => {
-                const monthKey = format(item.purchaseDate, "MMM/yy", { locale: dateLocale });
+                const monthKey = format(asDate(item.purchaseDate) ?? new Date(0), "MMM/yy", { locale: dateLocale });
                 if (monthlyData[monthKey]) {
                     const categoryKey = getCategoryKey(item.category);
-                    monthlyData[monthKey][categoryKey] = (monthlyData[monthKey][categoryKey] || 0) + item.totalPrice;
+                    monthlyData[monthKey][categoryKey] = (monthlyData[monthKey][categoryKey] || 0) + (item.totalPrice ?? 0);
                 }
             });
 
@@ -418,7 +431,7 @@ function DashboardPage() {
             // -- Process Pie Chart data (this month) --
             const thisMonthCategorySpending = thisMonthItems.reduce((acc, item) => {
                 const categoryKey = getCategoryKey(item.category);
-                acc[categoryKey] = (acc[categoryKey] || 0) + item.totalPrice;
+                acc[categoryKey] = (acc[categoryKey] || 0) + (item.totalPrice ?? 0);
                 return acc;
             }, {} as { [key: string]: number });
 
@@ -444,31 +457,36 @@ function DashboardPage() {
             setSpendingByCategory(Object.entries(thisMonthCategorySpending).map(([name, value]) => ({ name, value })));
 
             // -- Process Top Expenses (this month, with historical context) --
-            const thisMonthConsolidatedItems = consolidatedItems.filter(
-                (item) => item.purchaseDate >= startOfThisMonth && item.purchaseDate <= endOfThisMonth
-            );
+            const thisMonthConsolidatedItems = consolidatedItems.filter((item) => {
+                const d = asDate(item.purchaseDate);
+                return !!d && d >= startOfThisMonth && d <= endOfThisMonth;
+            });
 
             // Enhanced top expenses with frequency analysis across all months
             const productFrequency = new Map<string, { count: number, totalSpent: number, avgPrice: number }>();
             allItems.forEach(item => {
-                const key = item.productRef.id;
+                const key = item.productRef?.id ?? 'unknown';
                 const existing = productFrequency.get(key) || { count: 0, totalSpent: 0, avgPrice: 0 };
                 existing.count += 1;
-                existing.totalSpent += item.totalPrice;
+                existing.totalSpent += (item.totalPrice ?? 0);
                 existing.avgPrice = existing.totalSpent / existing.count;
                 productFrequency.set(key, existing);
             });
 
             // Enhance current month items with historical context
-            const enhancedThisMonthItems = thisMonthConsolidatedItems.map(item => ({
-                ...item,
-                historicalFrequency: productFrequency.get(item.productRef.id)?.count || 1,
-                historicalTotalSpent: productFrequency.get(item.productRef.id)?.totalSpent || item.totalPrice,
-                historicalAvgPrice: productFrequency.get(item.productRef.id)?.avgPrice || item.price
-            }));
+            const enhancedThisMonthItems = thisMonthConsolidatedItems.map(item => {
+                const key = item.productRef?.id ?? 'unknown';
+                const freq = productFrequency.get(key);
+                return {
+                    ...item,
+                    historicalFrequency: freq?.count || 1,
+                    historicalTotalSpent: freq?.totalSpent ?? (item.totalPrice ?? 0),
+                    historicalAvgPrice: freq?.avgPrice ?? (item.price ?? 0)
+                };
+            });
 
             const top5Expenses = [...enhancedThisMonthItems]
-                .sort((a, b) => b.totalPrice - a.totalPrice)
+                .sort((a, b) => (b.totalPrice ?? 0) - (a.totalPrice ?? 0))
                 .slice(0, 5);
             setTopExpensesData(top5Expenses);
 
@@ -481,20 +499,28 @@ function DashboardPage() {
             setTotalSpentMonth(correctTotalSpent);
             setTotalItemsBought(thisMonthTotalItems);
             setRecentItems(
-                [...thisMonthItems].sort((a, b) => b.purchaseDate.getTime() - a.purchaseDate.getTime()).slice(0, 10)
+                [...thisMonthItems]
+                    .sort((a, b) => {
+                        const ad = asDate(a.purchaseDate);
+                        const bd = asDate(b.purchaseDate);
+                        return (bd ? bd.getTime() : 0) - (ad ? ad.getTime() : 0);
+                    })
+                    .slice(0, 10)
             );
 
             // -- Enhanced Monthly Spending By Store with historical context --
             const spendingByStore = thisMonthItems.reduce((acc, item) => {
-                acc[item.storeName] = (acc[item.storeName] || 0) + item.totalPrice;
+                const store = item.storeName ?? "";
+                acc[store] = (acc[store] || 0) + (item.totalPrice ?? 0);
                 return acc;
             }, {} as { [key: string]: number });
 
             // Add historical average for comparison
             const historicalStoreSpending = allItems.reduce((acc, item) => {
-                const monthKey = format(item.purchaseDate, "yyyy-MM");
-                if (!acc[item.storeName]) acc[item.storeName] = {};
-                acc[item.storeName][monthKey] = (acc[item.storeName][monthKey] || 0) + item.totalPrice;
+                const monthKey = format(asDate(item.purchaseDate) ?? new Date(0), "yyyy-MM");
+                const store = item.storeName ?? "";
+                if (!acc[store]) acc[store] = {};
+                acc[store][monthKey] = (acc[store][monthKey] || 0) + (item.totalPrice ?? 0);
                 return acc;
             }, {} as { [store: string]: { [month: string]: number } });
 
@@ -552,7 +578,7 @@ function DashboardPage() {
                 const categoryFrequency = new Map<string, number>();
                 allItems.forEach(item => {
                     const categoryKey = getCategoryKey(item.category);
-                    categoryFrequency.set(categoryKey, (categoryFrequency.get(categoryKey) || 0) + item.totalPrice);
+                    categoryFrequency.set(categoryKey, (categoryFrequency.get(categoryKey) || 0) + (item.totalPrice ?? 0));
                 });
 
                 const topHistoricalCategory = Array.from(categoryFrequency.entries())

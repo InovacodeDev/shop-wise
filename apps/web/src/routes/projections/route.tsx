@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
-import React, { useEffect, useState } from 'react';
-import PremiumFeatureGuard from '@/components/subscription/PremiumFeatureGuard';
 import { SideBarLayout } from '@/components/layout/sidebar-layout';
-import type { FeatureCode, BalanceProjection } from '@/types/api';
+import PremiumFeatureGuard from '@/components/subscription/PremiumFeatureGuard';
 import { apiService } from '@/services/api';
+import type { BalanceProjection, FeatureCode } from '@/types/api';
+import { createFileRoute } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/projections/' as any)({
   component: ProjectionsPage,
@@ -34,7 +34,7 @@ function ProjectionsPage() {
               <div>Loading...</div>
             ) : projection ? (
               <div className="space-y-2">
-                {projection.projections.map((p, idx) => (
+                    {projection.projections.map((p: any, idx: number) => (
                   <div key={idx} className="flex justify-between rounded border p-2 text-sm">
                     <span>{new Date(p.date).toLocaleDateString()}</span>
                     <span>${p.balance.toFixed(2)}</span>

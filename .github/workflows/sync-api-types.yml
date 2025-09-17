@@ -1,0 +1,31 @@
+name: Sync API types
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        paths:
+            - "apps/api/**"
+            - "scripts/sync-api-types.mjs"
+
+jobs:
+    sync-check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18"
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+            - name: Run sync script
+              run: pnpm run sync:api-types
+            - name: Check for changes
+              run: |
+                  # fail if generated file changed
+                  if ! git diff --exit-code -- apps/web/src/types/api.ts; then
+                    echo 'apps/web/src/types/api.ts is out of date. Run `pnpm run sync:api-types` and commit the result.';
+                    git --no-pager --no-color diff -- apps/web/src/types/api.ts || true;
+                    exit 1;
+                  fi
